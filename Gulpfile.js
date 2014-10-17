@@ -19,6 +19,9 @@ var watch = [
 // lighthouse and lighthouse-client live at the same filesystem level
 var staticRoot = '../lighthouse/backend/static/';
 
+// default task run with 'gulp'
+gulp.task('default', ['build']);
+
 // Build app and assets
 gulp.task('build', ['jshint', 'browserify', 'views']);
 
@@ -33,7 +36,7 @@ gulp.task('jshint', function () {
 // -- This will package our app into a single file for distribution
 gulp.task('browserify', function() {
     // do magic
-    browserify('./app/js/main.js', {
+    browserify('./app/js/app.js', {
         debug: true
         // insertGlobals: true,
     })
