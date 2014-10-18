@@ -4,7 +4,7 @@ var angular = require('angular'),
     dockerService = require('./dockerService');
 
 // init angular module
-var main = angular.module('lighthouse-main', []);
+var main = angular.module('lighthouse.main', []);
 
 // register module components
 main.controller('mainController', mainController);

@@ -4,6 +4,7 @@
 var browserify = require('browserify'),
     buffer = require('vinyl-buffer'),
     gulp  = require('gulp'),
+    gutil = require('gulp-util'),
     jshint = require('gulp-jshint'),
     rimraf = require('rimraf'),
     source = require('vinyl-source-stream'),
@@ -18,9 +19,24 @@ var watch = [
 
 // lighthouse and lighthouse-client live at the same filesystem level
 var staticRoot = '../lighthouse/backend/static/';
+var appRoot = './app/js/app.js';
+var isProd = false;
 
-// default task run with 'gulp'
-gulp.task('default', ['build']);
+// TL;DR Default task
+gulp.task('default', ['prod', 'build']);
+
+//
+// Tasks
+//
+// sets up development build context
+gulp.task('dev', function () {
+    isProd = false;
+});
+
+// sets up production build context
+gulp.task('prod', function () {
+    isProd = true;
+});
 
 // Build app and assets
 gulp.task('build', ['jshint', 'browserify', 'views']);
@@ -36,7 +52,7 @@ gulp.task('jshint', function () {
 // -- This will package our app into a single file for distribution
 gulp.task('browserify', function() {
     // do magic
-    browserify('./app/js/app.js', {
+    browserify(appRoot, {
         debug: true
         // insertGlobals: true,
     })
@@ -45,8 +61,8 @@ gulp.task('browserify', function() {
     .pipe(source('app.js'))
     // convert to buffer for use by uglify (doesn't like streams)
     .pipe(buffer())
-    // minify
-    .pipe(uglify())
+    // minify source, skip on dev build
+    .pipe(isProd ? uglify() : gutil.noop())
     // Output it to our dist folder
     .pipe(gulp.dest(staticRoot + 'js/'));
 });
@@ -57,7 +73,7 @@ gulp.task('views', function () {
     .pipe(gulp.dest(staticRoot))
 })
 
-// Watch for source updates
+// Watch for source updates, will use dev build
 gulp.task('watch', [], function() {
     gulp.watch(watch, ['browserify', 'views']);
 });
