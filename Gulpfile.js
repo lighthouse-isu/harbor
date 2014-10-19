@@ -73,7 +73,7 @@ gulp.task('views', function () {
 })
 
 // Watch for source updates, will use dev build
-gulp.task('watch', [], function() {
+gulp.task('watch', ['dev'], function() {
     gulp.watch(watch, ['browserify', 'views']);
 });
 

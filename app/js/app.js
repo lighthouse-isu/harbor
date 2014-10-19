@@ -16,12 +16,12 @@ var angular = require('angular'),
 //
 
 // app modules
-var main = require('./main/init.js');
+var instances = require('./instances/init.js');
 
 // Initialize the main app
 var app = angular.module('lighthouse.app', [
     'restangular',
-    main.name
+    instances.name
 ]);
 
 function appConfig(RestangularProvider) {
