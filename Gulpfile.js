@@ -53,8 +53,7 @@ gulp.task('jshint', function () {
 gulp.task('browserify', function() {
     // do magic
     browserify(appRoot, {
-        debug: true
-        // insertGlobals: true,
+        debug: isProd
     })
     .bundle()
     // Bundle to a single file
