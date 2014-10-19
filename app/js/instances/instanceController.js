@@ -5,7 +5,16 @@
 function instanceController($scope, instanceService) {
     'use strict';
 
-    $scope.message = 'hello lighthouse.';
+    instanceService.getInstances().then(
+        // success
+        function (instances) {
+            $scope.message = instances;
+        },
+        // error
+        function (response) {
+
+        }
+    );
 }
 
 instanceController.$inject = ['$scope', 'instanceService'];

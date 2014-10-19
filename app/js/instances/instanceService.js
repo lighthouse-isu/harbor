@@ -4,8 +4,10 @@
  */
 function instanceService(Restangular) {
 
-    function getInstances() {
+    var baseInstances = Restangular.all('instances');
 
+    function getInstances() {
+        return baseInstances.getList();
     }
 
     return {
