@@ -16,22 +16,21 @@ var angular = require('angular'),
 //
 
 // app modules
-var instances = require('./instances/init.js');
+var config = require('./config/init.js'),
+    instances = require('./instances/init.js');
 
 // Initialize the main app
 var app = angular.module('lighthouse.app', [
     'restangular',
+    config.name,
     instances.name
 ]);
 
-// API configuration
-app.constant('baseApiUrl', '/api/v0');
-
-function appConfig(RestangularProvider, baseApiUrl) {
-    RestangularProvider.setBaseUrl(baseApiUrl);
+function appConfig(RestangularProvider) {
+    RestangularProvider.setBaseUrl('/api/v0');
 }
 
-appConfig.$inject = ['RestangularProvider', 'baseApiUrl'];
+appConfig.$inject = ['RestangularProvider'];
 app.config(appConfig);
 
 //
@@ -43,7 +42,7 @@ var devApp = angular.module('lighthouse.devApp', [app.name, 'ngMockE2E']);
 
 // Configure mock responses
 // TODO pull JSON from filesystem
-function devAppBootstrap($httpBackend, Restangular, baseApiUrl) {
+function devAppBootstrap($httpBackend, Restangular, configService) {
 
     // Instance discovery
     var instances = [
@@ -62,10 +61,10 @@ function devAppBootstrap($httpBackend, Restangular, baseApiUrl) {
         }
     ];
 
-    $httpBackend.whenGET(baseApiUrl + '/instances').respond(instances);
+    $httpBackend.whenGET(configService.api.base + '/instances').respond(instances);
 }
 
-devAppBootstrap.$inject = ['$httpBackend', 'Restangular', 'baseApiUrl'];
+devAppBootstrap.$inject = ['$httpBackend', 'Restangular', 'configService'];
 devApp.run(devAppBootstrap);
 
 // Pass control to angular
