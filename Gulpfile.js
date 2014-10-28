@@ -18,7 +18,7 @@ var watch = [
 ];
 
 // lighthouse and lighthouse-client live at the same filesystem level
-var staticRoot = '../lighthouse/backend/static/';
+var staticRoot = '../lighthouse/static/';
 var appRoot = './app/js/app.js';
 var isProd = false;
 
