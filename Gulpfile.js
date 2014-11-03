@@ -12,7 +12,6 @@ var browserify = require('browserify'),
 
 var watch = [
     './app/js/*.js',
-    './app/js/**/*.js',
     './app/*.html',
     './app/**/*.html'
 ];
@@ -39,7 +38,7 @@ gulp.task('prod', function () {
 });
 
 // Build app and assets
-gulp.task('build', ['jshint', 'browserify', 'views']);
+gulp.task('build', ['jshint', 'browserify', 'views', 'vendor']);
 
 // JSHint
 gulp.task('jshint', function () {
@@ -66,11 +65,16 @@ gulp.task('browserify', function() {
     .pipe(gulp.dest(staticRoot + 'js/'));
 });
 
+gulp.task('vendor', function() {
+  gulp.src('./app/bower_components/**')
+  .pipe(gulp.dest(staticRoot + 'vendor/'));
+});
+
 // View task for html assets
 gulp.task('views', function () {
     gulp.src('./app/*.html')
-    .pipe(gulp.dest(staticRoot))
-})
+    .pipe(gulp.dest(staticRoot));
+});
 
 // Watch for source updates, will use dev build
 gulp.task('watch', ['dev'], function() {
