@@ -23,7 +23,7 @@
     "angular-route": "~1.2.23",
     "lodash": "~2.4.1",
     "jquery": "~2.1.1",
-    "bootstrap": "~3.2.0",
+    "bootswatch-dist": "3.3.0-flatly",
     "fontawesome": "~4.1.0",
     "restangular": "~1.4.0"
   },
