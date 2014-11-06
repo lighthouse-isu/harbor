@@ -16,6 +16,15 @@ var watch = [
     './app/**/*.html'
 ];
 
+// front-end assets handled by Bower
+var bower_base = './app/bower_components/';
+var vendor_assets = [
+  bower_base + 'bootswatch-dist/css/bootstrap.css',
+  bower_base + 'bootswatch-dist/js/bootstrap.js',
+  bower_base + 'fontawesome/css/font-awesome.css',
+  bower_base + 'jquery/dist/jquery.js'
+]
+
 // lighthouse and lighthouse-client live at the same filesystem level
 var staticRoot = '../lighthouse/static/';
 var appRoot = './app/js/app.js';
@@ -66,7 +75,7 @@ gulp.task('browserify', function() {
 });
 
 gulp.task('vendor', function() {
-  gulp.src('./app/bower_components/**')
+  gulp.src(vendor_assets)
   .pipe(gulp.dest(staticRoot + 'vendor/'));
 });
 
