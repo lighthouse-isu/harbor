@@ -23,7 +23,7 @@ var vendor_assets = [
   bower_base + 'bootswatch-dist/js/bootstrap.js',
   bower_base + 'fontawesome/css/font-awesome.css',
   bower_base + 'jquery/dist/jquery.js'
-]
+];
 
 // lighthouse and lighthouse-client live at the same filesystem level
 var staticRoot = '../lighthouse/static/';
