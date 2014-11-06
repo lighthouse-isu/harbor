@@ -1,0 +1,26 @@
+{
+  "name": "lighthouse-client",
+  "version": "0.0.0",
+  "authors": [
+    "Robert Sheehy <rsheehy@iastate.edu>",
+    "Nick Miller <ngmiller@iastate.edu>",
+    "Zach Taylor <ztaylor234@gmail.com>"
+  ],
+  "homepage": "https://lighthouse.github.io",
+  "description": "Client for the Lighthouse application",
+  "main": "Gulpfile.js",
+  "license": "Apache",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "bootswatch-dist": "3.3.0-flatly",
+    "fontawesome": "~4.1.0",
+  }
+}
