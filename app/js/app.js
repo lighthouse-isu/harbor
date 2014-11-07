@@ -17,12 +17,14 @@ var angular = require('angular'),
 
 // app modules
 var config = require('./config/init.js'),
+    docker = require('./docker/init.js'),
     instances = require('./instances/init.js');
 
 // Initialize the main app
 var app = angular.module('lighthouse.app', [
     'restangular',
     config.name,
+    docker.name,
     instances.name
 ]);
 
@@ -62,6 +64,12 @@ function devAppBootstrap($httpBackend, Restangular, configService) {
     ];
 
     $httpBackend.whenGET(configService.api.base + '/instances').respond(instances);
+
+    $httpBackend.whenGET(configService.api.base + '/host/d/containers').respond([
+        {
+            'name': 'container2'
+        }
+    ]);
 }
 
 devAppBootstrap.$inject = ['$httpBackend', 'Restangular', 'configService'];

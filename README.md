@@ -18,4 +18,8 @@ Then, install our node dependencies, do a dev build, and optionally start the js
 
 New angular modules should follow the same pattern as `instances`. Generally speaking, each major piece of functionality should be pulled out into it's own module and given a unique name to link into the root module. (see `app/js/app.js`)
 
+### Running unit tests
+
+* `npm install jasmine-node -g`
+
 Happy coding!
