@@ -21,5 +21,7 @@ New angular modules should follow the same pattern as `instances`. Generally spe
 ### Running unit tests
 
 * `npm install jasmine-node -g`
+* `npn install karma -g`
+* (from root) `karma start`
 
 Happy coding!

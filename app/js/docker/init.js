@@ -1,8 +1,7 @@
 // docker/init.js
 // Creates docker requests targetted at a specific host.
 
-var angular = require('angular'),
-    containerService = require('./containerService');
+var containerService = require('./containerService');
 
 var docker = angular.module('lighthouse.docker', []);
 

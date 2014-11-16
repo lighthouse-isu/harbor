@@ -1,8 +1,7 @@
 // instances/init.js
 // Handles discovery and display of Docker host instances
 
-var angular = require('angular'),
-    instanceController = require('./instanceController'),
+var instanceController = require('./instanceController'),
     instanceService = require('./instanceService');
 
 // init angular module

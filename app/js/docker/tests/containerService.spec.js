@@ -1,6 +1,4 @@
 
-var angular = require('angular');
-
 
 describe('containerService', function () {
     var $httpBackend,
