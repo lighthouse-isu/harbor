@@ -7,7 +7,7 @@ function instanceService(Restangular) {
     var baseInstances = Restangular.all('instances');
 
     function getInstances() {
-        return 'testing';
+        return 'hello from instanceService';
     }
 
     return {
