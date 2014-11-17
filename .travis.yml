@@ -6,6 +6,3 @@ node_js:
 before_script:
   - npm install -g karma-cli
   - bower install
-
-script:
-  - karma start
