@@ -1,13 +1,13 @@
 //
 // Build
 //
-var browserify = require('browserify'),
+var browserify = require('gulp-browserify'),
     buffer = require('vinyl-buffer'),
     gulp  = require('gulp'),
     gutil = require('gulp-util'),
     jshint = require('gulp-jshint'),
     rimraf = require('rimraf'),
-    source = require('vinyl-source-stream'),
+    stringify = require('stringify'),
     uglify = require('gulp-uglify');
 
 var watch = [
@@ -60,18 +60,20 @@ gulp.task('jshint', function () {
 // -- This will package our app into a single file for distribution
 gulp.task('browserify', function() {
     // do magic
-    browserify(appRoot, {
-        debug: isProd
-    })
-    .bundle()
-    // Bundle to a single file
-    .pipe(source('app.js'))
-    // convert to buffer for use by uglify (doesn't like streams)
-    .pipe(buffer())
-    // minify source, skip on dev build
-    .pipe(isProd ? uglify() : gutil.noop())
-    // Output it to our dist folder
-    .pipe(gulp.dest(staticRoot + 'js/'));
+    gulp.src(appRoot)
+        .pipe(browserify({
+            debug: isProd,
+            transform: stringify({
+                extensions: ['.html'],
+                minify: true
+            })
+        }))
+        // convert to buffer for use by uglify (doesn't like streams)
+        .pipe(buffer())
+        // minify source, skip on dev build
+        .pipe(isProd ? uglify() : gutil.noop())
+        // Output it to our dist folder
+        .pipe(gulp.dest(staticRoot + 'js/'));
 });
 
 gulp.task('vendor', function() {

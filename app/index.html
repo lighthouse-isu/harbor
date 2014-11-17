@@ -3,11 +3,15 @@
 <html>
 
   <head>
+    <!-- required for html5Mode URLs (see $locationProvider) -->
+    <base href="/">
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Lighthouse</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Lighthouse</title>
 
     <link rel="stylesheet" href="/static/vendor/bootstrap.css"/>
     <link rel="stylesheet" href="/static/vendor/font-awesome.css"/>
@@ -45,9 +49,9 @@
       </div>
     </div>
 
-    <div class="container" ng-controller="instanceController">
-      <h2>{{ message }}</h2>
-      <hr>
+    <div class="container">
+      <div ng-view>
+      </div>
       <footer>
         <p style>&copy; Lighthouse 2014</p>
       </footer>
@@ -61,6 +65,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular-mocks.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/restangular/1.4.0/restangular.min.js"></script>
+    <script src="//code.angularjs.org/1.3.0/angular-route.js"></script>
     <script src="/static/js/app.js"></script>
   </body>
 
