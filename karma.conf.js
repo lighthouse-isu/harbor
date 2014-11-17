@@ -15,7 +15,7 @@ module.exports = function(config) {
         files: [
             // browser deps
             './node_modules/lodash/lodash.js',
-            './node_modules/angular/angular.js',
+            './node_modules/angular/lib/angular.js',
             './node_modules/angular-mocks/angular-mocks.js',
             './node_modules/restangular/src/restangular.js',
             // testing files
