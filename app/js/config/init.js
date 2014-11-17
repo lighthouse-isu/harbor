@@ -1,8 +1,6 @@
 // config/init.js
 // Application wide configuration parameters
 
-var angular = require('angular');
-
 function configService() {
     return {
         api: {

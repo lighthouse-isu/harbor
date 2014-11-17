@@ -17,7 +17,7 @@ var watch = [
 ];
 
 // front-end assets handled by Bower
-var bower_base = './app/bower_components/';
+var bower_base = './bower_components/';
 var vendor_assets = [
   bower_base + 'bootswatch-dist/css/bootstrap.css',
   bower_base + 'bootswatch-dist/js/bootstrap.js',
