@@ -33,10 +33,8 @@ module.exports = function(config) {
         },
 
         browserify: {
-            debug: true
-            // transform: [
-            //     ['stringify', { extensions: ['.html'] }]
-            // ]
+            debug: true,
+            transform: ['brfs']
         },
 
         // test results reporter to use

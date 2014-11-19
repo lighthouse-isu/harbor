@@ -1,13 +1,14 @@
 //
 // Build
 //
-var browserify = require('gulp-browserify'),
+var brfs = require('brfs'),
+    browserify = require('gulp-browserify'),
     buffer = require('vinyl-buffer'),
     gulp  = require('gulp'),
     gutil = require('gulp-util'),
     jshint = require('gulp-jshint'),
     rimraf = require('rimraf'),
-    stringify = require('stringify'),
+    //stringify = require('stringify'),
     uglify = require('gulp-uglify');
 
 var watch = [
@@ -63,10 +64,7 @@ gulp.task('browserify', function() {
     gulp.src(appRoot)
         .pipe(browserify({
             debug: isProd,
-            transform: stringify({
-                extensions: ['.html'],
-                minify: true
-            })
+            transform: ['brfs']
         }))
         // convert to buffer for use by uglify (doesn't like streams)
         .pipe(buffer())
