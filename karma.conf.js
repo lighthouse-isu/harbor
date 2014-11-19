@@ -1,5 +1,3 @@
-// Karma configuration
-// Generated on Sun Nov 02 2014 12:55:05 GMT-0600 (CST)
 
 module.exports = function(config) {
     config.set({
@@ -16,10 +14,12 @@ module.exports = function(config) {
             // browser deps
             './node_modules/lodash/lodash.js',
             './node_modules/angular/lib/angular.js',
+            './node_modules/angular-route/angular-route.js',
             './node_modules/angular-mocks/angular-mocks.js',
             './node_modules/restangular/src/restangular.js',
             // testing files
-            './app/js/**/*.js'
+            './app/js/app.js',
+            './app/js/**/tests/*.spec.js'
         ],
 
         // list of files to exclude
@@ -29,10 +29,14 @@ module.exports = function(config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            './app/js/**/*.js': ['browserify']
+            './app/js/app.js': ['browserify'],
         },
 
         browserify: {
+            debug: true
+            // transform: [
+            //     ['stringify', { extensions: ['.html'] }]
+            // ]
         },
 
         // test results reporter to use

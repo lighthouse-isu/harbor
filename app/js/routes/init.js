@@ -6,7 +6,8 @@ var routes = angular.module('lighthouse.routes', ['ngRoute']);
 function configRoutes($routeProvider) {
     $routeProvider
         .when('/instances', {
-            template: require('../instances/templates/instances.html'),
+            //template: require('../instances/templates/instances.html'),
+            template: 'test',
             controller: 'instanceController'
         });
 }
