@@ -8,7 +8,6 @@ var brfs = require('brfs'),
     gutil = require('gulp-util'),
     jshint = require('gulp-jshint'),
     rimraf = require('rimraf'),
-    //stringify = require('stringify'),
     uglify = require('gulp-uglify');
 
 var watch = [
