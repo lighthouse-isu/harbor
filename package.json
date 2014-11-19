@@ -1,5 +1,8 @@
 {
   "private": true,
+  "scripts": {
+    "test": "karma start"
+  },
   "devDependencies": {
     "angular": "1.2.21",
     "angular-mocks": "^1.3.0",
