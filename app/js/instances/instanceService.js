@@ -13,17 +13,17 @@ function instanceService(Restangular) {
     }
 
     function getInstances(provider, query, headers) {
-        return instanceBase
+        return instanceBase(provider)
             .one('vms').get(query, headers);
     }
 
     function findInstances(provider, query, headers) {
-        return instanceBase
+        return instanceBase(provider)
             .one('vms').one('find').get(query, headers);
     }
 
     function authorizeInstance(provider, query, headers) {
-        return instanceBase
+        return instanceBase(provider)
             .one('authorize').get(query, headers);
     }
 
