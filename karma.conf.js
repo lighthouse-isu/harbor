@@ -34,7 +34,7 @@ module.exports = function(config) {
 
         browserify: {
             debug: true,
-            transform: ['brfs']
+            transform: ['partialify']
         },
 
         // test results reporter to use

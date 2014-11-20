@@ -1,8 +1,7 @@
 //
 // Build
 //
-var brfs = require('brfs'),
-    browserify = require('gulp-browserify'),
+var browserify = require('gulp-browserify'),
     buffer = require('vinyl-buffer'),
     gulp  = require('gulp'),
     gutil = require('gulp-util'),
@@ -63,7 +62,7 @@ gulp.task('browserify', function() {
     gulp.src(appRoot)
         .pipe(browserify({
             debug: isProd,
-            transform: ['brfs']
+            transform: ['partialify']
         }))
         // convert to buffer for use by uglify (doesn't like streams)
         .pipe(buffer())
