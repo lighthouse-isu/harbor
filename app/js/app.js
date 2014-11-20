@@ -7,10 +7,10 @@
 //
 
 // app modules
-var config = require('./config/init.js'),
-    docker = require('./docker/init.js'),
-    instances = require('./instances/init.js'),
-    routes = require('./routes/init.js');
+var config = require('./config/init'),
+    docker = require('./docker/init'),
+    instances = require('./instances/init'),
+    routes = require('./routes/init');
 
 // Initialize the main app
 var app = angular.module('lighthouse.app', [

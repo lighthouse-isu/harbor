@@ -7,7 +7,6 @@ var browserify = require('gulp-browserify'),
     gutil = require('gulp-util'),
     jshint = require('gulp-jshint'),
     rimraf = require('rimraf'),
-    stringify = require('stringify'),
     uglify = require('gulp-uglify');
 
 var watch = [
@@ -63,10 +62,7 @@ gulp.task('browserify', function() {
     gulp.src(appRoot)
         .pipe(browserify({
             debug: isProd,
-            transform: stringify({
-                extensions: ['.html'],
-                minify: true
-            })
+            transform: ['partialify']
         }))
         // convert to buffer for use by uglify (doesn't like streams)
         .pipe(buffer())
