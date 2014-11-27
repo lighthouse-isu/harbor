@@ -4,31 +4,41 @@
  * authService
  * Manages login/logout and auth status.
  */
-function authService($rootScope, Restangular) {
-
+function authService($rootScope, $q, Restangular) {
     /*
      * login()
-     * Request a session.
-     * @param credentials: [object] keys (Email, Password)
+     * Request a session. Sets a user object at $rootScope
+     * upon successful login.
+     *
+     * @param auth: [object] keys (Email, Password)
+     * @return promise: (success, error)
+     *      - success callback accepts user [object] with email key
+     *      - error callback accepts reason [string]
      */
-    function login(credentials) {
-        if (!credentials.Email || !credentials.Password) {
-            // error
-            // resolve promise with an error?
-        }
+    function login(auth) {
+        var deferred = $q.defer();
 
-        Restangular.all('login').post(credentials).then(
+        Restangular.all('login').post(auth).then(
             // success
             function (response) {
-                
-            },
-            // error
-            function (response) {
+                if (response === 'false') {
+                    deferred.reject('invalid email or password');
+                }
+                else {
+                    var user = {
+                        email: auth.Email
+                    };
 
+                    $rootScope.user = user;
+                    deferred.resolve(user);
+                }
             }
+            // NOTE
+            // error callback will not execute on failed login
+            // as server returns 200 OK in either case
         );
-        // on success, resolve promise with success
-        // on error, resolve promise with error
+
+        return deferred.promise;
     }
 
     /*
@@ -50,7 +60,7 @@ function authService($rootScope, Restangular) {
 
     /*
      * isLoggedIn()
-     * @return boolean
+     * @return [boolean]
      */
     function isLoggedIn() {
         return $rootScope.user ? true : false;
@@ -63,5 +73,5 @@ function authService($rootScope, Restangular) {
     };
 }
 
-authService.$inject = ['$rootScope', 'Restangular'];
+authService.$inject = ['$rootScope', '$q', 'Restangular'];
 module.exports = authService;
