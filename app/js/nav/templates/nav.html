@@ -8,13 +8,21 @@
     </div>
     <div ng-if="loggedIn" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li class="active">
+        <li>
           <a href="/instances">Instances</a>
         </li>
       </ul>
-      <p class="navbar-text navbar-right">
-        Signed in as <a class="navbar-link" href="#">{{ user.email }}</a>
-      </p>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <p class="navbar-text">
+            Signed in as <a class="navbar-link" href="#">{{ user.email }}</a>
+          </p>
+        </li>
+        <li>
+          <button ng-click="logout()" type="button"
+            class="btn btn-primary navbar-btn">Sign out</button>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
