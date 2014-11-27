@@ -4,7 +4,23 @@
  * authService
  * Manages login/logout and auth status.
  */
-function authService($rootScope, $q, Restangular) {
+function authService($rootScope, $q, Restangular, authEvents) {
+    /*
+     * getUser()
+     * Return the global user [object].
+     */
+    function getUser() {
+        return $rootScope.user;
+    }
+
+    /*
+     * isLoggedIn()
+     * @return [boolean]
+     */
+    function isLoggedIn() {
+        return $rootScope.user ? true : false;
+    }
+
     /*
      * login()
      * Request a session. Sets a user object at $rootScope
@@ -19,7 +35,6 @@ function authService($rootScope, $q, Restangular) {
         var deferred = $q.defer();
 
         Restangular.all('login').post(auth).then(
-            // success
             function (response) {
                 if (response === 'false') {
                     deferred.reject('invalid email or password');
@@ -31,6 +46,9 @@ function authService($rootScope, $q, Restangular) {
 
                     $rootScope.user = user;
                     deferred.resolve(user);
+
+                    // fire event
+                    $rootScope.$broadcast(authEvents.login);
                 }
             }
             // NOTE
@@ -58,20 +76,13 @@ function authService($rootScope, $q, Restangular) {
         );
     }
 
-    /*
-     * isLoggedIn()
-     * @return [boolean]
-     */
-    function isLoggedIn() {
-        return $rootScope.user ? true : false;
-    }
-
     return {
+        'getUser': getUser,
+        'isLoggedIn': isLoggedIn,
         'login': login,
-        'logout': logout,
-        'isLoggedIn': isLoggedIn
+        'logout': logout
     };
 }
 
-authService.$inject = ['$rootScope', '$q', 'Restangular'];
+authService.$inject = ['$rootScope', '$q', 'Restangular', 'authEvents'];
 module.exports = authService;

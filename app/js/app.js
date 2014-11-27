@@ -10,6 +10,7 @@ var auth = require('./auth/init'),
     config = require('./config/init'),
     docker = require('./docker/init'),
     instances = require('./instances/init'),
+    nav = require('./nav/init');
     routes = require('./routes/init');
 
 // Initialize the main app
@@ -19,6 +20,7 @@ var app = angular.module('lighthouse.app', [
     config.name,
     docker.name,
     instances.name,
+    nav.name,
     routes.name
 ]);
 
