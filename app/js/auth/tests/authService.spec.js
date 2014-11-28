@@ -28,6 +28,9 @@ describe('authService', function () {
         http.expect('GET',
             configService.api.base + '/logout').respond('');
 
+        // mock log in
+        rootScope.user = true;
+
         authService.logout();
         http.flush();
     });
@@ -35,7 +38,7 @@ describe('authService', function () {
     it('should determine status', function () {
         expect(authService.isLoggedIn()).toBe(false);
 
-        rootScope.user = {'email': 'test@test.com'};
+        rootScope.user = true;
         expect(authService.isLoggedIn()).toBe(true);
     });
 });
