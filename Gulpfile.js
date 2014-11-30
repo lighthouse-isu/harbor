@@ -1,12 +1,13 @@
 //
 // Build
 //
-var browserify = require('gulp-browserify'),
+var browserify = require('browserify'),
     buffer = require('vinyl-buffer'),
     gulp  = require('gulp'),
     gutil = require('gulp-util'),
     jshint = require('gulp-jshint'),
     rimraf = require('rimraf'),
+    source = require('vinyl-source-stream'),
     uglify = require('gulp-uglify');
 
 var watch = [
@@ -18,10 +19,10 @@ var watch = [
 // front-end assets handled by Bower
 var bower_base = './bower_components/';
 var vendor_assets = [
-  bower_base + 'bootswatch-dist/css/bootstrap.css',
-  bower_base + 'bootswatch-dist/js/bootstrap.js',
-  bower_base + 'fontawesome/css/font-awesome.css',
-  bower_base + 'jquery/dist/jquery.js'
+    bower_base + 'bootswatch-dist/css/bootstrap.css',
+    bower_base + 'bootswatch-dist/js/bootstrap.js',
+    bower_base + 'fontawesome/css/font-awesome.css',
+    bower_base + 'jquery/dist/jquery.js'
 ];
 
 // lighthouse and lighthouse-client live at the same filesystem level
@@ -58,18 +59,18 @@ gulp.task('jshint', function () {
 // Browserify task for js assets
 // -- This will package our app into a single file for distribution
 gulp.task('browserify', function() {
-    // do magic
-    gulp.src(appRoot)
-        .pipe(browserify({
-            debug: isProd,
-            transform: ['partialify']
-        }))
-        // convert to buffer for use by uglify (doesn't like streams)
-        .pipe(buffer())
-        // minify source, skip on dev build
-        .pipe(isProd ? uglify() : gutil.noop())
-        // Output it to our dist folder
-        .pipe(gulp.dest(staticRoot + 'js/'));
+    browserify(appRoot, {
+        debug: true,
+        // modules with no require() deps
+        noparse: ['lodash'],
+        transform: ['partialify'],
+    })
+    .bundle()
+    .pipe(source('app.js'))
+    // minify source, skip on dev build
+    .pipe(isProd ? buffer() : gutil.noop())
+    .pipe(isProd ? uglify() : gutil.noop())
+    .pipe(gulp.dest(staticRoot + 'js/'));
 });
 
 gulp.task('vendor', function() {
