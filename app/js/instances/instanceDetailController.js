@@ -5,27 +5,33 @@
 
 var _ = require('lodash');
 
-function instanceDetailController($scope, instanceService, containerService) {
+function instanceDetailController($scope, $routeParams, instanceService, containerService) {
     'use strict';
 
+    var host = $routeParams.host;
     $scope.instance = {};
     $scope.containers = {};
 
-    $scope.getInstance = function(host) {
-        var instances = instanceService.getInstances();
-        $scope.instance = _.find(instances, {'name': host});
-        $scope.containers = containerService.list(host).then(
-            // success
-            function (containers) {
-                $scope.containers = containers;
-            },
-            // error
-            function (response) {
-                console.log(response);
-            }
-        );
-    }
+    instanceService.getInstances().then(
+        // success
+        function (instances) {
+            $scope.instance = _.find(instances, {'name': host});
+        },
+        function (response) {
+            console.log(response);
+        }
+    );
+
+    containerService.list(host).then(
+        // success
+        function (containers) {
+            $scope.containers = containers;
+        },
+        function (response) {
+            console.log(response);
+        }
+    );
 }
 
-instanceController.$inject = ['$scope', 'instanceService', 'containerService'];
+instanceDetailController.$inject = ['$scope', 'instanceService', 'containerService'];
 module.exports = instanceDetailController;
