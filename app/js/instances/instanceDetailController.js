@@ -33,5 +33,5 @@ function instanceDetailController($scope, $routeParams, instanceService, contain
     );
 }
 
-instanceDetailController.$inject = ['$scope', 'instanceService', 'containerService'];
+instanceDetailController.$inject = ['$scope', '$routeParams', 'instanceService', 'containerService'];
 module.exports = instanceDetailController;
