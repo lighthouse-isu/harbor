@@ -5,6 +5,12 @@ var routes = angular.module('lighthouse.routes', ['ngRoute']);
 
 function configRoutes($routeProvider) {
     $routeProvider
+        // Authentication
+        .when('/login', {
+            template: require('../auth/templates/login.html'),
+            controller: 'loginController'
+        })
+        // Functionality
         .when('/instances', {
             template: require('../instances/templates/instances.html'),
             controller: 'instanceController'
