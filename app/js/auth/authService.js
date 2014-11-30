@@ -1,5 +1,3 @@
-// auth/authService.js
-
 /*
  * authService
  * Manages login/logout and auth status.
