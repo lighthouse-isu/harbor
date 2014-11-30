@@ -60,7 +60,7 @@ gulp.task('jshint', function () {
 // -- This will package our app into a single file for distribution
 gulp.task('browserify', function() {
     browserify(appRoot, {
-        debug: true,
+        debug: !isProd,
         // modules with no require() deps
         noparse: ['lodash'],
         transform: ['partialify'],
