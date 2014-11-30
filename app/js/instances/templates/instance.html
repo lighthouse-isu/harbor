@@ -2,8 +2,28 @@
   <div class="row">
     <div class="col-md-12">
       <ol class="breadcrumb">
-        <li class="active">Instances</li>
+        <li><a href="/instances">Instances</a></li>
+        <li class="active">{{ instance.name }}</li>
       </ol>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h1>{{ instance.name }}</h1>
+    </div>
+    <div class="col-md-12">
+      <dl class="dl-horizontal">
+        <dt>Name</dt>
+        <dd>{{ instance.Name }}</dd>
+        <dt>Address</dt>
+        <dd>{{ instance.Address }}</dd>
+        <dt>Port</dt>
+        <dd>{{ instance.Port }}</dd>
+        <dt>Version</dt>
+        <dd>{{ instance.Version }}</dd>
+        <dt>Docker Status</dt>
+        <dd>{{ instance.CanAccessDocker }}</dd>
+      </dl>
     </div>
   </div>
   <div class="row">
@@ -43,22 +63,22 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Port</th>
-            <th>Version</th>
-            <th>Docker Status</th>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Image</th>
+            <th>Command</th>
+            <th>Created</th>
+            <th>Ports</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="instance in instances">
-            <td>
-              <a href="/instances/{{ instance.Name }}">{{ instance.Name }}</a>
-            </td>
-            <td>{{ instance.Address }}</td>
-            <td>{{ instance.Port }}</td>
-            <td>{{ instance.Version }}
-            <td>{{ instance.CanAccessDocker }}</td>
+          <tr ng-repeat="container in containers">
+            <td>{{ container.Id }}</td>
+            <td>{{ container.Status }}</td>
+            <td>{{ container.Image }}</td>
+            <td>{{ container.Command }}</td>
+            <td>{{ container.Created }}</td>
+            <td>{{ container.Ports }}</td>
           </tr>
         </tbody>
       </table>

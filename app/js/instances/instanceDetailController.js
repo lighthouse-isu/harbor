@@ -27,5 +27,5 @@ function instanceDetailController($scope, instanceService, containerService) {
     }
 }
 
-instanceController.$inject = ['$scope', 'instanceService'];
-module.exports = instanceController;
+instanceController.$inject = ['$scope', 'instanceService', 'containerService'];
+module.exports = instanceDetailController;
