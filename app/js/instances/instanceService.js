@@ -3,34 +3,26 @@
  * Requests and manages information related to instance discovery.
  */
 function instanceService(Restangular) {
-  'use strict';
+    'use strict';
 
-    var baseInstances = Restangular.all('instances');
-
-    function instanceBase(provider) {
+    function instanceBase() {
       return Restangular
-        .one('plugins').one(provider);
+        .one('provider');
     }
 
-    function getInstances(provider, query, headers) {
-        return instanceBase(provider)
+    function getInstances(query, headers) {
+        return instanceBase()
             .one('vms').get(query, headers);
     }
 
-    function findInstances(provider, query, headers) {
-        return instanceBase(provider)
-            .one('vms').one('find').get(query, headers);
-    }
-
-    function authorizeInstance(provider, query, headers) {
-        return instanceBase(provider)
-            .one('authorize').get(query, headers);
+    function whichProvider(query, headers) {
+        return instanceBase()
+            .one('which').get(query, headers);
     }
 
     return {
         'getInstances': getInstances,
-        'findInstances': findInstances,
-        'authorizeInstance': authorizeInstance
+        'whichProvider': whichProvider
     };
 }
 

@@ -14,7 +14,12 @@ function configRoutes($routeProvider) {
         .when('/instances', {
             template: require('../instances/templates/instances.html'),
             controller: 'instanceController'
-        });
+        })
+        .when('/instances/:host', {
+            template: require('../instances/templates/instance.html'),
+            controller: 'instanceDetailController'
+        })
+        .otherwise({ redirectTo: '/' });
 }
 
 configRoutes.$inject = ['$routeProvider'];
