@@ -5,7 +5,9 @@
 function instanceController($scope, instanceService) {
     'use strict';
 
-    $scope.message = instanceService.getInstances();
+    $scope.instances = instanceService.getInstances();
+
+
 }
 
 instanceController.$inject = ['$scope', 'instanceService'];

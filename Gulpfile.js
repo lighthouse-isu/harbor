@@ -6,6 +6,7 @@ var browserify = require('browserify'),
     gulp  = require('gulp'),
     gutil = require('gulp-util'),
     jshint = require('gulp-jshint'),
+    mainBower = require('main-bower-files'),
     rimraf = require('rimraf'),
     source = require('vinyl-source-stream'),
     uglify = require('gulp-uglify');
@@ -18,12 +19,6 @@ var watch = [
 
 // front-end assets handled by Bower
 var bower_base = './bower_components/';
-var vendor_assets = [
-    bower_base + 'bootswatch-dist/css/bootstrap.css',
-    bower_base + 'bootswatch-dist/js/bootstrap.js',
-    bower_base + 'fontawesome/css/font-awesome.css',
-    bower_base + 'jquery/dist/jquery.js'
-];
 
 // lighthouse and lighthouse-client live at the same filesystem level
 var staticRoot = '../lighthouse/static/';
@@ -73,9 +68,10 @@ gulp.task('browserify', function() {
     .pipe(gulp.dest(staticRoot + 'js/'));
 });
 
+// add vendor assets from Bower
 gulp.task('vendor', function() {
-  gulp.src(vendor_assets)
-  .pipe(gulp.dest(staticRoot + 'vendor/'));
+    gulp.src(mainBower(), { base: bower_base })
+        .pipe(gulp.dest(staticRoot + 'vendor/'));
 });
 
 // View task for html assets
