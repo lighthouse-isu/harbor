@@ -69,6 +69,7 @@
             <th>Command</th>
             <th>Created</th>
             <th>Ports</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -79,6 +80,19 @@
             <td>{{ container.Command }}</td>
             <td>{{ container.Created }}</td>
             <td>{{ container.Ports }}</td>
+            <td>
+              <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                  Actions
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="start(container.Id)">Start</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="stop(container.Id)">Stop</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="restart(container.Id)">Restart</a></li>
+                </ul>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
