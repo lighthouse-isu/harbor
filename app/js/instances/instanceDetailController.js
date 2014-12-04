@@ -33,15 +33,39 @@ function instanceDetailController($scope, $routeParams, instanceService, contain
     );
 
     $scope.start = function (id) {
-        containerService.start(host, id);
+        containerService.start(host, id).then(
+            // TODO: use alert service
+            function (response) {
+                alert('Successfully started container!');
+            },
+            function (response) {
+                console.log(response);
+            }
+        );
     }
 
     $scope.stop = function (id) {
-        containerService.stop(host, id);
+        containerService.stop(host, id).then(
+            // TODO: use alert service
+            function (response) {
+                alert('Successfully stopped container!');
+            },
+            function (response) {
+                console.log(response);
+            }
+        );
     }
 
     $scope.restart = function (id) {
-        containerService.restart(host, id);
+        containerService.restart(host, id).then(
+            // TODO: use alert service
+            function (response) {
+                alert('Successfully restarted container!');
+            },
+            function (response) {
+                console.log(response);
+            }
+        );
     }
 }
 
