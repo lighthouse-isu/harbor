@@ -25,6 +25,10 @@ function instanceDetailController($scope, $routeParams, instanceService, contain
     containerService.list(host).then(
         // success
         function (containers) {
+            _(containers).forEach(function (container) {
+                container.shortId = container.Id.slice(0, 6);
+            });
+            
             $scope.containers = containers;
         },
         function (response) {
@@ -42,7 +46,7 @@ function instanceDetailController($scope, $routeParams, instanceService, contain
                 console.log(response);
             }
         );
-    }
+    };
 
     $scope.stop = function (id) {
         containerService.stop(host, id).then(
@@ -54,7 +58,7 @@ function instanceDetailController($scope, $routeParams, instanceService, contain
                 console.log(response);
             }
         );
-    }
+    };
 
     $scope.restart = function (id) {
         containerService.restart(host, id).then(
@@ -66,7 +70,7 @@ function instanceDetailController($scope, $routeParams, instanceService, contain
                 console.log(response);
             }
         );
-    }
+    };
 }
 
 instanceDetailController.$inject = ['$scope', '$routeParams', 'instanceService', 'containerService'];

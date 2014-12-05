@@ -4,9 +4,10 @@
  */
 function authSetup($rootScope, $location, authService) {
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
-        if (!authService.isLoggedIn()) {
-            $location.path('/login');
-        }
+        // if (!authService.isLoggedIn()) {
+        //     $location.path('/login');
+        // }
+        $location.path($location.url());
     });
 }
 
