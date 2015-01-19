@@ -37,25 +37,22 @@ function authService($rootScope, $q, Restangular, authEvents) {
         }
         else {
             Restangular.all('login').post(auth).then(
+                // success
                 function (response) {
-                    if (response === 'false') {
-                        deferred.reject('invalid email or password');
-                    }
-                    else {
-                        var user = {
-                            email: auth.Email
-                        };
+                    var user = {
+                        email: auth.Email
+                    };
 
-                        $rootScope.user = user;
-                        deferred.resolve(user);
+                    $rootScope.user = user;
+                    deferred.resolve(user);
 
-                        // fire event
-                        $rootScope.$broadcast(authEvents.login);
-                    }
+                    // fire event
+                    $rootScope.$broadcast(authEvents.login);
+                },
+                // error
+                function (response) {
+                    deferred.reject('invalid email or password');
                 }
-                // NOTE
-                // error callback will not execute on failed login
-                // as server returns 200 OK in either case
             );
         }
 
