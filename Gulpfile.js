@@ -20,8 +20,14 @@ var watch = [
 // front-end assets handled by Bower
 var bower_base = './bower_components/';
 
-// lighthouse and lighthouse-client live at the same filesystem level
-var staticRoot = '../lighthouse/static/';
+// build to lighthouse repo in gopath
+var staticRoot = (function (enviroment) {
+    if (typeof enviroment.GOPATH === 'undefined') {
+        return '../lighthouse/static/';
+    }
+    return enviroment.GOPATH + '/src/github.com/lighthouse/lighthouse/static/';
+})(process.env);
+
 var appRoot = './app/js/app.js';
 var isProd = false;
 

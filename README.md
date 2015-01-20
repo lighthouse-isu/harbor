@@ -3,11 +3,16 @@ lighthouse-client
 
 UI assets and code for Lighthouse.
 
+## Requirements
+
+* [node](http://nodejs.org/)
+* [lighthouse](https://github.com/lighthouse/lighthouse)
+
 ## Development
 
-Be sure the `lighthouse` and `lighthouse-client` repositories are at the same level of the filesystem.
 Then, install our node dependencies, do a dev build, and optionally start the js watcher (which will automatically do a dev build when files change).
 
+* `npm install -g bower`
 * `bower install`
 * `npm install -g gulp`
 * `npm install`
