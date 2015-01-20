@@ -53,12 +53,12 @@
         <tbody>
           <tr ng-repeat="instance in instances">
             <td>
-              <a href="/instances/{{ instance.Name }}">{{ instance.Name }}</a>
+              <a href="/instances/{{ instance.name }}">{{ instance.name }}</a>
             </td>
-            <td>{{ instance.Address }}</td>
-            <td>{{ instance.Port }}</td>
-            <td>{{ instance.Version }}
-            <td>{{ instance.CanAccessDocker }}</td>
+            <td>{{ instance.address }}</td>
+            <td>{{ instance.port }}</td>
+            <td>{{ instance.version }}
+            <td>{{ instance.canAccessDocker }}</td>
           </tr>
         </tbody>
       </table>

@@ -25,12 +25,52 @@ function instanceDetailController($scope, $routeParams, instanceService, contain
     containerService.list(host).then(
         // success
         function (containers) {
+            _(containers).forEach(function (container) {
+                container.shortId = container.Id.slice(0, 6);
+            });
+            
             $scope.containers = containers;
         },
         function (response) {
             console.log(response);
         }
     );
+
+    $scope.start = function (id) {
+        containerService.start(host, id).then(
+            // TODO: use alert service
+            function (response) {
+                alert('Successfully started container!');
+            },
+            function (response) {
+                console.log(response);
+            }
+        );
+    };
+
+    $scope.stop = function (id) {
+        containerService.stop(host, id).then(
+            // TODO: use alert service
+            function (response) {
+                alert('Successfully stopped container!');
+            },
+            function (response) {
+                console.log(response);
+            }
+        );
+    };
+
+    $scope.restart = function (id) {
+        containerService.restart(host, id).then(
+            // TODO: use alert service
+            function (response) {
+                alert('Successfully restarted container!');
+            },
+            function (response) {
+                console.log(response);
+            }
+        );
+    };
 }
 
 instanceDetailController.$inject = ['$scope', '$routeParams', 'instanceService', 'containerService'];

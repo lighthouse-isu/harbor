@@ -33,33 +33,13 @@
           <a class="btn btn-primary"><i class="fa fa-refresh"></i> Rescan</a>
         </div>
         <div class="btn-group btn-group-sm">
-          <a class="btn btn-success"><i class="fa fa-plus"></i> Add Provider</a>
+          <a class="btn btn-success"><i class="fa fa-plus"></i> Add Container</a>
         </div>
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-3">
-      <form>
-        <h4>Filters</h4>
-        <label class="form-label">Provider</label>
-        <select class="form-control input-sm">
-          <option>All</option>
-          <option>AWS</option>
-          <option>GCE</option>
-          <option>Other</option>
-        </select>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" checked="checked">Only show instances that are up</label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" checked="checked">Only show instances with Docker connections</label>
-        </div>
-      </form>
-    </div>
-    <div class="col-md-9">
+    <div class="col-md-12">
       <table class="table">
         <thead>
           <tr>
@@ -69,16 +49,30 @@
             <th>Command</th>
             <th>Created</th>
             <th>Ports</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="container in containers">
-            <td>{{ container.Id }}</td>
+            <td>{{ container.shortId }}</td>
             <td>{{ container.Status }}</td>
             <td>{{ container.Image }}</td>
             <td>{{ container.Command }}</td>
             <td>{{ container.Created }}</td>
             <td>{{ container.Ports }}</td>
+            <td>
+              <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                  Actions
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="start(container.Id)">Start</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="stop(container.Id)">Stop</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="restart(container.Id)">Restart</a></li>
+                </ul>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
