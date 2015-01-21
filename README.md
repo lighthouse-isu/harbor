@@ -10,19 +10,25 @@ UI assets and code for Lighthouse.
 
 ## Development
 
-Then, install our node dependencies, do a dev build, and optionally start the js watcher (which will automatically do a dev build when files change).
+### Setup
 
 * `npm install -g bower`
 * `bower install`
 * `npm install -g gulp`
 * `npm install`
-* `gulp dev build`
-* `gulp watch` (optional)
-* `gulp clean` removes built assets from the server static dir (see Gulpfile.js)
-* `gulp prod build` will do the same as `dev`, but with minified js
-* fire up a webserver from `lighthouse/static` and navigate to `localhost` at the port specified by the server
 
-New angular modules should follow the same pattern as `instances`. Generally speaking, each major piece of functionality should be pulled out into it's own module and given a unique name to link into the root module. (see `app/js/app.js`)
+### Doing things
+
+* `gulp build` default build (non-minified source) to `../lighthouse/static`
+* `gulp watch` optional, rebuilds on source changes
+* `gulp clean` removes built assets from the server static dir (see Gulpfile.js)
+
+Options:
+
+* `--prod` build minfied source to `../lighthouse/static`
+* `--gopath` build to `$GOPATH/src/github.com/lighthouse/lighthouse/static/`
+
+These two flags can be used in conjunction with each other and with any command above. Note that using `--gopath` overrides the default target directory. (i.e. source isn't moved to both locations)
 
 ### Running unit tests
 
