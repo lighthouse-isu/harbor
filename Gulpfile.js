@@ -80,6 +80,9 @@ gulp.task('browserify', function() {
 gulp.task('vendor', function() {
     gulp.src(mainBower(), { base: bower_base })
         .pipe(gulp.dest(staticRoot + 'vendor/'));
+
+    gulp.src('./node_modules/flux-angular/release/flux-angular.min.js')
+        .pipe(gulp.dest(staticRoot + 'vendor/'));
 });
 
 // View task for html assets

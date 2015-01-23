@@ -6,7 +6,8 @@
 //
 
 // app modules
-var auth = require('./auth/init'),
+var actions = require('./actions/init'),
+    auth = require('./auth/init'),
     config = require('./config/init'),
     docker = require('./docker/init'),
     instances = require('./instances/init'),
@@ -15,7 +16,9 @@ var auth = require('./auth/init'),
 
 // Initialize the main app
 var app = angular.module('lighthouse.app', [
+    'flux',
     'restangular',
+    actions.name,
     auth.name,
     config.name,
     docker.name,

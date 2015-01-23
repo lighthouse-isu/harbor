@@ -12,7 +12,7 @@
  * The method definition order follows the order of Docker's API docs as of v1.15
  *
  */
-function containerService(Restangular) {
+function containerService(Restangular, actions, flux) {
     'use strict';
 
     /*
@@ -29,8 +29,17 @@ function containerService(Restangular) {
      * GET /{host}/d/containers/json
      */
      function list(host, query, headers) {
-        return dockerBase(host)
-            .one('json').get(query, headers);
+        dockerBase(host).one('json').get(query, headers).then(
+            // success
+            function (containers) {
+                flux.dispatch(actions.listContainers, containers);
+            },
+            // error
+            function (response) {
+                // TODO flux.dispatch(action.error, message)
+                console.log('Docker API error: /containers/json: ' + response);
+            }
+        );
     }
 
     /*
@@ -169,5 +178,5 @@ function containerService(Restangular) {
     };
 }
 
-containerService.$inject = ['Restangular'];
+containerService.$inject = ['Restangular', 'actions', 'flux'];
 module.exports = containerService;
