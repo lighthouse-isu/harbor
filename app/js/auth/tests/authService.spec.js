@@ -18,7 +18,7 @@ describe('authService', function () {
 
     it('should use the right login URL', function () {
         http.expect('POST',
-            configService.api.base + '/login').respond('');
+            configService.api.base + 'login').respond('');
 
         authService.login({});
         http.flush();
@@ -26,7 +26,7 @@ describe('authService', function () {
 
     it('should use the right logout URL', function () {
         http.expect('GET',
-            configService.api.base + '/logout').respond('');
+            configService.api.base + 'logout').respond('');
 
         // mock log in
         rootScope.user = true;
