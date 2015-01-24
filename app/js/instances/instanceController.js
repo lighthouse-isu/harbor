@@ -2,22 +2,16 @@
  * instanceController
  * Main instance view control.
  */
-function instanceController($scope, instanceService) {
+function instanceController($scope, instanceModel, instanceService) {
     'use strict';
 
     $scope.instances = {};
+    instanceService.getInstances();
 
-    instanceService.getInstances().then(
-        // success
-        function (instances) {
-            $scope.instances = instances;
-        },
-        function (response) {
-            console.log(response);
-        }
-    );
-
+    $scope.$listenTo(instanceModel, function () {
+        $scope.instances = instanceModel.getInstances();
+    });
 }
 
-instanceController.$inject = ['$scope', 'instanceService'];
+instanceController.$inject = ['$scope', 'instanceModel', 'instanceService'];
 module.exports = instanceController;

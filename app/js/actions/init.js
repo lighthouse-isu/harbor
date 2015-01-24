@@ -10,7 +10,10 @@ var _actions = keymirror({
     authLogin: null,
     authLogout: null,
 
-    // Docker / Instance
+    // Instances
+    listInstances: null,
+
+    // Docker
     listContainers: null,
     startContainer: null,
     stopContainer: null,

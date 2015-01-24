@@ -8,10 +8,17 @@ function instanceModel() {
         // State
         hostName: '',
         containers: [],
+        instances: [],
 
         // Event handlers
         handlers: {
+            'listInstances': 'listInstances',
             'listContainers': 'listContainers'
+        },
+
+        listInstances: function (instances) {
+            this.instances = instances;
+            this.emitChange();
         },
 
         listContainers: function (containers) {
@@ -23,6 +30,10 @@ function instanceModel() {
         exports: {
             getContainers: function () {
                 return this.containers;
+            },
+
+            getInstances: function () {
+                return this.instances;
             }
         }
     };
