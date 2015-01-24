@@ -17,7 +17,6 @@ var actions = require('./actions/init'),
 // Initialize the main app
 var app = angular.module('lighthouse.app', [
     'flux',
-    'restangular',
     actions.name,
     auth.name,
     config.name,
@@ -28,8 +27,7 @@ var app = angular.module('lighthouse.app', [
 ]);
 
 // Configuration
-function appConfig(RestangularProvider, $locationProvider) {
-    RestangularProvider.setBaseUrl('/api/v0.1');
+function appConfig($locationProvider) {
     $locationProvider.html5Mode(true);
 }
 
@@ -65,7 +63,7 @@ function appInit($location, flux) {
     });
 }
 
-appConfig.$inject = ['RestangularProvider', '$locationProvider'];
+appConfig.$inject = ['$locationProvider'];
 appInit.$inject = ['$location', 'flux'];
 
 app.config(appConfig);
