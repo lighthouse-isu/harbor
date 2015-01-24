@@ -6,6 +6,11 @@
 var keymirror = require('keymirror');
 
 var _actions = keymirror({
+    // Authentication
+    authLogin: null,
+    authLogout: null,
+
+    // Docker / Instance
     listContainers: null,
     startContainer: null,
     stopContainer: null,

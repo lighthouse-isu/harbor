@@ -1,106 +1,64 @@
 /*
- * authService
- * Manages login/logout and auth status.
+ * auth/authService.js
+ * Manages API authentication.
  */
-function authService($rootScope, $q, Restangular, authEvents) {
-    /*
-     * getUser()
-     * Return the global user [object].
-     */
-    function getUser() {
-        return $rootScope.user;
-    }
 
-    /*
-     * isLoggedIn()
-     * @return [boolean]
-     */
-    function isLoggedIn() {
-        return $rootScope.user ? true : false;
-    }
+function authService($http, actions, flux, authModel, configService) {
+    'use strict';
 
     /*
      * login()
-     * Request a session. Sets a user object at $rootScope
-     * upon successful login.
+     * Request a session. Success dispatches authLogin action.
      *
-     * @param auth: [object] keys (Email, Password)
-     * @return promise: (success, error)
-     *      - success callback accepts user [object] with email key
-     *      - error callback accepts reason [string]
+     * @param auth {object} keys (Email, Password)
      */
     function login(auth) {
-        var deferred = $q.defer();
+        var request = [configService.api.base, 'login'].join('');
 
-        if (isLoggedIn()) {
-            deferred.resolve($rootScope.user);
-        }
-        else {
-            Restangular.all('login').post(auth).then(
+        // Only act if not logged in
+        if (!authModel.isLoggedIn()) {
+            $http.post(request, auth).then(
                 // success
-                function (response) {
-                    var user = {
-                        email: auth.Email
-                    };
-
-                    $rootScope.user = user;
-                    deferred.resolve(user);
-
-                    // fire event
-                    $rootScope.$broadcast(authEvents.login);
+                function (reponse) {
+                    flux.dispatch(actions.authLogin, {email: auth.Email});
                 },
                 // error
                 function (response) {
-                    deferred.reject('invalid email or password');
+                    // TODO flux.dispatch(actions.authError, ...);
+                    console.log('auth error: invalid user name or password: ' + response);
                 }
             );
         }
-
-        return deferred.promise;
     }
 
     /*
      * logout()
      * Invalidate current session.
-     *
-     * @return promise: (success, error)
-     *      - both callbacks may accept the response object returned from
-     *        the initial /logout call
      */
     function logout() {
-        var deferred = $q.defer();
+        var request = [configService.api.base, 'logout'].join('');
 
-        if (!isLoggedIn()) {
-            deferred.resolve('logged out');
-        }
-        else {
-            Restangular.one('logout').get().then(
+        // Only act if logged in
+        if (authModel.isLoggedIn()) {
+            $http.get(request).then(
                 // success
                 function (response) {
-                    // invalidate user object
-                    $rootScope.user = null;
-                    deferred.resolve(response);
-
-                    // fire event
-                    $rootScope.$broadcast(authEvents.logout);
+                    flux.dispatch(actions.authLogout);
                 },
                 // error
                 function (response) {
-                    deferred.reject(response);
+                    // TODO flux.dispatch(actions.authError, ...);
+                    console.log('auth error: unable to logout: ' + response);
                 }
             );
         }
-
-        return deferred.promise;
     }
 
     return {
-        'getUser': getUser,
-        'isLoggedIn': isLoggedIn,
         'login': login,
         'logout': logout
     };
 }
 
-authService.$inject = ['$rootScope', '$q', 'Restangular', 'authEvents'];
+authService.$inject = ['$http', 'actions', 'flux', 'authModel', 'configService'];
 module.exports = authService;

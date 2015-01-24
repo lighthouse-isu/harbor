@@ -2,33 +2,19 @@
  * navController
  * Manage navigation bar status and information.
  */
-function navController($scope, $location, authEvents, authService) {
-    // initialize nav
-    $scope.loggedIn = authService.isLoggedIn();
+function navController($scope, authModel, authService) {
+    // init
+    $scope.loggedIn = authModel.isLoggedIn();
 
-    // update nav
-    $scope.$on(authEvents.login, function (event, data) {
-        $scope.loggedIn = true;
-        $scope.user = authService.getUser();
+    $scope.$listenTo(authModel, function () {
+        $scope.loggedIn = authModel.isLoggedIn();
+        $scope.user = authModel.getUser();
     });
 
     $scope.logout = function () {
-        authService.logout().then(
-            // success
-            function (response) {
-                $scope.loggedIn = false;
-                $scope.user = authService.getUser();
-                // redirect
-                $location.path('/login');
-            },
-            // error
-            function (response) {
-                // TODO
-                // wire in alertService
-            }
-        );
+        authService.logout();
     };
 }
 
-navController.$inject = ['$scope', '$location', 'authEvents', 'authService'];
+navController.$inject = ['$scope', 'authModel', 'authService'];
 module.exports = navController;

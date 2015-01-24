@@ -11,7 +11,7 @@ var actions = require('./actions/init'),
     config = require('./config/init'),
     docker = require('./docker/init'),
     instances = require('./instances/init'),
-    nav = require('./nav/init');
+    nav = require('./nav/init'),
     routes = require('./routes/init');
 
 // Initialize the main app
@@ -33,8 +33,42 @@ function appConfig(RestangularProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 }
 
-appConfig.$inject = ['RestangularProvider', '$locationProvider'];
-app.config(appConfig);
+// Initialization
+function appInit($location, flux) {
+    flux.createStore('appStore', {
+        // State
+        route: '',
 
+        // Event hanlders
+        handlers: {
+            'authLogin': 'authLogin',
+            'authLogout': 'authLogout'
+        },
+
+        authLogin: function () {
+            this.route = '/instances';
+            $location.path(this.route);
+            this.emitChange();
+        },
+
+        authLogout: function () {
+            this.route = '/login';
+            $location.path(this.route);
+            this.emitChange();
+        },
+
+        exports: {
+            getRoute: function () {
+                return this.route;
+            }
+        }
+    });
+}
+
+appConfig.$inject = ['RestangularProvider', '$locationProvider'];
+appInit.$inject = ['$location', 'flux'];
+
+app.config(appConfig);
+app.run(appInit);
 // Pass control to angular
 angular.bootstrap(document, [app.name]);
