@@ -17,6 +17,7 @@ module.exports = function(config) {
             './node_modules/angular-route/angular-route.js',
             './node_modules/angular-mocks/angular-mocks.js',
             './node_modules/restangular/src/restangular.js',
+            './node_modules/flux-angular/release/flux-angular.js',
             // testing files
             './app/js/app.js',
             './app/js/**/tests/*.spec.js'
@@ -40,7 +41,7 @@ module.exports = function(config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['dots'],
+        reporters: ['progress'],
 
         // web server port
         port: 9876,
@@ -57,11 +58,10 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['PhantomJS'],
+        browsers: ['Chrome'],
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
         singleRun: true,
-        autowatch: false
     });
 };

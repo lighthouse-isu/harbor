@@ -1,7 +1,8 @@
 //
 // Build
 //
-var browserify = require('browserify'),
+var argv = require('yargs').argv,
+    browserify = require('browserify'),
     buffer = require('vinyl-buffer'),
     gulp  = require('gulp'),
     gutil = require('gulp-util'),
@@ -10,6 +11,10 @@ var browserify = require('browserify'),
     rimraf = require('rimraf'),
     source = require('vinyl-source-stream'),
     uglify = require('gulp-uglify');
+
+//
+// Build Context
+//
 
 var watch = [
     './app/js/*.js',
@@ -21,31 +26,28 @@ var watch = [
 var bower_base = './bower_components/';
 
 // build to lighthouse repo in gopath
-var staticRoot = (function (enviroment) {
-    if (typeof enviroment.GOPATH === 'undefined') {
-        return '../lighthouse/static/';
+var staticRoot = (function (env) {
+    if (argv.gopath) {
+        if (env.GOPATH) {
+            return env.GOPATH + '/src/github.com/lighthouse/lighthouse/static/';
+        }
+        else {
+            console.log('ERROR: $GOPATH not set - building to ../lighthouse/static/');
+        }
     }
-    return enviroment.GOPATH + '/src/github.com/lighthouse/lighthouse/static/';
+
+    return '../lighthouse/static/';
 })(process.env);
 
 var appRoot = './app/js/app.js';
-var isProd = false;
-
-// TL;DR Default task
-gulp.task('default', ['prod', 'build']);
+var isProd = argv.prod ? true : false;
 
 //
 // Tasks
 //
-// sets up development build context
-gulp.task('dev', function () {
-    isProd = false;
-});
 
-// sets up production build context
-gulp.task('prod', function () {
-    isProd = true;
-});
+// TL;DR Default task
+gulp.task('default', ['build']);
 
 // Build app and assets
 gulp.task('build', ['jshint', 'browserify', 'views', 'vendor']);
@@ -78,6 +80,9 @@ gulp.task('browserify', function() {
 gulp.task('vendor', function() {
     gulp.src(mainBower(), { base: bower_base })
         .pipe(gulp.dest(staticRoot + 'vendor/'));
+
+    gulp.src('./node_modules/flux-angular/release/flux-angular.min.js')
+        .pipe(gulp.dest(staticRoot + 'vendor/'));
 });
 
 // View task for html assets
@@ -86,19 +91,13 @@ gulp.task('views', function () {
     .pipe(gulp.dest(staticRoot));
 });
 
-// Watch for source updates, will use dev build
-gulp.task('watch', ['dev'], function() {
+// Watch for source updates
+gulp.task('watch', function() {
     gulp.watch(watch, ['browserify', 'views']);
 });
 
 // Clean build artifacts
 gulp.task('clean', function () {
-    rimraf(staticRoot, function (er) {
-        if (er) {
-            console.log(er);
-        }
-    });
-
     rimraf(staticRoot, function (er) {
         if (er) {
             console.log(er);

@@ -5,73 +5,25 @@
 
 var _ = require('lodash');
 
-function instanceDetailController($scope, $routeParams, instanceService, containerService) {
+function instanceDetailController($scope, $routeParams, containerService, instanceModel) {
     'use strict';
 
-    var host = $routeParams.host;
-    $scope.instance = {};
-    $scope.containers = {};
+    // init
+    $scope.containers = [];
+    $scope.instance = $routeParams.host;
+    containerService.list($scope.instance);
 
-    instanceService.getInstances().then(
-        // success
-        function (instances) {
-            $scope.instance = _.find(instances, {'name': host});
-        },
-        function (response) {
-            console.log(response);
-        }
-    );
+    // State event listeners
+    $scope.$listenTo(instanceModel, function () {
+        var containers = instanceModel.getContainers();
 
-    containerService.list(host).then(
-        // success
-        function (containers) {
-            _(containers).forEach(function (container) {
-                container.shortId = container.Id.slice(0, 6);
-            });
-            
-            $scope.containers = containers;
-        },
-        function (response) {
-            console.log(response);
-        }
-    );
+        _(containers).forEach(function (container) {
+            container.Id = container.Id.slice(0, 6);
+        });
 
-    $scope.start = function (id) {
-        containerService.start(host, id).then(
-            // TODO: use alert service
-            function (response) {
-                alert('Successfully started container!');
-            },
-            function (response) {
-                console.log(response);
-            }
-        );
-    };
-
-    $scope.stop = function (id) {
-        containerService.stop(host, id).then(
-            // TODO: use alert service
-            function (response) {
-                alert('Successfully stopped container!');
-            },
-            function (response) {
-                console.log(response);
-            }
-        );
-    };
-
-    $scope.restart = function (id) {
-        containerService.restart(host, id).then(
-            // TODO: use alert service
-            function (response) {
-                alert('Successfully restarted container!');
-            },
-            function (response) {
-                console.log(response);
-            }
-        );
-    };
+        $scope.containers = containers;
+    });
 }
 
-instanceDetailController.$inject = ['$scope', '$routeParams', 'instanceService', 'containerService'];
+instanceDetailController.$inject = ['$scope', '$routeParams', 'containerService', 'instanceModel'];
 module.exports = instanceDetailController;
