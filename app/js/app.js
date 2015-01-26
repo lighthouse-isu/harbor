@@ -37,7 +37,7 @@ function appInit($location, flux) {
         // State
         route: '',
 
-        // Event hanlders
+        // Event handlers
         handlers: {
             'authLogin': 'authLogin',
             'authLogout': 'authLogout'
