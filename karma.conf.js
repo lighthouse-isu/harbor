@@ -31,6 +31,7 @@ module.exports = function(config) {
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
             './app/js/app.js': ['browserify'],
+            './app/js/**/tests/*.spec.js': ['browserify']
         },
 
         browserify: {
