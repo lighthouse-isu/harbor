@@ -12,7 +12,8 @@ var actions = require('./actions/init'),
     docker = require('./docker/init'),
     instances = require('./instances/init'),
     nav = require('./nav/init'),
-    routes = require('./routes/init');
+    routes = require('./routes/init'),
+    transform = require('./transform/init');
 
 // Initialize the main app
 var app = angular.module('lighthouse.app', [
@@ -23,7 +24,8 @@ var app = angular.module('lighthouse.app', [
     docker.name,
     instances.name,
     nav.name,
-    routes.name
+    routes.name,
+    transform.name
 ]);
 
 // Configuration

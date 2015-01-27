@@ -3,8 +3,6 @@
  * Main instance detailed view
  */
 
-var _ = require('lodash');
-
 function instanceDetailController($scope, $routeParams, containerService, instanceModel) {
     'use strict';
 
@@ -15,13 +13,7 @@ function instanceDetailController($scope, $routeParams, containerService, instan
 
     // State event listeners
     $scope.$listenTo(instanceModel, function () {
-        var containers = instanceModel.getContainers();
-
-        _(containers).forEach(function (container) {
-            container.Id = container.Id.slice(0, 6);
-        });
-
-        $scope.containers = containers;
+        $scope.containers = instanceModel.getContainers();
     });
 }
 
