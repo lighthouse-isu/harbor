@@ -32,7 +32,8 @@ function dockerService($http, actions, flux, configService) {
      * @param {string, required} action: application action to dispatch with response data
      * @param {string, required} host: lighthouse alias for targeted Docker instance
      * @param {string} id: Docker generated id for image or container
-     * @param {object} data: sent in POST request under 'Payload' key
+     * @param {object} data: if method is GET, set data as query parameters,
+     *                       if POST, set in request body under 'Payload' key
      *
      * Note: The exposed interface is shortened to just (host, id, data)
      * via a partial function application.
