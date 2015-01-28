@@ -8,12 +8,14 @@ function instanceModel() {
         // State
         hostName: '',
         containers: [],
+        images: [],
         instances: [],
 
         // Event handlers
         handlers: {
             'listInstances': 'listInstances',
-            'listContainers': 'listContainers'
+            'listContainers': 'listContainers',
+            'listImages': 'listImages'
         },
 
         listInstances: function (instances) {
@@ -26,6 +28,11 @@ function instanceModel() {
             this.emitChange();
         },
 
+        listImages: function (images) {
+            this.images = images;
+            this.emitChange();
+        },
+
         // State access
         exports: {
             getContainers: function () {
@@ -34,6 +41,10 @@ function instanceModel() {
 
             getInstances: function () {
                 return this.instances;
+            },
+
+            getImages: function () {
+                return this.images;
             }
         }
     };

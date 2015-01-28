@@ -19,7 +19,9 @@ var _actions = keymirror({
     stopContainer: null,
     restartContainer: null,
     pauseContainer: null,
-    unpauseContainer: null
+    unpauseContainer: null,
+
+    listImages: null
 });
 
 var actions = angular.module('lighthouse.actions', []);
