@@ -5,25 +5,35 @@
 
 var _ = require('lodash');
 
-function instanceDetailController($scope, $routeParams, containerService, instanceModel) {
+function instanceDetailController($scope, $routeParams, dockerService, instanceModel) {
     'use strict';
 
     // init
     $scope.containers = [];
-    $scope.instance = $routeParams.host;
-    containerService.list($scope.instance);
+    $scope.images = [];
+    $scope.instance = _.find(instanceModel.getInstances(), {name: $routeParams.host});
+
+    $scope.allImages = false;
+    $scope.allContainers = false;
+
+    dockerService.containers.list($scope.instance.name, null);
+    dockerService.images.list($scope.instance.name, null);
 
     // State event listeners
     $scope.$listenTo(instanceModel, function () {
-        var containers = instanceModel.getContainers();
-
-        _(containers).forEach(function (container) {
-            container.Id = container.Id.slice(0, 6);
-        });
-
-        $scope.containers = containers;
+        $scope.containers = instanceModel.getContainers();
+        $scope.images = instanceModel.getImages();
     });
+
+    // View handlers
+    $scope.getImages = function() {
+        dockerService.images.list($scope.instance.name, null, {all: $scope.allImages});
+    };
+
+    $scope.getContainers = function () {
+        dockerService.containers.list($scope.instance.name, null, {all: $scope.allContainers});
+    };
 }
 
-instanceDetailController.$inject = ['$scope', '$routeParams', 'containerService', 'instanceModel'];
+instanceDetailController.$inject = ['$scope', '$routeParams', 'dockerService', 'instanceModel'];
 module.exports = instanceDetailController;

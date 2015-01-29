@@ -55,8 +55,8 @@ gulp.task('build', ['jshint', 'browserify', 'views', 'vendor']);
 // JSHint
 gulp.task('jshint', function () {
     gulp.src('./app/js/**/*.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
 });
 
 // Browserify task for js assets
@@ -88,7 +88,7 @@ gulp.task('vendor', function() {
 // View task for html assets
 gulp.task('views', function () {
     gulp.src('./app/*.html')
-    .pipe(gulp.dest(staticRoot));
+        .pipe(gulp.dest(staticRoot));
 });
 
 // Watch for source updates

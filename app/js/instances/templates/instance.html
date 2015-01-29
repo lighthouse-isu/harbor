@@ -3,44 +3,71 @@
     <div class="col-md-12">
       <ol class="breadcrumb">
         <li><a href="/instances">Instances</a></li>
-        <li class="active">{{ instance }}</li>
+        <li class="active">{{ instance.name }}</li>
       </ol>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h1>{{ instance.name }}</h1>
+      <h1>{{ instance.name }} <i class="fa"
+        ng-class="{'fa-check': instance.canAccessDocker, 'fa-times': !instance.canAccessDocker}"
+        ng-style="{color: instance.canAccessDocker ? 'rgb(75, 180, 75)' : 'rgb(180, 75, 75)'}"></i></h1>
     </div>
     <div class="col-md-12">
       <dl class="dl-horizontal">
-        <dt>Name</dt>
-        <dd>{{ instance.Name }}</dd>
-        <dt>Address</dt>
-        <dd>{{ instance.Address }}</dd>
-        <dt>Port</dt>
-        <dd>{{ instance.Port }}</dd>
-        <dt>Version</dt>
-        <dd>{{ instance.Version }}</dd>
-        <dt>Docker Status</dt>
-        <dd>{{ instance.CanAccessDocker }}</dd>
+        <dt>Address</dt> <dd>{{ instance.address }}</dd>
+        <dt>Port</dt> <dd>{{ instance.port }}</dd>
+        <dt>Version</dt> <dd>{{ instance.version }}</dd>
       </dl>
     </div>
   </div>
+  <!-- Images -->
   <div class="row">
     <div class="col-md-12">
-      <div class="btn-toolbar">
-        <div class="btn-group btn-group-sm">
-          <a class="btn btn-primary"><i class="fa fa-refresh"></i> Rescan</a>
-        </div>
-        <div class="btn-group btn-group-sm">
-          <a class="btn btn-success"><i class="fa fa-plus"></i> Add Container</a>
-        </div>
+      <h3>Images</h3>
+      <div class="checkbox">
+        <label><input type="checkbox" ng-model="allImages" ng-click="getImages()"> Show all</label>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <table class="table">
+      <table class="table table-hover table-condensed">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Parent ID</th>
+            <th>Repo tags</th>
+            <th>Size</th>
+            <th>Virtual Size</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="image in images track by image.Id">
+            <td>{{ image.Id | shorten:6 }}</td>
+            <td>{{ image.ParentId | shorten:6 }}</td>
+            <td>{{ image.RepoTags }}</td>
+            <td>{{ image.Size }}</td>
+            <td>{{ image.VirtualSize }}</td>
+            <td>{{ image.Created | fromEpoch:true }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Containers -->
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Containers</h3>
+      <div class="checkbox">
+        <label><input type="checkbox" ng-model="allContainers" ng-click="getContainers()"> Show all</label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-hover table-condensed">
         <thead>
           <tr>
             <th>ID</th>
@@ -52,12 +79,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="container in containers">
-            <td>{{ container.Id }}</td>
+          <tr ng-repeat="container in containers track by container.Id">
+            <td>{{ container.Id | shorten:6 }}</td>
             <td>{{ container.Status }}</td>
             <td>{{ container.Image }}</td>
             <td>{{ container.Command }}</td>
-            <td>{{ container.Created }}</td>
+            <td>{{ container.Created | fromEpoch:true }}</td>
             <td>{{ container.Ports }}</td>
           </tr>
         </tbody>

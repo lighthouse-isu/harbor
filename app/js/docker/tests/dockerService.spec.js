@@ -1,16 +1,16 @@
 
-describe('containerService', function () {
+describe('dockerService.containers', function () {
     var http,
         configService,
-        containerService;
+        dockerService;
 
     beforeEach(function () {
         angular.mock.module('lighthouse.app');
 
-        angular.mock.inject(function (_$httpBackend_, _configService_, _containerService_) {
+        angular.mock.inject(function (_$httpBackend_, _configService_, _dockerService_) {
             http = _$httpBackend_;
             configService = _configService_;
-            containerService = _containerService_;
+            dockerService = _dockerService_;
         });
     });
 
@@ -19,7 +19,7 @@ describe('containerService', function () {
         http.expect('GET',
             configService.api.base + 'host/d/containers/json').respond('');
 
-        containerService.list('host');
+        dockerService.containers.list('host');
         http.flush();
     });
 
@@ -27,7 +27,7 @@ describe('containerService', function () {
         http.expect('GET',
             configService.api.base + 'host/d/containers/json?all=true&size=true').respond('');
 
-        containerService.list('host', {
+        dockerService.containers.list('host', null, {
             all: true,
             size: true
         });
@@ -38,7 +38,7 @@ describe('containerService', function () {
         http.expect('POST',
             configService.api.base + 'host/d/containers/id/start').respond('');
 
-        containerService.start('host', 'id');
+        dockerService.containers.start('host', 'id');
         http.flush();
     });
 
@@ -46,7 +46,7 @@ describe('containerService', function () {
         http.expect('POST',
             configService.api.base + 'host/d/containers/id/stop').respond('');
 
-        containerService.stop('host', 'id');
+        dockerService.containers.stop('host', 'id');
         http.flush();
     });
 
@@ -54,7 +54,7 @@ describe('containerService', function () {
         http.expect('POST',
             configService.api.base + 'host/d/containers/id/restart').respond('');
 
-        containerService.restart('host', 'id');
+        dockerService.containers.restart('host', 'id');
         http.flush();
     });
 
@@ -62,7 +62,7 @@ describe('containerService', function () {
         http.expect('POST',
             configService.api.base + 'host/d/containers/id/pause').respond('');
 
-        containerService.pause('host', 'id');
+        dockerService.containers.pause('host', 'id');
         http.flush();
     });
 
@@ -70,7 +70,7 @@ describe('containerService', function () {
         http.expect('POST',
             configService.api.base + 'host/d/containers/id/unpause').respond('');
 
-        containerService.unpause('host', 'id');
+        dockerService.containers.unpause('host', 'id');
         http.flush();
     });
 
