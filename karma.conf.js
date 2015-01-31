@@ -16,7 +16,7 @@ module.exports = function(config) {
             './node_modules/angular/lib/angular.js',
             './node_modules/angular-route/angular-route.js',
             './node_modules/angular-mocks/angular-mocks.js',
-            './node_modules/restangular/src/restangular.js',
+            './node_modules/es5-shim/es5-shim.js',
             './node_modules/flux-angular/release/flux-angular.js',
             // testing files
             './app/js/app.js',
@@ -59,7 +59,7 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
