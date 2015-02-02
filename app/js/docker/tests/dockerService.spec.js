@@ -14,6 +14,14 @@ describe('dockerService.containers', function () {
         });
     });
 
+    it('should uri encode host', function () {
+        http.expect('GET',
+            configService.api.base + 'host%40com/d/containers/json').respond('');
+
+        dockerService.containers.list('host@com');
+        http.flush();
+    });
+
     it('should list containers', function () {
         // testing route is created as expected
         http.expect('GET',
