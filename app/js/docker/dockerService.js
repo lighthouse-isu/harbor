@@ -71,6 +71,7 @@ function dockerService($http, actions, flux, configService) {
 
     return {
         'containers': {
+            'inspect': d('GET', '/containers/{id}/json', actions.inspectContainer),
             'list':    d('GET', '/containers/json', actions.listContainers),
             'start':   d('POST', '/containers/{id}/start', actions.startContainer),
             'stop':    d('POST', '/containers/{id}/stop', actions.stopContainer),

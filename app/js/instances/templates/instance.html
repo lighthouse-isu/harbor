@@ -45,8 +45,8 @@
         </thead>
         <tbody>
           <tr ng-repeat="image in images track by image.Id">
-            <td>{{ image.Id | shorten:6 }}</td>
-            <td>{{ image.ParentId | shorten:6 }}</td>
+            <td>{{ image.Id | shorten:10 }}</td>
+            <td>{{ image.ParentId | shorten:10 }}</td>
             <td>{{ image.RepoTags }}</td>
             <td>{{ image.Size }}</td>
             <td>{{ image.VirtualSize }}</td>
@@ -80,7 +80,12 @@
         </thead>
         <tbody>
           <tr ng-repeat="container in containers track by container.Id">
-            <td>{{ container.Id | shorten:6 }}</td>
+            <td>
+              <a href="/instances/{{instance.name}}/container/{{container.Id | shorten:10}}"
+                 ng-click="inspect(container.Id)">
+                {{container.Id | shorten:10}}
+              </a>
+            </td>
             <td>{{ container.Status }}</td>
             <td>{{ container.Image }}</td>
             <td>{{ container.Command }}</td>

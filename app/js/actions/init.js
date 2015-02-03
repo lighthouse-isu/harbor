@@ -14,6 +14,7 @@ var _actions = keymirror({
     listInstances: null,
 
     // Docker
+    inspectContainer: null,
     listContainers: null,
     startContainer: null,
     stopContainer: null,
