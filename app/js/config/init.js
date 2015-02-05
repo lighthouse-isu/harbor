@@ -5,9 +5,9 @@ function configService() {
     return {
         api: {
             // API version number
-            version: 0.1,
+            version: 0.2,
             // Base URL for every outgoing API request
-            base: '/api/v0.1/'
+            base: '/api/v0.2/'
         }
     };
 }
