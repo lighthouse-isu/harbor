@@ -16,7 +16,7 @@ describe('dockerService.containers', function () {
 
     it('should uri encode host', function () {
         http.expect('GET',
-            configService.api.base + 'host%40com/d/containers/json').respond('');
+            configService.api.base + 'd/host%40com/containers/json').respond('');
 
         dockerService.containers.list('host@com');
         http.flush();
@@ -25,7 +25,7 @@ describe('dockerService.containers', function () {
     it('should list containers', function () {
         // testing route is created as expected
         http.expect('GET',
-            configService.api.base + 'host/d/containers/json').respond('');
+            configService.api.base + 'd/host/containers/json').respond('');
 
         dockerService.containers.list('host');
         http.flush();
@@ -33,7 +33,7 @@ describe('dockerService.containers', function () {
 
     it('should list containers with query parameters', function() {
         http.expect('GET',
-            configService.api.base + 'host/d/containers/json?all=true&size=true').respond('');
+            configService.api.base + 'd/host/containers/json?all=true&size=true').respond('');
 
         dockerService.containers.list('host', null, {
             all: true,
@@ -44,7 +44,7 @@ describe('dockerService.containers', function () {
 
     it('should start a container', function () {
         http.expect('POST',
-            configService.api.base + 'host/d/containers/id/start').respond('');
+            configService.api.base + 'd/host/containers/id/start').respond('');
 
         dockerService.containers.start('host', 'id');
         http.flush();
@@ -52,7 +52,7 @@ describe('dockerService.containers', function () {
 
     it('should stop a container', function () {
         http.expect('POST',
-            configService.api.base + 'host/d/containers/id/stop').respond('');
+            configService.api.base + 'd/host/containers/id/stop').respond('');
 
         dockerService.containers.stop('host', 'id');
         http.flush();
@@ -60,7 +60,7 @@ describe('dockerService.containers', function () {
 
     it('should restart a container', function () {
         http.expect('POST',
-            configService.api.base + 'host/d/containers/id/restart').respond('');
+            configService.api.base + 'd/host/containers/id/restart').respond('');
 
         dockerService.containers.restart('host', 'id');
         http.flush();
@@ -68,7 +68,7 @@ describe('dockerService.containers', function () {
 
     it('should pause a container', function () {
         http.expect('POST',
-            configService.api.base + 'host/d/containers/id/pause').respond('');
+            configService.api.base + 'd/host/containers/id/pause').respond('');
 
         dockerService.containers.pause('host', 'id');
         http.flush();
@@ -76,7 +76,7 @@ describe('dockerService.containers', function () {
 
     it('should unpause a container', function () {
         http.expect('POST',
-            configService.api.base + 'host/d/containers/id/unpause').respond('');
+            configService.api.base + 'd/host/containers/id/unpause').respond('');
 
         dockerService.containers.unpause('host', 'id');
         http.flush();
