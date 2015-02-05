@@ -1,4 +1,18 @@
 <div class="container">
-    <h3>Container {{id}} on {{host}}</h3>
-    <pre>{{info | stringify}}</pre>
+  <ol class="breadcrumb">
+    <li><a href="/instances">Instances</a></li>
+    <li><a href="/instances/{{host}}">{{host}}</a></li>
+    <li>containers</li>
+    <li>{{id}}</li>
+  </ol>
+
+  <h3>Container {{id}} on {{host}}</h3>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      Response
+    </div>
+    <div class="panel-body" style="padding: 0;">
+      <pre>{{info | stringify}}</pre>
+    </div>
+  </div>
 </div>
