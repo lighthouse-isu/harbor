@@ -13,7 +13,7 @@ function dockerService($http, actions, flux, configService) {
      * @param {string} id: container/image id located on host
      */
     function prepareUrl(url, host, id) {
-        var request = [configService.api.base, encodeURIComponent(host), '/d'];
+        var request = [configService.api.base, 'd/', encodeURIComponent(host)];
 
         if (id && (url.indexOf('{id}') > 0)) {
             request.push(url.replace('{id}', id));
