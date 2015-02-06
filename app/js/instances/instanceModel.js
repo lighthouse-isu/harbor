@@ -12,7 +12,7 @@ function id(c) {
     return c.Id.slice(0, 10);
 }
 
-function instanceModel() {
+function instanceModel(dockerService) {
     'use strict';
 
     return {
@@ -25,27 +25,37 @@ function instanceModel() {
         // Event handlers
         handlers: {
             'inspectContainer': 'inspectContainer',
+            'startContainer': 'containerUpdate',
+            'stopContainer': 'containerUpdate',
+            'pauseContainer': 'containerUpdate',
+            'unpauseContainer': 'containerUpdate',
             'listInstances': 'listInstances',
             'listContainers': 'listContainers',
             'listImages': 'listImages'
         },
 
-        inspectContainer: function (c) {
-            var update = this.containers[id(c)];
+        // containerUpdate() - multi-action handler
+        // forces container inspection
+        containerUpdate: function (r) {
+            dockerService.containers.inspect(r.host, r.id);
+        },
+
+        inspectContainer: function (r) {
+            var update = this.containers[id(r.response)];
             if (update) {
-                update.detail = c;
+                update.detail = r.response;
                 this.emitChange();
             }
         },
 
-        listInstances: function (instances) {
-            this.instances = instances;
+        listInstances: function (r) {
+            this.instances = r.response;
             this.emitChange();
         },
 
-        listContainers: function (containers) {
+        listContainers: function (r) {
             // Store containers, indexed by their shortened Docker id
-            this.containers = _.indexBy(_.map(containers, function (c) {
+            this.containers = _.indexBy(_.map(r.response, function (c) {
                 // Build model
                 return { summary: c, detail: null };
             }), function (c) {
@@ -56,8 +66,8 @@ function instanceModel() {
             this.emitChange();
         },
 
-        listImages: function (images) {
-            this.images = images;
+        listImages: function (r) {
+            this.images = r.response;
             this.emitChange();
         },
 
@@ -85,4 +95,5 @@ function instanceModel() {
     };
 }
 
+instanceModel.$inject = ['dockerService'];
 module.exports = instanceModel;
