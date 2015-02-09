@@ -31,17 +31,17 @@ function dockerService($http, actions, flux, configService) {
      * @param {string, required} url: Docker API URL
      * @param {string, required} action: application action to dispatch with response data
      * @param {string, required} host: lighthouse alias for targeted Docker instance
-     * @param {string} id: Docker generated id for image or container
+     * @param {string} cid: Docker generated id for image or container
      * @param {object} data: if method is GET, set data as query parameters,
      *                       if POST, set in request body under 'Payload' key
      *
      * Note: The exposed interface is shortened to just (host, id, data)
      * via a partial function application.
      */
-    function docker(method, url, action, host, id, data) {
+    function docker(method, url, action, host, cid, data) {
         var config = {
             method: method,
-            url: prepareUrl(url, host, id),
+            url: prepareUrl(url, host, cid),
             responseType: 'json',
             params: method === 'GET' ? data : null,
             data: method === 'POST' ? {Payload: data} : null
@@ -50,7 +50,8 @@ function dockerService($http, actions, flux, configService) {
         $http(config).then(
             // success
             function (response) {
-                flux.dispatch(action, response.data);
+                flux.dispatch(action,
+                    {'id': cid, 'host': host, 'response': response.data});
             },
             // error
             function (response) {
@@ -65,12 +66,13 @@ function dockerService($http, actions, flux, configService) {
      * @param *: (see dockerService.docker)
      * Returns the partially applied docker function.
      */
-    function d(method, url, action, host, id, data) {
+    function d(method, url, action, host, cid, data) {
         return _.partial(docker, method, url, action);
     }
 
     return {
         'containers': {
+            'inspect': d('GET', '/containers/{id}/json', actions.inspectContainer),
             'list':    d('GET', '/containers/json', actions.listContainers),
             'start':   d('POST', '/containers/{id}/start', actions.startContainer),
             'stop':    d('POST', '/containers/{id}/stop', actions.stopContainer),

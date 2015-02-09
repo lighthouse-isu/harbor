@@ -18,6 +18,10 @@ function routeConfig($routeProvider) {
             template: require('../instances/templates/instance.html'),
             controller: 'instanceDetailController'
         })
+        .when('/instances/:host/container/:id', {
+            template: require('../instances/templates/container.html'),
+            controller: 'containerController'
+        })
         .otherwise({ redirectTo: '/' });
 }
 
