@@ -11,6 +11,7 @@ var _actions = keymirror({
     authLogout: null,
 
     // Alerts
+    alertClear: null,
     alertCreate: null,
 
     // Instances

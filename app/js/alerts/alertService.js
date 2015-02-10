@@ -17,7 +17,16 @@ function alertService(actions, flux) {
         flux.dispatch(actions.alertCreate, alert);
     }
 
+    /*
+     * clear()
+     * Dispatches a global alert clear.
+     */
+    function clear() {
+        flux.dispatch(actions.alertClear);
+    }
+
     return {
+        'clear': clear,
         'create': create
     };
 

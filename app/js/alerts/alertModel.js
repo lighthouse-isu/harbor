@@ -14,7 +14,20 @@ function alertModel($timeout) {
 
         // Event handlers
         handlers: {
-            'alertCreate': 'alertCreate',
+            'alertClear': 'alertClear',
+            'alertCreate': 'alertCreate'
+        },
+
+        alertClear: function () {
+            // cancel registered timeouts
+            _(this.alerts).forEach(function (alert) {
+                if (alert.promise) {
+                    $timeout.cancel(alert.promise);
+                }
+            });
+
+            this.alerts = [];
+            this.emitChange();
         },
 
         alertCreate: function (alert) {
@@ -22,7 +35,7 @@ function alertModel($timeout) {
             this.emitChange();
 
             if (alert.timeout) {
-                $timeout(function () {
+                alert.promise = $timeout(function () {
                     this.alerts = _.without(this.alerts, alert);
                     this.emitChange();
                 }.bind(this), alert.timeout * 1000);

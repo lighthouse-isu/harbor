@@ -36,7 +36,7 @@ function appConfig($locationProvider) {
 }
 
 // Initialization
-function appInit($location, flux) {
+function appInit($rootScope, $location, flux, alertService) {
     flux.createStore('appStore', {
         // State
         route: '',
@@ -65,10 +65,16 @@ function appInit($location, flux) {
             }
         }
     });
+
+    // Route change handling
+    $rootScope.$on('$locationChangeStart', function () {
+        // Do not allow alerts to persist across page navigation
+        alertService.clear();
+    });
 }
 
 appConfig.$inject = ['$locationProvider'];
-appInit.$inject = ['$location', 'flux'];
+appInit.$inject = ['$rootScope', '$location', 'flux', 'alertService'];
 
 app.config(appConfig);
 app.run(appInit);
