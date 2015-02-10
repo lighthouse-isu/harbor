@@ -31,15 +31,15 @@ function alertModel($timeout) {
         },
 
         alertCreate: function (alert) {
-            this.alerts.push(alert);
-            this.emitChange();
-
             if (alert.timeout) {
                 alert.promise = $timeout(function () {
                     this.alerts = _.without(this.alerts, alert);
                     this.emitChange();
                 }.bind(this), alert.timeout * 1000);
             }
+
+            this.alerts.push(alert);
+            this.emitChange();
         },
 
         // State access
