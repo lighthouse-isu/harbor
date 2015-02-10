@@ -3,15 +3,17 @@
  * Listens for alert actions and updates directive scope.
  */
 
-function alertController($scope, alertModel) {
+function alertController($scope, alertModel, alertService) {
     'use strict';
 
     $scope.$listenTo(alertModel, function () {
         $scope.alerts = alertModel.getAll();
     });
 
-    // $scope.dismiss() can remove an alert early
+    $scope.dismiss = function (id) {
+        alertService.dismiss(id);
+    };
 }
 
-alertController.$inject = ['$scope', 'alertModel'];
+alertController.$inject = ['$scope', 'alertModel', 'alertService'];
 module.exports = alertController;

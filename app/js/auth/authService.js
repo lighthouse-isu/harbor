@@ -26,7 +26,6 @@ function authService($http, actions, flux, authModel, alertService, configServic
                 function (response) {
                     alertService.create({
                         message: 'Invalid user name or password.',
-                        timeout: 5,
                         type: 'danger'
                     });
                 }
@@ -52,7 +51,6 @@ function authService($http, actions, flux, authModel, alertService, configServic
                 function (response) {
                     alertService.create({
                         message: 'Unable to logout - please check your connection.',
-                        timeout: 5,
                         type: 'warning'
                     });
                 }

@@ -25,9 +25,18 @@ function alertService(actions, flux) {
         flux.dispatch(actions.alertClear);
     }
 
+    /* 
+     * dismiss()
+     * Dispatches a global alert dismiss for the given id.
+     */
+    function dismiss(id) {
+        flux.dispatch(actions.alertDismiss, id);
+    }
+
     return {
         'clear': clear,
-        'create': create
+        'create': create,
+        'dismiss': dismiss
     };
 
 }

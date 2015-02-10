@@ -11,11 +11,13 @@ function alertModel($timeout) {
     return {
         // State
         alerts: [],
+        nextId: 0,
 
         // Event handlers
         handlers: {
             'alertClear': 'alertClear',
-            'alertCreate': 'alertCreate'
+            'alertCreate': 'alertCreate',
+            'alertDismiss': 'alertDismiss'
         },
 
         alertClear: function () {
@@ -26,6 +28,7 @@ function alertModel($timeout) {
                 }
             });
 
+            this.nextId = 0;
             this.alerts = [];
             this.emitChange();
         },
@@ -38,7 +41,18 @@ function alertModel($timeout) {
                 }.bind(this), alert.timeout * 1000);
             }
 
+            alert.id = this.nextId++;
             this.alerts.push(alert);
+            this.emitChange();
+        },
+
+        alertDismiss: function (id) {
+            var remove = _.find(this.alerts, {'id': id});
+            if (remove.promise) {
+                $timeout.cancel(remove.promise);
+            }
+
+            this.alerts = _.without(this.alerts, remove);
             this.emitChange();
         },
 

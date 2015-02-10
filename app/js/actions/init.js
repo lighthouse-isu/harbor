@@ -13,6 +13,7 @@ var _actions = keymirror({
     // Alerts
     alertClear: null,
     alertCreate: null,
+    alertDismiss: null,
 
     // Instances
     listInstances: null,
