@@ -5,7 +5,7 @@
 
 var _ = require('lodash');
 
-function dockerService($http, actions, flux, configService) {
+function dockerService($http, actions, flux, alertService, configService) {
     /*
      * prepareUrl()
      * @param {string, required} url: docker API call
@@ -55,8 +55,11 @@ function dockerService($http, actions, flux, configService) {
             },
             // error
             function (response) {
-                // TODO flux.dispatch(actions.error, message)
-                console.log('Docker API error: ' + url + ': ' + response);
+                alertService.create({
+                    message: response.data,
+                    timeout: 10,
+                    type: 'danger'
+                });
             }
         );
     }
@@ -86,5 +89,5 @@ function dockerService($http, actions, flux, configService) {
     };
 }
 
-dockerService.$inject = ['$http', 'actions', 'flux', 'configService'];
+dockerService.$inject = ['$http', 'actions', 'flux', 'alertService', 'configService'];
 module.exports = dockerService;

@@ -4,6 +4,7 @@
  */
 function navDirective() {
     return {
+        'restrict': 'A',
         'controller': 'navController',
         'template': require('./templates/nav.html')
     };

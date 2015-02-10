@@ -1,0 +1,9 @@
+<div style="position: fixed;
+            bottom: 0;
+            width: 100%;">
+    <div class="container">
+        <div ng-repeat="alert in alerts">
+            <div class="alert alert-{{alert.type}}">{{alert.message}}</div>
+        </div>
+    </div>
+</div>
