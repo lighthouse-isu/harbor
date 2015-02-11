@@ -26,6 +26,7 @@ function authService($http, actions, flux, authModel, alertService, configServic
                 function (response) {
                     alertService.create({
                         message: 'Invalid email address or password.',
+                        timeout: 2,
                         type: 'danger'
                     });
                 }

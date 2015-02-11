@@ -57,7 +57,6 @@ function dockerService($http, actions, flux, alertService, configService) {
             function (response) {
                 alertService.create({
                     message: response.data,
-                    timeout: 10,
                     type: 'danger'
                 });
             }
