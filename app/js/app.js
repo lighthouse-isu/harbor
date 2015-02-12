@@ -8,6 +8,7 @@
 // app modules
 var actions = require('./actions/init'),
     auth = require('./auth/init'),
+    beacons = require('./beacons/init'),
     config = require('./config/init'),
     docker = require('./docker/init'),
     instances = require('./instances/init'),
@@ -20,6 +21,7 @@ var app = angular.module('lighthouse.app', [
     'flux',
     actions.name,
     auth.name,
+    beacons.name,
     config.name,
     docker.name,
     instances.name,

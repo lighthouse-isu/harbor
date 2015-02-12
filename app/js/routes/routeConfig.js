@@ -10,6 +10,10 @@ function routeConfig($routeProvider) {
             controller: 'loginController'
         })
         // Functionality
+        .when('/beacons', {
+            template: require('../beacons/templates/beacons.html'),
+            controller: 'beaconController'
+        })
         .when('/instances', {
             template: require('../instances/templates/instances.html'),
             controller: 'instanceController'
