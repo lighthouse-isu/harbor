@@ -27,11 +27,18 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
 
     // View handlers
     $scope.getImages = function() {
-        dockerService.images.list($scope.instance.name, null, {all: $scope.allImages});
+        dockerService.images.list(
+            $scope.instance.name, null, {all: $scope.allImages});
     };
 
     $scope.getContainers = function () {
-        dockerService.containers.list($scope.instance.name, null, {all: $scope.allContainers});
+        dockerService.containers.list(
+            $scope.instance.name, null, {all: $scope.allContainers});
+    };
+
+    $scope.inspect = function (id) {
+        dockerService.containers.inspect(
+            $scope.instance.name, id);
     };
 }
 

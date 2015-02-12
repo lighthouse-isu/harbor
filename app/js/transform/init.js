@@ -33,4 +33,15 @@ transform.filter('fromEpoch', function() {
 
 });
 
+/*
+ * stringify (filter)
+ * @param {object} obj - to stringify
+ */
+transform.filter('stringify', function() {
+    return function(obj) {
+        // four spaces
+        return JSON.stringify(obj, null, '    ');
+    };
+});
+
 module.exports = transform;

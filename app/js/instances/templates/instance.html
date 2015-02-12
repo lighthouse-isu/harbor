@@ -21,41 +21,6 @@
       </dl>
     </div>
   </div>
-  <!-- Images -->
-  <div class="row">
-    <div class="col-md-12">
-      <h3>Images</h3>
-      <div class="checkbox">
-        <label><input type="checkbox" ng-model="allImages" ng-click="getImages()"> Show all</label>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <table class="table table-hover table-condensed">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Parent ID</th>
-            <th>Repo tags</th>
-            <th>Size</th>
-            <th>Virtual Size</th>
-            <th>Created</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="image in images track by image.Id">
-            <td>{{ image.Id | shorten:6 }}</td>
-            <td>{{ image.ParentId | shorten:6 }}</td>
-            <td>{{ image.RepoTags }}</td>
-            <td>{{ image.Size }}</td>
-            <td>{{ image.VirtualSize }}</td>
-            <td>{{ image.Created | fromEpoch:true }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
   <!-- Containers -->
   <div class="row">
     <div class="col-md-12">
@@ -80,12 +45,52 @@
         </thead>
         <tbody>
           <tr ng-repeat="container in containers track by container.Id">
-            <td>{{ container.Id | shorten:6 }}</td>
+            <td>
+              <a href="/instances/{{instance.name}}/container/{{container.Id | shorten:10}}"
+                 ng-click="inspect(container.Id)">
+                {{container.Id | shorten:10}}
+              </a>
+            </td>
             <td>{{ container.Status }}</td>
             <td>{{ container.Image }}</td>
             <td>{{ container.Command }}</td>
             <td>{{ container.Created | fromEpoch:true }}</td>
             <td>{{ container.Ports }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Images -->
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Images</h3>
+      <div class="checkbox">
+        <label><input type="checkbox" ng-model="allImages" ng-click="getImages()"> Show all</label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-hover table-condensed">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Parent ID</th>
+            <th>Repo tags</th>
+            <th>Size</th>
+            <th>Virtual Size</th>
+            <th>Created</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="image in images track by image.Id">
+            <td>{{ image.Id | shorten:10 }}</td>
+            <td>{{ image.ParentId | shorten:10 }}</td>
+            <td>{{ image.RepoTags }}</td>
+            <td>{{ image.Size }}</td>
+            <td>{{ image.VirtualSize }}</td>
+            <td>{{ image.Created | fromEpoch:true }}</td>
           </tr>
         </tbody>
       </table>

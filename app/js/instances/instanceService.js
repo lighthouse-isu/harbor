@@ -10,7 +10,7 @@ function instanceService($http, actions, flux, configService) {
         $http.get(request).then(
             // success
             function (response) {
-                flux.dispatch(actions.listInstances, response.data);
+                flux.dispatch(actions.listInstances, {'response': response.data});
             },
             // error
             function (response) {
