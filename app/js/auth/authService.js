@@ -3,7 +3,7 @@
  * Manages API authentication.
  */
 
-function authService($http, actions, flux, authModel, configService) {
+function authService($http, actions, flux, authModel, alertService, configService) {
     'use strict';
 
     /*
@@ -24,8 +24,11 @@ function authService($http, actions, flux, authModel, configService) {
                 },
                 // error
                 function (response) {
-                    // TODO flux.dispatch(actions.authError, ...);
-                    console.log('auth error: invalid user name or password: ' + response);
+                    alertService.create({
+                        message: 'Invalid email address or password.',
+                        timeout: 2,
+                        type: 'danger'
+                    });
                 }
             );
         }
@@ -47,8 +50,10 @@ function authService($http, actions, flux, authModel, configService) {
                 },
                 // error
                 function (response) {
-                    // TODO flux.dispatch(actions.authError, ...);
-                    console.log('auth error: unable to logout: ' + response);
+                    alertService.create({
+                        message: 'Unable to logout - please check your connection.',
+                        type: 'warning'
+                    });
                 }
             );
         }
@@ -60,5 +65,5 @@ function authService($http, actions, flux, authModel, configService) {
     };
 }
 
-authService.$inject = ['$http', 'actions', 'flux', 'authModel', 'configService'];
+authService.$inject = ['$http', 'actions', 'flux', 'authModel', 'alertService', 'configService'];
 module.exports = authService;
