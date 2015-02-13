@@ -15,7 +15,8 @@ var actions = require('./actions/init'),
     instances = require('./instances/init'),
     nav = require('./nav/init'),
     routes = require('./routes/init'),
-    transform = require('./transform/init');
+    transform = require('./transform/init'),
+    users = require('./users/init');
 
 // Initialize the main app
 var app = angular.module('lighthouse.app', [
@@ -29,7 +30,8 @@ var app = angular.module('lighthouse.app', [
     instances.name,
     nav.name,
     routes.name,
-    transform.name
+    transform.name,
+    users.name
 ]);
 
 // Configuration

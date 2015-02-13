@@ -30,7 +30,10 @@ var _actions = keymirror({
     listImages: null,
 
     // Beacons
-    createBeacon: null
+    createBeacon: null,
+
+    // Users
+    listUsers: null
 });
 
 var actions = angular.module('lighthouse.actions', []);

@@ -1,9 +1,9 @@
 /*
  * beaconModel.js
- * Stores state related to a particular Docker instance.
+ * Stores state related to a beacon
  */
 
-function instanceModel() {
+function beaconModel() {
     return {
         // State
         address: '',
@@ -12,17 +12,18 @@ function instanceModel() {
 
         // Event handlers
         handlers: {
+          'createBeacon': 'createBeacon'
         },
 
-        listUsers: function (instances) {
-            this.instances = instances;
+        createBeacon: function (r) {
+            this.beacon = r.response;
             this.emitChange();
         },
 
         // State access
         exports: {
-            getContainers: function () {
-                return this.containers;
+            createBeacon: function () {
+                return this.beacon;
             }
         }
     };

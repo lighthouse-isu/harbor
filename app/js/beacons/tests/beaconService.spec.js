@@ -15,9 +15,15 @@ describe('beaconService', function () {
 
     it('should create beacon', function () {
         http.expect('POST',
-            configService.api.base + 'beacon/create').respond('');
+            configService.api.base + 'beacons/create').respond('');
 
-        beaconService.createBeacon();
+        var beacon = {
+          Address: '127.0.0.1:5000',
+          Token: 'token',
+          Users: ['user@example.com', 'user2@example.com']
+        }
+
+        beaconService.createBeacon(beacon);
         http.flush();
     });
 });
