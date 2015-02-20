@@ -11,13 +11,17 @@ function beaconService($http, actions, flux, configService, alertService) {
             // success
             function (response) {
                 flux.dispatch(actions.createBeacon, {'response': response.data});
+                alertService.create({
+                  message: 'Successfully created beacon!',
+                  type: 'success'
+                });
             },
             // error
             function (response) {
                 alertService.create({
                     message: response.data,
                     type: 'danger'
-                })
+                });
             }
         );
     }

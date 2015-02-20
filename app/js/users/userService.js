@@ -6,7 +6,7 @@ function userService($http, actions, flux, configService, alertService) {
     'use strict';
 
     function getUsers() {
-        var request = [configService.api.base, 'users/'].join('');
+        var request = [configService.api.base, 'users/', 'list'].join('');
         $http.get(request).then(
             // success
             function (response) {
@@ -17,7 +17,7 @@ function userService($http, actions, flux, configService, alertService) {
                 alertService.create({
                     message: response.data,
                     type: 'danger'
-                })
+                });
             }
         );
     }
@@ -27,5 +27,5 @@ function userService($http, actions, flux, configService, alertService) {
     };
 }
 
-beaconService.$inject = ['$http', 'actions', 'flux', 'configService', 'alertService'];
+userService.$inject = ['$http', 'actions', 'flux', 'configService', 'alertService'];
 module.exports = userService;
