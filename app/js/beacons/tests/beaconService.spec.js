@@ -13,6 +13,14 @@ describe('beaconService', function () {
         });
     });
 
+    it('should list beacons', function() {
+        http.expect('GET',
+            configService.api.base + 'beacons/list').respond('');
+
+        beaconService.getBeacons();
+        http.flush();
+    });
+
     it('should create beacon', function () {
         http.expect('POST',
             configService.api.base + 'beacons/create').respond('');

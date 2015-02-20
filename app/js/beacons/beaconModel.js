@@ -9,21 +9,28 @@ function beaconModel() {
         address: '',
         token: '',
         users: [],
+        beacons: [],
 
         // Event handlers
         handlers: {
-          'createBeacon': 'createBeacon'
+            'addBeacon': 'addBeacon',
+            'listBeacons': 'listBeacons'
         },
 
-        createBeacon: function (r) {
-            this.beacon = r.response;
+        listBeacons: function (r) {
+            this.beacons = r.response;
+            this.emitChange();
+        },
+
+        addBeacon: function (beacon) {
+            this.beacons.push(beacon);
             this.emitChange();
         },
 
         // State access
         exports: {
-            createBeacon: function () {
-                return this.beacon;
+            getBeacons: function () {
+                return this.beacons;
             }
         }
     };

@@ -30,7 +30,8 @@ var _actions = keymirror({
     listImages: null,
 
     // Beacons
-    createBeacon: null,
+    addBeacon: null,
+    listBeacons: null,
 
     // Users
     listUsers: null
