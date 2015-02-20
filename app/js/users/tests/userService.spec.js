@@ -15,7 +15,7 @@ describe('userService', function () {
 
     it('should list users', function () {
         http.expect('GET',
-            configService.api.base + 'users').respond('');
+            configService.api.base + 'users/list').respond('');
 
         userService.getUsers();
         http.flush();

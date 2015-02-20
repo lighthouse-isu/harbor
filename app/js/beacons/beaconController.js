@@ -7,7 +7,7 @@ function beaconController($scope, beaconModel, beaconService) {
 
     $scope.create = function (beacon) {
         beaconService.createBeacon(beacon);
-    }
+    };
 
 }
 

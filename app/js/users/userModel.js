@@ -7,7 +7,7 @@ function userModel() {
     return {
         // State
         Email: '',
-        users: []
+        users: [],
 
         // Event handlers
         handlers: {

@@ -21,7 +21,7 @@ describe('beaconService', function () {
           Address: '127.0.0.1:5000',
           Token: 'token',
           Users: ['user@example.com', 'user2@example.com']
-        }
+        };
 
         beaconService.createBeacon(beacon);
         http.flush();
