@@ -3,6 +3,8 @@
  * Stores state related to a beacon
  */
 
+var _ = require('lodash');
+
 function beaconModel() {
     return {
         // State
@@ -17,7 +19,7 @@ function beaconModel() {
         },
 
         listBeacons: function (r) {
-            this.beacons = r.response;
+            this.beacons = _.map(r.response, function (addr) { return {address: addr}; });
             this.emitChange();
         },
 
