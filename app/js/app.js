@@ -19,6 +19,7 @@ var actions = require('./actions/init'),
 // Initialize the main app
 var app = angular.module('lighthouse.app', [
     'flux',
+    'ngCookies',
     actions.name,
     alerts.name,
     auth.name,
@@ -36,7 +37,7 @@ function appConfig($locationProvider) {
 }
 
 // Initialization
-function appInit($rootScope, $location, flux, alertService) {
+function appInit($cookieStore, $rootScope, $location, actions, flux, alertService) {
     flux.createStore('appStore', {
         // State
         route: '',
@@ -47,15 +48,23 @@ function appInit($rootScope, $location, flux, alertService) {
             'authLogout': 'authLogout'
         },
 
-        authLogin: function () {
+        authLogin: function (user) {
             this.route = '/instances';
             $location.path(this.route);
+
+            $cookieStore.put('lighthouse.loggedIn', true);
+            $cookieStore.put('lighthouse.user', user);
+
             this.emitChange();
         },
 
         authLogout: function () {
             this.route = '/login';
             $location.path(this.route);
+
+            $cookieStore.remove('lighthouse.loggedIn');
+            $cookieStore.remove('lighthouse.user');
+
             this.emitChange();
         },
 
@@ -66,6 +75,13 @@ function appInit($rootScope, $location, flux, alertService) {
         }
     });
 
+    // Redirect if logged in
+    if ($cookieStore.get('lighthouse.loggedIn')) {
+        console.log('appInit: logged in!');
+        console.log('appInit: lighthouse.user = ' + $cookieStore.get('lighthouse.user'));
+        flux.dispatch(actions.authLogin, $cookieStore.get('lighthouse.user'));
+    }
+
     // Route change handling
     $rootScope.$on('$locationChangeStart', function () {
         // Do not allow alerts to persist across page navigation
@@ -74,7 +90,7 @@ function appInit($rootScope, $location, flux, alertService) {
 }
 
 appConfig.$inject = ['$locationProvider'];
-appInit.$inject = ['$rootScope', '$location', 'flux', 'alertService'];
+appInit.$inject = ['$cookieStore', '$rootScope', '$location', 'actions', 'flux', 'alertService'];
 
 app.config(appConfig);
 app.run(appInit);
