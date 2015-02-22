@@ -8,7 +8,6 @@ function beaconModel() {
         // State
         address: '',
         token: '',
-        users: [],
         beacons: [],
 
         // Event handlers
