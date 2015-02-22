@@ -27,7 +27,14 @@ var _actions = keymirror({
     pauseContainer: null,
     unpauseContainer: null,
 
-    listImages: null
+    listImages: null,
+
+    // Beacons
+    addBeacon: null,
+    listBeacons: null,
+
+    // Users
+    listUsers: null
 });
 
 var actions = angular.module('lighthouse.actions', []);
