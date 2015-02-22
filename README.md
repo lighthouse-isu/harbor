@@ -1,6 +1,8 @@
 lighthouse-client
 =================
 
+[![Build Status](https://img.shields.io/travis/lighthouse/lighthouse-client.svg?style=flat)](https://travis-ci.org/lighthouse/lighthouse-client)
+
 UI assets and code for Lighthouse.
 
 ## Requirements
