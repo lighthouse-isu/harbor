@@ -3,7 +3,7 @@
  * Manages API authentication.
  */
 
-function authService($http, actions, flux, authModel, alertService, configService) {
+function authService($http, actions, flux, appModel, alertService, configService) {
     'use strict';
 
     /*
@@ -16,7 +16,7 @@ function authService($http, actions, flux, authModel, alertService, configServic
         var request = [configService.api.base, 'login'].join('');
 
         // Only act if not logged in
-        if (!authModel.isLoggedIn()) {
+        if (!appModel.isLoggedIn()) {
             $http.post(request, auth).then(
                 // success
                 function (reponse) {
@@ -42,7 +42,7 @@ function authService($http, actions, flux, authModel, alertService, configServic
         var request = [configService.api.base, 'logout'].join('');
 
         // Only act if logged in
-        if (authModel.isLoggedIn()) {
+        if (appModel.isLoggedIn()) {
             $http.get(request).then(
                 // success
                 function (response) {
@@ -65,5 +65,5 @@ function authService($http, actions, flux, authModel, alertService, configServic
     };
 }
 
-authService.$inject = ['$http', 'actions', 'flux', 'authModel', 'alertService', 'configService'];
+authService.$inject = ['$http', 'actions', 'flux', 'appModel', 'alertService', 'configService'];
 module.exports = authService;

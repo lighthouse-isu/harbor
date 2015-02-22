@@ -31,6 +31,10 @@ var app = angular.module('lighthouse.app', [
     transform.name
 ]);
 
+// Prepare app state
+var appModel = require('./appModel');
+app.store('appModel', appModel);
+
 // Configuration
 function appConfig($locationProvider) {
     $locationProvider.html5Mode(true);
@@ -38,48 +42,14 @@ function appConfig($locationProvider) {
 
 // Initialization
 function appInit($cookieStore, $rootScope, $location, actions, flux, alertService) {
-    flux.createStore('appStore', {
-        // State
-        route: '',
-
-        // Event handlers
-        handlers: {
-            'authLogin': 'authLogin',
-            'authLogout': 'authLogout'
-        },
-
-        authLogin: function (user) {
-            this.route = '/instances';
-            $location.path(this.route);
-
-            $cookieStore.put('lighthouse.loggedIn', true);
-            $cookieStore.put('lighthouse.user', user);
-
-            this.emitChange();
-        },
-
-        authLogout: function () {
-            this.route = '/login';
-            $location.path(this.route);
-
-            $cookieStore.remove('lighthouse.loggedIn');
-            $cookieStore.remove('lighthouse.user');
-
-            this.emitChange();
-        },
-
-        exports: {
-            getRoute: function () {
-                return this.route;
-            }
-        }
-    });
+    // $cookieStore.remove('lighthouse.loggedIn');
+    // $cookieStore.remove('lighthouse.user');
 
     // Redirect if logged in
     if ($cookieStore.get('lighthouse.loggedIn')) {
         console.log('appInit: logged in!');
         console.log('appInit: lighthouse.user = ' + $cookieStore.get('lighthouse.user'));
-        flux.dispatch(actions.authLogin, $cookieStore.get('lighthouse.user'));
+        //flux.dispatch(actions.authLogin, $cookieStore.get('lighthouse.user'));
     }
 
     // Route change handling
