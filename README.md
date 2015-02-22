@@ -1,6 +1,10 @@
 lighthouse-client
 =================
 
+[![Build Status](https://img.shields.io/travis/lighthouse/lighthouse-client.svg?style=flat)](https://travis-ci.org/lighthouse/lighthouse-client)
+[![License](https://img.shields.io/badge/license-apache2-blue.svg?style=flat)](/LICENSE)
+[![gitter.im](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-45cba1.svg?style=flat)](https://gitter.im/lighthouse)
+
 UI assets and code for Lighthouse.
 
 ## Requirements
@@ -32,12 +36,7 @@ These two flags can be used in conjunction with each other and with any command 
 
 ### Running unit tests (work in progress)
 
-As part of our node dependencies, we have a Google Chrome launcher for karma. Upon running the unit tests (as below, and after `npm install`), karma will look for a Chrome install at `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` - If you have Chromium or a different install location, please set `$CHROME_BIN` to that binary before running karma.
-
-(This assuming you're running OS X. If not, try to run `karma start` and it should notify you of where it's looking for Chrome.)
-
-* `npm install -g jasmine-node`
 * `npm install -g karma-cli`
-* (from root) `karma start`
+* `npm test`
 
 Happy coding!
