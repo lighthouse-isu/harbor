@@ -46,8 +46,7 @@
         <tbody>
           <tr ng-repeat="container in containers track by container.Id">
             <td>
-              <a href="/instances/{{instance.name}}/container/{{container.Id | shorten:10}}"
-                 ng-click="inspect(container.Id)">
+              <a href="/instances/{{instance.name}}/container/{{container.Id | shorten:10}}">
                 {{container.Id | shorten:10}}
               </a>
             </td>

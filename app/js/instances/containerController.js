@@ -9,16 +9,18 @@ function containerController($scope, $routeParams, dockerService, instanceModel)
     $scope.host = $routeParams.host;
     $scope.id = $routeParams.id;
 
+    dockerService.containers.inspect($scope.host, $scope.id);
+
     $scope.$listenTo(instanceModel, function () {
         $scope.info = instanceModel.getContainer($scope.id);
 
         if ($scope.info) {
-            var dState = $scope.info.State;
+            var ds = $scope.info.State;
             $scope.state = {
-                running: dState.Running && !dState.Paused,
-                paused: dState.Paused,
-                restarting: dState.Restarting,
-                stopped: !(dState.Running || dState.Paused || dState.Restarting)
+                running: ds.Running && !ds.Paused,
+                paused: ds.Paused,
+                restarting: ds.Restarting,
+                stopped: !(ds.Running || ds.Paused || ds.Restarting)
             };
         }
     });

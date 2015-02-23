@@ -22,17 +22,8 @@ describe('instanceModel', function () {
     });
 
     it('should store container details', function () {
-        flux.dispatch(actions.listContainers, {response: containers});
-
         var detail = {Id: 'one', here: 'is', some: 'data'};
         flux.dispatch(actions.inspectContainer, {response: detail});
-
         expect(instanceModel.getContainer('one')).toEqual(detail);
-    });
-
-    it('should not allow storage of unknown containers', function () {
-        flux.dispatch(actions.listContainers, {response: containers});
-        flux.dispatch(actions.inspectContainer, {response: {Id: 'three', some: 'data'}});
-        expect(instanceModel.getContainer('three')).toBe(undefined);
     });
 });
