@@ -45,26 +45,23 @@ function appConfig($locationProvider) {
 }
 
 // Initialization
-function appInit($cookieStore, $rootScope, $location, actions, flux, alertService) {
-    // $cookieStore.remove('lighthouse.loggedIn');
-    // $cookieStore.remove('lighthouse.user');
-
+function appInit($cookieStore, $location, $rootScope, actions, alertService, appModel, flux) {
     // Redirect if logged in
-    if ($cookieStore.get('lighthouse.loggedIn')) {
-        console.log('appInit: logged in!');
-        console.log('appInit: lighthouse.user = ' + $cookieStore.get('lighthouse.user'));
-        //flux.dispatch(actions.authLogin, $cookieStore.get('lighthouse.user'));
+    if ($cookieStore.get('lighthouse.loggedIn') === true) {
+        flux.dispatch(actions.authLogin, $cookieStore.get('lighthouse.user'));
+        flux.dispatch(actions.routeChange, $cookieStore.get('lighthouse.route'));
     }
 
     // Route change handling
     $rootScope.$on('$locationChangeStart', function () {
         // Do not allow alerts to persist across page navigation
+        flux.dispatch(actions.routeChange, $location.path());
         alertService.clear();
     });
 }
 
 appConfig.$inject = ['$locationProvider'];
-appInit.$inject = ['$cookieStore', '$rootScope', '$location', 'actions', 'flux', 'alertService'];
+appInit.$inject = ['$cookieStore', '$location', '$rootScope', 'actions', 'alertService', 'appModel', 'flux'];
 
 app.config(appConfig);
 app.run(appInit);

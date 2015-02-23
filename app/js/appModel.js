@@ -16,13 +16,11 @@ function appModel($cookieStore, $location) {
         // Event handlers
         handlers: {
             'authLogin': 'authLogin',
-            'authLogout': 'authLogout'
+            'authLogout': 'authLogout',
+            'routeChange': 'routeChange'
         },
 
         authLogin: function (user) {
-            console.log('appModel: caught authLogin');
-            console.log('appModel: user.email = ' + user.email);
-
             this.route = '/instances';
             this.user = user;
             this.loggedIn = true;
@@ -42,6 +40,16 @@ function appModel($cookieStore, $location) {
             $location.path(this.route);
             $cookieStore.remove('lighthouse.loggedIn');
             $cookieStore.remove('lighthouse.user');
+            $cookieStore.remove('lighthouse.route');
+
+            this.emitChange();
+        },
+
+        routeChange: function (route) {
+            this.route = route;
+
+            $location.path(this.route);
+            $cookieStore.put('lighthouse.route', this.route);
 
             this.emitChange();
         },
