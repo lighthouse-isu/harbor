@@ -3,7 +3,6 @@ lighthouse-client
 
 [![Build Status](https://img.shields.io/travis/lighthouse/lighthouse-client.svg?style=flat)](https://travis-ci.org/lighthouse/lighthouse-client)
 [![License](https://img.shields.io/badge/license-apache2-blue.svg?style=flat)](/LICENSE)
-[![gitter.im](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-45cba1.svg?style=flat)](https://gitter.im/lighthouse)
 
 UI assets and code for Lighthouse.
 
@@ -40,3 +39,7 @@ These two flags can be used in conjunction with each other and with any command 
 * `npm test`
 
 Happy coding!
+
+## License
+
+[Apache v2.0](http://www.apache.org/licenses/LICENSE-2.0)
