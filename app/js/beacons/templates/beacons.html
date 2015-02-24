@@ -19,7 +19,7 @@
     <div class="col-md-12">
       <div class="panel-group" id="beacons-list" role="tablist" aria-multiselectable="true">
         <div class="panel panel-default" ng-repeat="beacon in beacons track by $index">
-          <div class="panel-heading" role="tab">
+          <div class="panel-heading" role="tab" ng-click="injectInstances(beacon)">
             <h4 class="panel-title">
               <a class="collapsed" data-toggle="collapse" data-parent="#beacons-list" href="#beacon-collapse-{{ $index }}" aria-expanded="true" aria-controls="beacon-collapse-{{ $index }}">
                 {{ beacon.address }}
@@ -38,7 +38,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="instance in instances track by $index">
+                  <tr ng-repeat="instance in beacon.instances track by $index">
                     <td>
                       <a href="/instances/{{ instance.name }}">{{ instance.name }}</a>
                     </td>

@@ -22,7 +22,7 @@ function instanceService($http, actions, flux, configService) {
     'use strict';
 
     function getInstances(beacon) {
-        var request = [configService.api.base, 'beacons/', 'list/', beacon].join('');
+        var request = [configService.api.base, 'beacons/', 'list/', beacon.alias].join('');
         $http.get(request).then(
             // success
             function (response) {

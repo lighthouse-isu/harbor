@@ -31,9 +31,12 @@ describe('instanceService', function () {
 
     it('should list instances', function () {
         http.expect('GET',
-            configService.api.base + 'provider/vms').respond('');
+            configService.api.base + 'beacons/list/beacon').respond('');
 
-        instanceService.getInstances();
+        var beacon = {
+            alias: 'beacon'
+        };
+        instanceService.getInstances(beacon);
         http.flush();
     });
 });

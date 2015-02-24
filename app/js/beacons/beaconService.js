@@ -38,6 +38,23 @@ function beaconService($http, actions, flux, configService, alertService) {
         );
     }
 
+    function refreshBeacon(beacon) {
+        var request = [configService.api.base, 'beacons/', 'refresh/', beacon.alias].join('');
+        $http.put(request).then(
+            // success
+            function (response) {
+                flux.dispatch(actions.listBeacons, {'response': response.data});
+            },
+            // error
+            function (response) {
+                alertService.create({
+                    message: response.data,
+                    type: 'danger'
+                });
+            }
+        );
+    }
+
     function createBeacon(beacon) {
         var request = [configService.api.base, 'beacons/', 'create'].join('');
         $http.post(request, beacon).then(
