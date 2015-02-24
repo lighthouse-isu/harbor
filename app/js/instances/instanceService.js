@@ -21,8 +21,8 @@
 function instanceService($http, actions, flux, configService) {
     'use strict';
 
-    function getInstances() {
-        var request = [configService.api.base, 'provider/', 'vms'].join('');
+    function getInstances(beacon) {
+        var request = [configService.api.base, 'beacons/', 'list/', beacon].join('');
         $http.get(request).then(
             // success
             function (response) {

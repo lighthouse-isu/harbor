@@ -8,7 +8,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <div class="btn-group btn-group-sm">
+      <div class="form-group btn-group btn-group-sm">
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#beacon-modal">
           <i class="fa fa-plus"></i> Add Beacon
         </button>
@@ -16,22 +16,45 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-9">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Address</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="beacon in beacons">
-            <td>{{ beacon.address }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col-md-12">
+      <div class="panel-group" id="beacons-list" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default" ng-repeat="beacon in beacons track by $index">
+          <div class="panel-heading" role="tab">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" data-parent="#beacons-list" href="#beacon-collapse-{{ $index }}" aria-expanded="true" aria-controls="beacon-collapse-{{ $index }}">
+                {{ beacon.address }}
+              </a>
+            </h4>
+          </div>
+          <div id="beacon-collapse-{{ $index }}" class="panel-collapse collapse" role="tabpanel">
+            <div class="panel-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Version</th>
+                    <th>Docker Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="instance in instances track by $index">
+                    <td>
+                      <a href="/instances/{{ instance.name }}">{{ instance.name }}</a>
+                    </td>
+                    <td>{{ instance.instanceaddress }}</td>
+                    <td>{{ instance.canAccessDocker }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
 <div class="modal fade" id="beacon-modal" tabindex="-1" role="dialog" aria-labelledby="beacon-modal-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
