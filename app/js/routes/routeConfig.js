@@ -38,6 +38,10 @@ function routeConfig($routeProvider) {
             template: require('../instances/templates/instance.html'),
             controller: 'instanceDetailController'
         })
+        .when('/instances/:host/container/create', {
+            template: require('../instances/templates/create_container.html'),
+            controller: 'createContainerController'
+        })
         .when('/instances/:host/container/:id', {
             template: require('../instances/templates/container.html'),
             controller: 'containerController'
