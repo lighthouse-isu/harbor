@@ -34,7 +34,7 @@ describe('instanceService', function () {
             configService.api.base + 'beacons/list/beacon').respond('');
 
         var beacon = {
-            alias: 'beacon'
+            address: 'beacon'
         };
         instanceService.getInstances(beacon);
         http.flush();

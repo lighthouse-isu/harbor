@@ -39,7 +39,7 @@ function beaconService($http, actions, flux, configService, alertService) {
     }
 
     function refreshBeacon(beacon) {
-        var request = [configService.api.base, 'beacons/', 'refresh/', beacon.alias].join('');
+        var request = [configService.api.base, 'beacons/', 'refresh/', beacon.address].join('');
         $http.put(request).then(
             // success
             function (response) {
