@@ -22,7 +22,7 @@ function beaconService($http, actions, flux, configService, alertService) {
     'use strict';
 
     function getBeacons() {
-        var request = [configService.api.base, 'beacons/', 'list'].join('');
+        var request = [configService.api.base, 'beacons/list'].join('');
         $http.get(request).then(
             // success
             function (response) {
@@ -39,7 +39,7 @@ function beaconService($http, actions, flux, configService, alertService) {
     }
 
     function refreshBeacon(beacon) {
-        var request = [configService.api.base, 'beacons/', 'refresh/', beacon.address].join('');
+        var request = [configService.api.base, 'beacons/refresh/', beacon.Address].join('');
         $http.put(request).then(
             // success
             function (response) {
@@ -56,11 +56,12 @@ function beaconService($http, actions, flux, configService, alertService) {
     }
 
     function createBeacon(beacon) {
-        var request = [configService.api.base, 'beacons/', 'create'].join('');
+        var request = [configService.api.base, 'beacons/create'].join('');
         $http.post(request, beacon).then(
             // success
             function (response) {
                 flux.dispatch(actions.addBeacon, beacon);
+
                 alertService.create({
                   message: 'Successfully created beacon!',
                   type: 'success'
@@ -77,8 +78,9 @@ function beaconService($http, actions, flux, configService, alertService) {
     }
 
     return {
+        'createBeacon': createBeacon,
         'getBeacons': getBeacons,
-        'createBeacon': createBeacon
+        'refreshBeacon': refreshBeacon
     };
 }
 

@@ -22,7 +22,7 @@
           <div class="panel-heading" role="tab" ng-click="injectInstances(beacon)">
             <h4 class="panel-title">
               <a class="collapsed" data-toggle="collapse" data-parent="#beacons-list" href="#beacon-collapse-{{ $index }}" aria-expanded="true" aria-controls="beacon-collapse-{{ $index }}">
-                {{ beacon.address }}
+                {{ beacon.Address }}
               </a>
             </h4>
           </div>
@@ -38,12 +38,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="instance in beacon.instances track by $index">
+                  <tr ng-repeat="instance in instances track by $index">
                     <td>
-                      <a href="/instances/{{ instance.name }}">{{ instance.name }}</a>
+                      <a href="/instances/{{ instance.Name }}">{{ instance.Name }}</a>
                     </td>
-                    <td>{{ instance.instanceaddress }}</td>
-                    <td>{{ instance.canAccessDocker }}</td>
+                    <td>{{ instance.InstanceAddress }}</td>
+                    <td>1.17</td>
+                    <td>{{ instance.CanAccessDocker }}</td>
                   </tr>
                 </tbody>
               </table>

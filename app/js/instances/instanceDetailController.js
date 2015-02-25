@@ -33,13 +33,12 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
 
     dockerService.containers.list($scope.instance.name, null);
     dockerService.images.list($scope.instance.name, null);
-    instanceService.getInstances();
 
     // State event listeners
     $scope.$listenTo(instanceModel, function () {
         $scope.containers = instanceModel.getContainers();
         $scope.images = instanceModel.getImages();
-        $scope.instance = _.find(instanceModel.getInstances(), {name: $routeParams.host});
+        //$scope.instance = _.find(instanceModel.getInstances(), {name: $routeParams.host});
     });
 
     // View handlers

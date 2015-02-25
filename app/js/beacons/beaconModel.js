@@ -24,7 +24,6 @@ var _ = require('lodash');
 function beaconModel() {
     return {
         // State
-        address: '',
         token: '',
         beacons: [],
 
@@ -35,7 +34,7 @@ function beaconModel() {
         },
 
         listBeacons: function (r) {
-            this.beacons = _.map(r.response, function (addr) { return {address: addr}; });
+            this.beacons = r.response;
             this.emitChange();
         },
 

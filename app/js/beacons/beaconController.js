@@ -21,20 +21,28 @@
 function beaconController($scope, beaconModel, instanceModel, beaconService, instanceService) {
     'use strict';
 
-    $scope.beacon = {};
-    $scope.beacons = {};
+    $scope.beacon = {instances: [
+        {
+            Name: 'boot2docker',
+            InstanceAddres: '192.168.59.103:2375/v1.12',
+            CanAccessDocker: true
+        }
+    ]};
+    $scope.instances = [];
+    $scope.beacons = [];
     beaconService.getBeacons();
 
     $scope.$listenTo(beaconModel, function() {
         $scope.beacons = beaconModel.getBeacons();
     });
 
+    $scope.$listenTo(instanceModel, function () {
+        $scope.instances = instanceModel.getInstances();
+    });
+
     $scope.injectInstances = function (beacon) {
-        beaconService.refreshBeacon(beacon);
+        // beaconService.refreshBeacon(beacon);
         instanceService.getInstances(beacon);
-        $scope.$listenTo(instanceModel, function () {
-            beacon.instances = instanceModel.getInstances();
-        });
     };
 
     $scope.create = function (beacon) {
