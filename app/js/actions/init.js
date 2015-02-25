@@ -36,6 +36,7 @@ var _actions = keymirror({
 
     // Docker
     inspectContainer: null,
+    createContainer: null,
     listContainers: null,
     startContainer: null,
     stopContainer: null,
