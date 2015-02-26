@@ -7,8 +7,20 @@ function createContainerController($scope, $routeParams, $location, dockerServic
     dockerService.images.list($scope.host, null);
 
     $scope.$listenTo(instanceModel, function () {
-        $scope.images = instanceModel.getImages();
-        $scope.selectedImage = $scope.images[0];
+      $scope.images = _.map(instanceModel.getImages(), function(image) {
+
+        image.Tags = _.filter(image.RepoTags, function(repoTag) {
+          return repoTag !== '<none>:<none>';
+        }).join(', ');
+
+        return image;
+      });
+
+      $scope.images = _.filter($scope.images, function(image) {
+        return image.Tags !== '';
+      });
+
+      $scope.selectedImage = $scope.images[0];
     });
 
     $scope.enviromentVariables = [];
