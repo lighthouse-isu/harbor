@@ -21,6 +21,15 @@
 function instanceService($http, actions, flux, configService) {
     'use strict';
 
+    /*
+     * getInstances()
+     * Fetch instances under control of the given beacon.
+     * Successful responses dispatch `actions.listInstances` along with
+     * the given beacon's generated ID.
+     *
+     * @param {object} beacon - desired beacon to fetch instances from. Must
+     *                          contain a valid `Address` key.
+     */
     function getInstances (beacon) {
         var request = [
             configService.api.base, 'beacons/list/', beacon.Address].join('');

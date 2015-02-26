@@ -37,7 +37,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="instance in instances track by $index">
+                  <tr ng-repeat="instance in instances[$index] track by $index">
                     <td>
                       <a href="/instances/{{ instance.Name }}">{{ instance.Name }}</a>
                     </td>

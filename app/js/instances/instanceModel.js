@@ -41,7 +41,6 @@ function instanceModel(dockerService) {
             details: {}
         },
         images: [],
-        instances: [],
 
         // Event handlers
         handlers: {
@@ -50,7 +49,6 @@ function instanceModel(dockerService) {
             'stopContainer': 'containerUpdate',
             'pauseContainer': 'containerUpdate',
             'unpauseContainer': 'containerUpdate',
-            'listInstances': 'listInstances',
             'listContainers': 'listContainers',
             'listImages': 'listImages'
         },
@@ -63,11 +61,6 @@ function instanceModel(dockerService) {
 
         inspectContainer: function (r) {
             this.containers.details[id(r.response)] = r.response;
-            this.emitChange();
-        },
-
-        listInstances: function (r) {
-            this.instances = r.response;
             this.emitChange();
         },
 
@@ -89,10 +82,6 @@ function instanceModel(dockerService) {
 
             getContainer: function (id) {
                 return this.containers.details[id];
-            },
-
-            getInstances: function () {
-                return this.instances;
             },
 
             getImages: function () {

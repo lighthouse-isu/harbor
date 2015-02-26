@@ -29,10 +29,7 @@ function beaconController($scope, beaconModel, instanceModel, beaconService, ins
 
     $scope.$listenTo(beaconModel, function() {
         $scope.beacons = beaconModel.getBeacons();
-    });
-
-    $scope.$listenTo(instanceModel, function () {
-        $scope.instances = instanceModel.getInstances();
+        $scope.instances = beaconModel.getInstances();
     });
 
     $scope.injectInstances = function (beacon) {
