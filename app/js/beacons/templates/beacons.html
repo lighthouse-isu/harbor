@@ -20,11 +20,11 @@
       <div class="panel-group" id="beacons-list" role="tablist" aria-multiselectable="true">
         <div class="panel panel-default" ng-repeat="beacon in beacons track by $index">
           <div class="panel-heading" role="tab" ng-click="injectInstances(beacon)">
-            <h4 class="panel-title">
-              <a class="collapsed" data-toggle="collapse" data-parent="#beacons-list" href="#beacon-collapse-{{ $index }}" aria-expanded="true" aria-controls="beacon-collapse-{{ $index }}">
-                {{ beacon.Address }}
-              </a>
-            </h4>
+            <a class="collapsed" data-toggle="collapse" data-parent="#beacons-list" href="#beacon-collapse-{{ $index }}" aria-expanded="true" aria-controls="beacon-collapse-{{ $index }}">
+              <h4 class="panel-title">
+                {{ beacon.Alias }} ({{ beacon.Address }})
+              </h4>
+            </a>
           </div>
           <div id="beacon-collapse-{{ $index }}" class="panel-collapse collapse" role="tabpanel">
             <div class="panel-body">
@@ -33,7 +33,6 @@
                   <tr>
                     <th>Name</th>
                     <th>Address</th>
-                    <th>Version</th>
                     <th>Docker Status</th>
                   </tr>
                 </thead>
@@ -43,7 +42,6 @@
                       <a href="/instances/{{ instance.Name }}">{{ instance.Name }}</a>
                     </td>
                     <td>{{ instance.InstanceAddress }}</td>
-                    <td>1.17</td>
                     <td>{{ instance.CanAccessDocker }}</td>
                   </tr>
                 </tbody>
@@ -68,13 +66,13 @@
           <div class="form-group">
             <label for="beacon-address" class="col-sm-2 control-label">Address</label>
             <div class="col-sm-10">
-              <input type="text" ng-model="beacon.address" class="form-control" id="beacon-address" placeholder="127.0.0.1">
+              <input type="text" ng-model="new.address" class="form-control" id="beacon-address" placeholder="127.0.0.1">
             </div>
           </div>
           <div class="form-group">
             <label for="beacon-token" class="col-sm-2 control-label">Token</label>
             <div class="col-sm-10">
-              <input type="text" ng-model="beacon.token" class="form-control" id="beacon-token" placeholder="Password">
+              <input type="text" ng-model="new.token" class="form-control" id="beacon-token" placeholder="Token">
             </div>
           </div>
         </form>

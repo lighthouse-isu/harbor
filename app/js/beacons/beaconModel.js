@@ -23,9 +23,10 @@ var _ = require('lodash');
 
 function beaconModel() {
     return {
-        // State
-        token: '',
-        beacons: [],
+        // generated ID -> beacon top-level info
+        beacons: {},
+        // generated ID -> beacon instance list
+        instances: {},
 
         // Event handlers
         handlers: {
@@ -34,7 +35,14 @@ function beaconModel() {
         },
 
         listBeacons: function (r) {
-            this.beacons = r.response;
+            // attach id
+            var id = 0;
+            var _beacons = _.map(r.response, function (beacon) {
+                return _.assign(beacon, {'id': id++});
+            });
+
+            // build new map
+            this.beacons = _.indexBy(_beacons, 'id');
             this.emitChange();
         },
 
