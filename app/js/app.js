@@ -61,17 +61,18 @@ app.store('appModel', appModel);
 // Captures requests and responses before forwarding them to the calling service
 function httpInterceptor(actions, flux) {
     return {
-        'response': function (response) {
-            if (response.status === 401) {
-                // Clears session data and redirects to /login
-                console.log('caught 401!');
-                flux.dispatch(actions.authLogout);
-            }
-            else {
-                console.log('authorized!');
-                return response;
-            }
-        }
+        // TODO - need to coordinate with backend
+        // 'response': function (response) {
+        //     if (response.status === 401) {
+        //         // Clears session data and redirects to /login
+        //         console.log('caught 401!');
+        //         flux.dispatch(actions.authLogout);
+        //     }
+        //     else {
+        //         console.log('authorized!');
+        //         return response;
+        //     }
+        // }
     };
 }
 
