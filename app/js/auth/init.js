@@ -18,11 +18,13 @@
 // Handles user session data and view access control.
 
 var authService = require('./authService'),
+    sessionService = require('./sessionService'),
     loginController = require('./loginController');
 
 var auth = angular.module('lighthouse.auth', []);
 
 auth.controller('loginController', loginController);
 auth.factory('authService', authService);
+auth.factory('sessionService', sessionService);
 
 module.exports = auth;

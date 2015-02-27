@@ -21,6 +21,9 @@
 // Application setup
 //
 
+// library
+var _ = require('lodash');
+
 // app modules
 var actions = require('./actions/init'),
     alerts = require('./alerts/init'),
@@ -37,7 +40,6 @@ var actions = require('./actions/init'),
 // Initialize the main app
 var app = angular.module('lighthouse.app', [
     'flux',
-    'ngCookies',
     actions.name,
     alerts.name,
     auth.name,
@@ -55,17 +57,44 @@ var app = angular.module('lighthouse.app', [
 var appModel = require('./appModel');
 app.store('appModel', appModel);
 
+// $http interceptor
+// Captures requests and responses before forwarding them to the calling service
+function httpInterceptor(actions, flux) {
+    return {
+        'response': function (response) {
+            if (response.status === 401) {
+                // Clears session data and redirects to /login
+                console.log('caught 401!');
+                flux.dispatch(actions.authLogout);
+            }
+            else {
+                console.log('authorized!');
+                return response;
+            }
+        }
+    };
+}
+
 // Configuration
-function appConfig($locationProvider) {
+function appConfig($locationProvider, $httpInterceptor, $provide) {
     $locationProvider.html5Mode(true);
+    $provide.factory('httpInterceptor', httpInterceptor);
+    $httpInterceptor.interceptors.push('httpInterceptor');
 }
 
 // Initialization
-function appInit($cookieStore, $location, $rootScope, actions, alertService, appModel, flux) {
+function appInit($location, $rootScope, actions, alertService, sessionService, appModel, flux) {
     // Redirect if logged in
-    if ($cookieStore.get('lighthouse.loggedIn') === true) {
-        flux.dispatch(actions.authLogin, $cookieStore.get('lighthouse.user'));
-        flux.dispatch(actions.routeChange, $cookieStore.get('lighthouse.route'));
+    var user = sessionService.get('lighthouse.user'),
+        route = sessionService.get('lighthouse.route'),
+        loggedIn = sessionService.get('lighthouse.loggedIn');
+
+    if (loggedIn === true && user && route) {
+        flux.dispatch(actions.authLogin, user);
+        flux.dispatch(actions.routeChange, route);
+    }
+    else {
+        flux.dispatch(actions.routeChange, '/login');
     }
 
     // Route change handling
@@ -76,8 +105,9 @@ function appInit($cookieStore, $location, $rootScope, actions, alertService, app
     });
 }
 
-appConfig.$inject = ['$locationProvider'];
-appInit.$inject = ['$cookieStore', '$location', '$rootScope', 'actions', 'alertService', 'appModel', 'flux'];
+httpInterceptor.$inject = ['actions', 'flux'];
+appConfig.$inject = ['$locationProvider', '$httpProvider', '$provide'];
+appInit.$inject = ['$location', '$rootScope', 'actions', 'alertService', 'sessionService', 'appModel', 'flux'];
 
 app.config(appConfig);
 app.run(appInit);
