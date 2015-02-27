@@ -44,6 +44,7 @@ function createContainerController($scope, $routeParams, $location, dockerServic
     $scope.cmdInput = "";
 
     $scope.addEnviromentVar = function(event) {
+      // ignore all other keyboard input other than the "Enter" key
       if ((event.which !== 13 && event.type === "keypress") || $scope.enviromentInput === "") {
         return;
       }
