@@ -99,11 +99,6 @@ gulp.task('vendor', function() {
 
     gulp.src('./node_modules/flux-angular/release/flux-angular.min.js')
         .pipe(gulp.dest(staticRoot + 'vendor/'));
-
-    gulp.src('./node_modules/angular-cookies/angular-cookies.min.js')
-        .pipe(gulp.dest(staticRoot + 'vendor/'));
-    gulp.src('./node_modules/angular-cookies/angular-cookies.min.js.map')
-        .pipe(gulp.dest(staticRoot + 'vendor/'));
 });
 
 // View task for html assets

@@ -20,7 +20,7 @@
  * such as auth state and route state.
  */
 
-function appModel($cookieStore, $location) {
+function appModel($location, sessionService) {
     'use strict';
 
     return {
@@ -42,8 +42,8 @@ function appModel($cookieStore, $location) {
             this.loggedIn = true;
 
             $location.path(this.route);
-            $cookieStore.put('lighthouse.loggedIn', true);
-            $cookieStore.put('lighthouse.user', user);
+            sessionService.set('lighthouse.loggedIn', true);
+            sessionService.set('lighthouse.user', user);
 
             this.emitChange();
         },
@@ -54,9 +54,9 @@ function appModel($cookieStore, $location) {
             this.loggedIn = false;
 
             $location.path(this.route);
-            $cookieStore.remove('lighthouse.loggedIn');
-            $cookieStore.remove('lighthouse.user');
-            $cookieStore.remove('lighthouse.route');
+            sessionService.remove('lighthouse.loggedIn');
+            sessionService.remove('lighthouse.user');
+            sessionService.remove('lighthouse.route');
 
             this.emitChange();
         },
@@ -65,8 +65,8 @@ function appModel($cookieStore, $location) {
             this.route = route;
 
             $location.path(this.route);
-            $cookieStore.put('lighthouse.route', this.route);
-
+            sessionService.set('lighthouse.route', this.route);
+            
             this.emitChange();
         },
 
@@ -86,5 +86,5 @@ function appModel($cookieStore, $location) {
     };
 }
 
-appModel.$inject = ['$cookieStore', '$location'];
+appModel.$inject = ['$location', 'sessionService'];
 module.exports = appModel;

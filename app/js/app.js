@@ -21,6 +21,9 @@
 // Application setup
 //
 
+// library
+var _ = require('lodash');
+
 // app modules
 var actions = require('./actions/init'),
     alerts = require('./alerts/init'),
@@ -37,7 +40,6 @@ var actions = require('./actions/init'),
 // Initialize the main app
 var app = angular.module('lighthouse.app', [
     'flux',
-    'ngCookies',
     actions.name,
     alerts.name,
     auth.name,
@@ -61,11 +63,15 @@ function appConfig($locationProvider) {
 }
 
 // Initialization
-function appInit($cookieStore, $location, $rootScope, actions, alertService, appModel, flux) {
+function appInit($location, $rootScope, actions, alertService, sessionService, appModel, flux) {
     // Redirect if logged in
-    if ($cookieStore.get('lighthouse.loggedIn') === true) {
-        flux.dispatch(actions.authLogin, $cookieStore.get('lighthouse.user'));
-        flux.dispatch(actions.routeChange, $cookieStore.get('lighthouse.route'));
+    var loggedIn = sessionService.get('lighthouse.loggedIn'),
+        user = sessionService.get('lighthouse.user'),
+        route = sessionService.get('lighthouse.route');
+
+    if (loggedIn === true && user && route) {
+        flux.dispatch(actions.authLogin, user);
+        flux.dispatch(actions.routeChange, route);
     }
 
     // Route change handling
@@ -77,7 +83,9 @@ function appInit($cookieStore, $location, $rootScope, actions, alertService, app
 }
 
 appConfig.$inject = ['$locationProvider'];
-appInit.$inject = ['$cookieStore', '$location', '$rootScope', 'actions', 'alertService', 'appModel', 'flux'];
+appInit.$inject = [
+    '$location', '$rootScope', 'actions',
+    'alertService', 'sessionService', 'appModel', 'flux'];
 
 app.config(appConfig);
 app.run(appInit);
