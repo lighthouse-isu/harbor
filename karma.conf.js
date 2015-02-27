@@ -29,7 +29,6 @@ module.exports = function(config) {
             // browser deps
             './node_modules/lodash/lodash.js',
             './node_modules/angular/lib/angular.js',
-            './node_modules/angular-cookies/angular-cookies.js',
             './node_modules/angular-route/angular-route.js',
             './node_modules/angular-mocks/angular-mocks.js',
             './node_modules/es5-shim/es5-shim.js',
