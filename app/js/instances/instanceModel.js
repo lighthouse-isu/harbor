@@ -34,7 +34,12 @@ function instanceModel(dockerService) {
     return {
         // State
         hostName: '',
-        containers: {},
+        containers: {
+            // responses from /containers/json
+            summaries: [],
+            // responses from /containers/{id}/json
+            details: {}
+        },
         images: [],
         instances: [],
 
@@ -57,11 +62,8 @@ function instanceModel(dockerService) {
         },
 
         inspectContainer: function (r) {
-            var update = this.containers[id(r.response)];
-            if (update) {
-                update.detail = r.response;
-                this.emitChange();
-            }
+            this.containers.details[id(r.response)] = r.response;
+            this.emitChange();
         },
 
         listInstances: function (r) {
@@ -70,15 +72,7 @@ function instanceModel(dockerService) {
         },
 
         listContainers: function (r) {
-            // Store containers, indexed by their shortened Docker id
-            this.containers = _.indexBy(_.map(r.response, function (c) {
-                // Build model
-                return { summary: c, detail: null };
-            }), function (c) {
-                // Generate key
-                return id(c.summary);
-            });
-
+            this.containers.summaries = r.response;
             this.emitChange();
         },
 
@@ -90,14 +84,11 @@ function instanceModel(dockerService) {
         // State access
         exports: {
             getContainers: function () {
-                return _.map(this.containers, function (c) {
-                    return c.summary;
-                });
+                return this.containers.summaries;
             },
 
             getContainer: function (id) {
-                var c = this.containers[id.slice(0, 10)];
-                return c ? c.detail : undefined;
+                return this.containers.details[id];
             },
 
             getInstances: function () {

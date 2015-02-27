@@ -15,49 +15,76 @@
  */
 
 /*
- * auth/authModel.js
- * Manages authentication state.
+ * appModel.js
+ * Defines and manages application wide concepts
+ * such as auth state and route state.
  */
 
-function authModel() {
+function appModel($location, sessionService) {
     'use strict';
 
     return {
         // State
-
-        // user {object} keys (email)
+        route: '',
         user: {},
         loggedIn: false,
 
         // Event handlers
         handlers: {
             'authLogin': 'authLogin',
-            'authLogout': 'authLogout'
+            'authLogout': 'authLogout',
+            'routeChange': 'routeChange'
         },
 
         authLogin: function (user) {
+            this.route = '/instances';
             this.user = user;
             this.loggedIn = true;
+
+            $location.path(this.route);
+            sessionService.set('lighthouse.loggedIn', true);
+            sessionService.set('lighthouse.user', user);
+
             this.emitChange();
         },
 
         authLogout: function () {
+            this.route = '/login';
             this.user = {};
             this.loggedIn = false;
+
+            $location.path(this.route);
+            sessionService.remove('lighthouse.loggedIn');
+            sessionService.remove('lighthouse.user');
+            sessionService.remove('lighthouse.route');
+
             this.emitChange();
         },
 
-        // State access
+        routeChange: function (route) {
+            this.route = route;
+
+            $location.path(this.route);
+            sessionService.set('lighthouse.route', this.route);
+            
+            this.emitChange();
+        },
+
         exports: {
-            isLoggedIn: function () {
-                return this.loggedIn;
+            getRoute: function () {
+                return this.route;
             },
 
             getUser: function () {
                 return this.user;
+            },
+
+            isLoggedIn: function () {
+                return this.loggedIn;
             }
         }
     };
 }
 
-module.exports = authModel;
+appModel.$inject = ['$location', 'sessionService'];
+module.exports = appModel;

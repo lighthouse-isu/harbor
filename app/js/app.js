@@ -21,6 +21,9 @@
 // Application setup
 //
 
+// library
+var _ = require('lodash');
+
 // app modules
 var actions = require('./actions/init'),
     alerts = require('./alerts/init'),
@@ -50,51 +53,62 @@ var app = angular.module('lighthouse.app', [
     users.name
 ]);
 
+// Prepare app state
+var appModel = require('./appModel');
+app.store('appModel', appModel);
+
+// $http interceptor
+// Captures requests and responses before forwarding them to the calling service
+function httpInterceptor(actions, flux) {
+    return {
+        // TODO - need to coordinate with backend
+        // 'response': function (response) {
+        //     if (response.status === 401) {
+        //         // Clears session data and redirects to /login
+        //         console.log('caught 401!');
+        //         flux.dispatch(actions.authLogout);
+        //     }
+        //     else {
+        //         console.log('authorized!');
+        //         return response;
+        //     }
+        // }
+    };
+}
+
 // Configuration
-function appConfig($locationProvider) {
+function appConfig($locationProvider, $httpInterceptor, $provide) {
     $locationProvider.html5Mode(true);
+    $provide.factory('httpInterceptor', httpInterceptor);
+    $httpInterceptor.interceptors.push('httpInterceptor');
 }
 
 // Initialization
-function appInit($rootScope, $location, flux, alertService) {
-    flux.createStore('appStore', {
-        // State
-        route: '',
+function appInit($location, $rootScope, actions, alertService, sessionService, appModel, flux) {
+    // Redirect if logged in
+    var user = sessionService.get('lighthouse.user'),
+        route = sessionService.get('lighthouse.route'),
+        loggedIn = sessionService.get('lighthouse.loggedIn');
 
-        // Event handlers
-        handlers: {
-            'authLogin': 'authLogin',
-            'authLogout': 'authLogout'
-        },
-
-        authLogin: function () {
-            this.route = '/instances';
-            $location.path(this.route);
-            this.emitChange();
-        },
-
-        authLogout: function () {
-            this.route = '/login';
-            $location.path(this.route);
-            this.emitChange();
-        },
-
-        exports: {
-            getRoute: function () {
-                return this.route;
-            }
-        }
-    });
+    if (loggedIn === true && user && route) {
+        flux.dispatch(actions.authLogin, user);
+        flux.dispatch(actions.routeChange, route);
+    }
+    else {
+        flux.dispatch(actions.routeChange, '/login');
+    }
 
     // Route change handling
     $rootScope.$on('$locationChangeStart', function () {
         // Do not allow alerts to persist across page navigation
+        flux.dispatch(actions.routeChange, $location.path());
         alertService.clear();
     });
 }
 
-appConfig.$inject = ['$locationProvider'];
-appInit.$inject = ['$rootScope', '$location', 'flux', 'alertService'];
+httpInterceptor.$inject = ['actions', 'flux'];
+appConfig.$inject = ['$locationProvider', '$httpProvider', '$provide'];
+appInit.$inject = ['$location', '$rootScope', 'actions', 'alertService', 'sessionService', 'appModel', 'flux'];
 
 app.config(appConfig);
 app.run(appInit);
