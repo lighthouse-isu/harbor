@@ -2,23 +2,14 @@
   <div class="row">
     <div class="col-md-12">
       <ol class="breadcrumb">
-        <li><a href="/instances">Instances</a></li>
+        <li><a href="/beacons">Beacons</a></li>
         <li class="active">{{ instance.name }}</li>
       </ol>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h1>{{ instance.name }} <i class="fa"
-        ng-class="{'fa-check': instance.canAccessDocker, 'fa-times': !instance.canAccessDocker}"
-        ng-style="{color: instance.canAccessDocker ? 'rgb(75, 180, 75)' : 'rgb(180, 75, 75)'}"></i></h1>
-    </div>
-    <div class="col-md-12">
-      <dl class="dl-horizontal">
-        <dt>Address</dt> <dd>{{ instance.address }}</dd>
-        <dt>Port</dt> <dd>{{ instance.port }}</dd>
-        <dt>Version</dt> <dd>{{ instance.version }}</dd>
-      </dl>
+      <h1>{{ instance.name }}</h1>
     </div>
   </div>
   <!-- Containers -->

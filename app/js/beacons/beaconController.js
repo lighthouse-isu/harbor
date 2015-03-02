@@ -18,27 +18,34 @@
  * beaconController
  * Main beacon view control.
  */
-function beaconController($scope, beaconModel, beaconService) {
+function beaconController($scope, beaconModel, instanceModel, beaconService, instanceService) {
     'use strict';
 
-    $scope.beacon = {};
-    $scope.beacons = {};
+    $scope.new = {};
+    $scope.instances = [];
+    $scope.beacons = [];
+    
     beaconService.getBeacons();
 
     $scope.$listenTo(beaconModel, function() {
         $scope.beacons = beaconModel.getBeacons();
+        $scope.instances = beaconModel.getInstances();
     });
 
-    $scope.create = function (beacon) {
+    $scope.injectInstances = function (beacon) {
+        instanceService.getInstances(beacon);
+    };
+
+    $scope.create = function () {
         beaconService.createBeacon({
-          address: beacon.address,
-          token: beacon.token
+            address: $scope.new.address,
+            token: $scope.new.token
         });
 
-        $scope.beacon.address = '';
-        $scope.beacon.token = '';
+        $scope.new.address = '';
+        $scope.new.token = '';
     };
 }
 
-beaconController.$inject = ['$scope', 'beaconModel', 'beaconService'];
+beaconController.$inject = ['$scope', 'beaconModel', 'instanceModel', 'beaconService', 'instanceService'];
 module.exports = beaconController;

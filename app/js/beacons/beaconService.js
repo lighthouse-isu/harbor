@@ -22,7 +22,8 @@ function beaconService($http, actions, flux, configService, alertService) {
     'use strict';
 
     function getBeacons() {
-        var request = [configService.api.base, 'beacons/', 'list'].join('');
+        var request = [configService.api.base, 'beacons/list'].join('');
+
         $http.get(request).then(
             // success
             function (response) {
@@ -38,15 +39,35 @@ function beaconService($http, actions, flux, configService, alertService) {
         );
     }
 
+    function refreshBeacon(beacon) {
+        var request = [configService.api.base, 'beacons/refresh/', beacon.Address].join('');
+
+        $http.put(request).then(
+            // success
+            function (response) {
+                flux.dispatch(actions.listBeacons, {'response': response.data});
+            },
+            // error
+            function (response) {
+                alertService.create({
+                    message: response.data,
+                    type: 'danger'
+                });
+            }
+        );
+    }
+
     function createBeacon(beacon) {
-        var request = [configService.api.base, 'beacons/', 'create'].join('');
+        var request = [configService.api.base, 'beacons/create'].join('');
+
         $http.post(request, beacon).then(
             // success
             function (response) {
                 flux.dispatch(actions.addBeacon, beacon);
+
                 alertService.create({
-                  message: 'Successfully created beacon!',
-                  type: 'success'
+                    message: 'Successfully created beacon!',
+                    type: 'success'
                 });
             },
             // error
@@ -60,8 +81,9 @@ function beaconService($http, actions, flux, configService, alertService) {
     }
 
     return {
+        'createBeacon': createBeacon,
         'getBeacons': getBeacons,
-        'createBeacon': createBeacon
+        'refreshBeacon': refreshBeacon
     };
 }
 

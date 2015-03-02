@@ -37,7 +37,7 @@ function appModel($location, sessionService) {
         },
 
         authLogin: function (user) {
-            this.route = '/instances';
+            this.route = '/beacons';
             this.user = user;
             this.loggedIn = true;
 
