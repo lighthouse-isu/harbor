@@ -38,7 +38,6 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
     $scope.$listenTo(instanceModel, function () {
         $scope.containers = instanceModel.getContainers();
         $scope.images = instanceModel.getImages();
-        //$scope.instance = _.find(instanceModel.getInstances(), {name: $routeParams.host});
     });
 
     // View handlers
