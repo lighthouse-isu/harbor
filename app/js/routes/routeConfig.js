@@ -30,10 +30,6 @@ function routeConfig($routeProvider) {
             template: require('../beacons/templates/beacons.html'),
             controller: 'beaconController'
         })
-        .when('/instances', {
-            template: require('../instances/templates/instances.html'),
-            controller: 'instanceController'
-        })
         .when('/instances/:host', {
             template: require('../instances/templates/instance.html'),
             controller: 'instanceDetailController'

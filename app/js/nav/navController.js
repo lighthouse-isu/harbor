@@ -18,13 +18,13 @@
  * navController
  * Manage navigation bar status and information.
  */
-function navController($scope, authModel, authService) {
-    // init
-    $scope.loggedIn = authModel.isLoggedIn();
+function navController($scope, appModel, authService) {
+    'use strict';
+    $scope.loggedIn = appModel.isLoggedIn();
 
-    $scope.$listenTo(authModel, function () {
-        $scope.loggedIn = authModel.isLoggedIn();
-        $scope.user = authModel.getUser();
+    $scope.$listenTo(appModel, function () {
+        $scope.loggedIn = appModel.isLoggedIn();
+        $scope.user = appModel.getUser();
     });
 
     $scope.logout = function () {
@@ -32,5 +32,5 @@ function navController($scope, authModel, authService) {
     };
 }
 
-navController.$inject = ['$scope', 'authModel', 'authService'];
+navController.$inject = ['$scope', 'appModel', 'authService'];
 module.exports = navController;

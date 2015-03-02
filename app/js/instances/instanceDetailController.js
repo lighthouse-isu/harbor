@@ -21,14 +21,13 @@
 
 var _ = require('lodash');
 
-function instanceDetailController($scope, $routeParams, dockerService, instanceModel) {
+function instanceDetailController($scope, $routeParams, dockerService, instanceModel, instanceService) {
     'use strict';
 
     // init
     $scope.containers = [];
     $scope.images = [];
-    $scope.instance = _.find(instanceModel.getInstances(), {name: $routeParams.host});
-
+    $scope.instance = {name: $routeParams.host};
     $scope.allImages = false;
     $scope.allContainers = false;
 
@@ -51,12 +50,7 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
         dockerService.containers.list(
             $scope.instance.name, null, {all: $scope.allContainers});
     };
-
-    $scope.inspect = function (id) {
-        dockerService.containers.inspect(
-            $scope.instance.name, id);
-    };
 }
 
-instanceDetailController.$inject = ['$scope', '$routeParams', 'dockerService', 'instanceModel'];
+instanceDetailController.$inject = ['$scope', '$routeParams', 'dockerService', 'instanceModel', 'instanceService'];
 module.exports = instanceDetailController;
