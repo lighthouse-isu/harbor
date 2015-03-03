@@ -27,12 +27,12 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
     // init
     $scope.containers = [];
     $scope.images = [];
-    $scope.instance = {name: $routeParams.host};
+    $scope.instance = {alias: $routeParams.host};
     $scope.allImages = false;
     $scope.allContainers = false;
 
-    dockerService.containers.list($scope.instance.name, null);
-    dockerService.images.list($scope.instance.name, null);
+    dockerService.containers.list($scope.instance.alias, null);
+    dockerService.images.list($scope.instance.alias, null);
 
     // State event listeners
     $scope.$listenTo(instanceModel, function () {
@@ -43,12 +43,12 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
     // View handlers
     $scope.getImages = function() {
         dockerService.images.list(
-            $scope.instance.name, null, {all: $scope.allImages});
+            $scope.instance.alias, null, {all: $scope.allImages});
     };
 
     $scope.getContainers = function () {
         dockerService.containers.list(
-            $scope.instance.name, null, {all: $scope.allContainers});
+            $scope.instance.alias, null, {all: $scope.allContainers});
     };
 }
 

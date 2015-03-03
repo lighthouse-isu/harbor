@@ -21,7 +21,13 @@
 function beaconController($scope, beaconModel, instanceModel, beaconService, instanceService) {
     'use strict';
 
-    $scope.new = {};
+    // New beacon parameters
+    $scope.new = {
+        alias: '',
+        address: '',
+        token: ''
+    };
+
     $scope.instances = [];
     $scope.beacons = [];
     
@@ -38,10 +44,12 @@ function beaconController($scope, beaconModel, instanceModel, beaconService, ins
 
     $scope.create = function () {
         beaconService.createBeacon({
-            address: $scope.new.address,
-            token: $scope.new.token
+            Alias: $scope.new.alias,
+            Address: $scope.new.address,
+            Token: $scope.new.token
         });
 
+        $scope.new.alias = '';
         $scope.new.address = '';
         $scope.new.token = '';
     };
