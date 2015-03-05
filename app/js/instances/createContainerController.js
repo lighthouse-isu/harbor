@@ -62,12 +62,12 @@ function createContainerController($scope, $routeParams, $location, dockerServic
     };
 
     $scope.submit = function() {
-      var data = JSON.stringify({
+      var data = {
         'Env': $scope.enviromentVariables,
         'Image': $scope.selectedImage.RepoTags[0],
         'WorkingDir': $scope.workingDir,
         'Cmd': $scope.cmdInput.split(' ')
-      });
+      };
 
       dockerService.containers.create($scope.host, null, data);
 
