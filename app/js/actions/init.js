@@ -48,6 +48,8 @@ var _actions = keymirror({
     unpauseContainer: null,
 
     listImages: null,
+    searchImages: null,
+    pullImage: null,
 
     // Beacons
     addBeacon: null,

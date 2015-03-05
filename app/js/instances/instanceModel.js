@@ -41,6 +41,7 @@ function instanceModel(dockerService) {
             details: {}
         },
         images: [],
+        foundImages: [],
 
         // Event handlers
         handlers: {
@@ -50,7 +51,8 @@ function instanceModel(dockerService) {
             'pauseContainer': 'containerUpdate',
             'unpauseContainer': 'containerUpdate',
             'listContainers': 'listContainers',
-            'listImages': 'listImages'
+            'listImages': 'listImages',
+            'searchImages': 'searchImages'
         },
 
         // containerUpdate() - multi-action handler
@@ -74,6 +76,13 @@ function instanceModel(dockerService) {
             this.emitChange();
         },
 
+        searchImages: function(r) {
+            this.foundImages = r.response;
+            this.emitChange();
+        },
+
+
+
         // State access
         exports: {
             getContainers: function () {
@@ -86,6 +95,10 @@ function instanceModel(dockerService) {
 
             getImages: function () {
                 return this.images;
+            },
+
+            getSearchedImages: function() {
+                return this.foundImages;
             }
         }
     };
