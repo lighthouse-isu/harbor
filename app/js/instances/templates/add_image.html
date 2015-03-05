@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li><a href="/beacons">Beacons</a></li>
+        <li><a href="/instances/{{host}}">{{host}}</a></li>
+        <li>image</li>
+        <li>add</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search for..." ng-model="searchTerm" ng-keypress="inputHandler($event)">
+        <span class="input-group-btn">
+          <button class="btn btn-default" ng-click="searchImage()">
+            <i ng-show="!isLoading" class="fa fa-search"></i>
+            <i ng-show="isLoading" class="fa fa-spinner fa-spin"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top:30px;">
+    <div class="col-md-12">
+      <ul class="list-group">
+        <a href="#" class="list-group-item" ng-model="foundImages" ng-repeat="foundImage in foundImages" ng-click="stageImage(foundImage)" data-toggle="modal" data-target="#pullImageModal">
+          {{ foundImage.name }}
+          <span class="badge alert-warning">{{ foundImage.star_count }}<i class="fa fa-star"></i></span>
+          <span class="badge alert-success" ng-show="foundImage.is_trusted"><i class="fa fa-check"></i></span>
+          <span class="badge alert-info" ng-show="foundImage.is_official"><i class="fa fa-thumbs-o-up"></i></span>
+          <p class="text-muted">{{ foundImage.description }}</p>
+        </a>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="pullImageModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modalLabel">Specify a version tag for "{{ selectedImage.name }}"</h4>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control" ng-model="imageTag">
+        <p class="text-muted">Leave empty if you want to pull all versions...</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="pullImage(selectedImage)">Pull image</button>
+      </div>
+    </div>
+  </div>
+</div>
