@@ -29,7 +29,7 @@
     <!-- Current user's email from Lighthouse -->
     <script>
       {{ if .LoggedIn }}
-        window.user = {"{{.Email}}"};
+        window.user = {email: "{{.Email}}"};
       {{ else }}
         window.user = {};
       {{ end }}
