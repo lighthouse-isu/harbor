@@ -25,7 +25,10 @@ function containerController($scope, $routeParams, dockerService, instanceModel)
     $scope.host = $routeParams.host;
     $scope.id = $routeParams.id;
 
-    dockerService.containers.inspect($scope.host, $scope.id);
+    dockerService.d('containers.inspect', {
+        host: $scope.host,
+        id: $scope.id
+    });
 
     $scope.$listenTo(instanceModel, function () {
         $scope.info = instanceModel.getContainer($scope.id);
@@ -41,20 +44,32 @@ function containerController($scope, $routeParams, dockerService, instanceModel)
         }
     });
 
-    $scope.start = function (id) {
-        dockerService.containers.start($scope.host, id, null);
+    $scope.start = function (_id) {
+        dockerService.d('containers.start', {
+            host: $scope.host,
+            id: _id
+        });
     };
 
-    $scope.stop = function (id) {
-        dockerService.containers.stop($scope.host, id, null);
+    $scope.stop = function (_id) {
+        dockerService.d('containers.stop', {
+            host: $scope.host,
+            id: _id
+        });
     };
 
-    $scope.pause = function (id) {
-        dockerService.containers.pause($scope.host, id, null);
+    $scope.pause = function (_id) {
+        dockerService.d('containers.pause', {
+            host: $scope.host,
+            id: _id
+        });
     };
 
-    $scope.unpause = function (id) {
-        dockerService.containers.unpause($scope.host, id, null);
+    $scope.unpause = function (_id) {
+        dockerService.d('containers.unpause', {
+            host: $scope.host,
+            id: _id
+        });
     };
 }
 

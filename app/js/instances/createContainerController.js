@@ -20,7 +20,9 @@ function createContainerController($scope, $routeParams, $location, dockerServic
     'use strict';
     $scope.host = $routeParams.host;
 
-    dockerService.images.list($scope.host, null);
+    dockerService.d('images.list', {
+      host: $scope.host
+    });
 
     $scope.$listenTo(instanceModel, function () {
       $scope.images = _.map(instanceModel.getImages(), function(image) {
@@ -62,14 +64,17 @@ function createContainerController($scope, $routeParams, $location, dockerServic
     };
 
     $scope.submit = function() {
-      var data = {
+      var postData = {
         'Env': $scope.enviromentVariables,
         'Image': $scope.selectedImage.RepoTags[0],
         'WorkingDir': $scope.workingDir,
         'Cmd': $scope.cmdInput.split(' ')
       };
 
-      dockerService.containers.create($scope.host, null, data);
+      dockerService.d('containers.create', {
+        host: $scope.host,
+        data: postData
+      });
 
       $location.path('/instances/' + $scope.host);
     };
