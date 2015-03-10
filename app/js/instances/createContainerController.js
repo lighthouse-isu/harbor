@@ -20,7 +20,9 @@ function createContainerController($scope, $routeParams, $location, alertService
     'use strict';
     $scope.host = $routeParams.host;
 
-    dockerService.images.list($scope.host, null);
+    dockerService.d('images.list', {
+      host: $scope.host
+    });
 
     $scope.$listenTo(instanceModel, function () {
       $scope.images = _.map(instanceModel.getImages(), function(image) {
@@ -42,6 +44,7 @@ function createContainerController($scope, $routeParams, $location, alertService
     $scope.enviromentVariables = [];
     $scope.enviromentInput = "";
     $scope.cmdInput = "";
+    $scope.nameInput = "";
 
     $scope.addEnviromentVar = function(event) {
       // ignore all other keyboard input other than the "Enter" key
@@ -63,14 +66,20 @@ function createContainerController($scope, $routeParams, $location, alertService
 
     $scope.submit = function() {
       if ($scope.containerForm.$valid) {
-        var data = {
+        var postData = {
           'Env': $scope.enviromentVariables,
           'Image': $scope.selectedImage.RepoTags[0],
           'WorkingDir': $scope.workingDir,
           'Cmd': $scope.cmdInput.split(' ')
         };
 
-        dockerService.containers.create($scope.host, null, data);
+        dockerService.d('containers.create', {
+          host: $scope.host
+          data: postData,
+          query: {
+            'name': $scope.nameInput
+          }
+        });
         $location.path('/instances/' + $scope.host);
       }
       else {
