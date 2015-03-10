@@ -74,7 +74,7 @@ function createContainerController($scope, $routeParams, $location, alertService
         };
 
         dockerService.d('containers.create', {
-          host: $scope.host
+          host: $scope.host,
           data: postData,
           query: {
             'name': $scope.nameInput
