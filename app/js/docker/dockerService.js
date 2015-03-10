@@ -86,11 +86,6 @@ function dockerService($http, actions, flux, alertService, configService) {
         var ns = namespace.split('.');
         var endpoint = endpoints[ns[0]][ns[1]];
 
-        if (endpoint === undefined) {
-            // TODO
-            // call to alertService with a generic 'Something broke.'?
-        }
-
         var config = {
             method: endpoint.verb,
             url: prepareUrl(endpoint.template, request.host, request.id),
