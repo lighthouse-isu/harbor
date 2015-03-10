@@ -66,11 +66,6 @@ function dockerService($http, actions, flux, alertService, configService) {
             }
         };
 
-        if (action === 'pullImage') {
-            // hack for pulling images
-            config.params = data;
-        }
-
         $http(config).then(
             // success
             function (response) {
@@ -109,7 +104,6 @@ function dockerService($http, actions, flux, alertService, configService) {
         },
         'images': {
             'search': d('GET', '/images/search', actions.searchImages),
-            'pull': d('POST', '/images/create', actions.pullImage),
             'list': d('GET', '/images/json', actions.listImages)
         }
     };
