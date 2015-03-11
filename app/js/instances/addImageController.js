@@ -68,7 +68,7 @@ function addImageController($scope, $routeParams, $location, dockerService, inst
 
         dockerService.stream('images.pull', {
             host: $scope.host,
-            data: {fromImage: imageName},
+            query: {fromImage: imageName},
             patterns: ['{status}', '{error}']
         });
 

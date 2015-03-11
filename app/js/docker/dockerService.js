@@ -122,7 +122,8 @@ function dockerService($http, actions, flux, alertService, configService) {
 
         var oboeStream = oboe({
             method: endpoint.verb,
-            url: prepareUrl(endpoint.template, request.host, request.id) + '?' + $.param(request.data)
+            url: prepareUrl(endpoint.template, request.host, request.id) + '?' + $.param(request.query),
+            body: request.body
         });
 
         _.reduce(request.patterns, function(stream, pattern) {
@@ -135,6 +136,13 @@ function dockerService($http, actions, flux, alertService, configService) {
                 });
             });
         }, oboeStream);
+
+        oboeStream.fail(function() {
+            alertService.create({
+                message: namespace + ' call failed...',
+                type: 'danger'
+            });
+        });
     }
 
     return {
