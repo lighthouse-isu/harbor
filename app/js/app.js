@@ -61,18 +61,15 @@ app.store('appModel', appModel);
 // Captures requests and responses before forwarding them to the calling service
 function httpInterceptor(actions, flux) {
     return {
-        // TODO - need to coordinate with backend
-        // 'response': function (response) {
-        //     if (response.status === 401) {
-        //         // Clears session data and redirects to /login
-        //         console.log('caught 401!');
-        //         flux.dispatch(actions.authLogout);
-        //     }
-        //     else {
-        //         console.log('authorized!');
-        //         return response;
-        //     }
-        // }
+        'response': function (response) {
+            if (response.status === 401) {
+                // Clears session data and redirects to /login
+                flux.dispatch(actions.authLogout);
+            }
+            else {
+                return response;
+            }
+        }
     };
 }
 
@@ -84,15 +81,16 @@ function appConfig($locationProvider, $httpInterceptor, $provide) {
 }
 
 // Initialization
-function appInit($location, $rootScope, actions, alertService, sessionService, appModel, flux) {
-    // Redirect if logged in
-    var user = sessionService.get('lighthouse.user'),
-        route = sessionService.get('lighthouse.route'),
-        loggedIn = sessionService.get('lighthouse.loggedIn');
+function appInit($location, $rootScope, $window, actions, alertService, sessionService, appModel, flux) {
+    // Confirm auth status with the mothership
+    if ($window.user && $window.user.email) {
+        flux.dispatch(actions.authLogin, $window.user);
 
-    if (loggedIn === true && user && route) {
-        flux.dispatch(actions.authLogin, user);
-        flux.dispatch(actions.routeChange, route);
+        // Reload previous page
+        var route = sessionService.get('lighthouse.route');
+        if (route) {
+            flux.dispatch(actions.routeChange, route);
+        }
     }
     else {
         flux.dispatch(actions.routeChange, '/login');
@@ -108,7 +106,7 @@ function appInit($location, $rootScope, actions, alertService, sessionService, a
 
 httpInterceptor.$inject = ['actions', 'flux'];
 appConfig.$inject = ['$locationProvider', '$httpProvider', '$provide'];
-appInit.$inject = ['$location', '$rootScope', 'actions', 'alertService', 'sessionService', 'appModel', 'flux'];
+appInit.$inject = ['$location', '$rootScope', '$window', 'actions', 'alertService', 'sessionService', 'appModel', 'flux'];
 
 app.config(appConfig);
 app.run(appInit);

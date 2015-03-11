@@ -42,8 +42,6 @@ function appModel($location, sessionService) {
             this.loggedIn = true;
 
             $location.path(this.route);
-            sessionService.set('lighthouse.loggedIn', true);
-            sessionService.set('lighthouse.user', user);
 
             this.emitChange();
         },
@@ -54,8 +52,6 @@ function appModel($location, sessionService) {
             this.loggedIn = false;
 
             $location.path(this.route);
-            sessionService.remove('lighthouse.loggedIn');
-            sessionService.remove('lighthouse.user');
             sessionService.remove('lighthouse.route');
 
             this.emitChange();
