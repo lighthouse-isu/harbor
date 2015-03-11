@@ -39,7 +39,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="pullImageModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" data-backdrop="static">
+<div class="modal fade" id="pullImageModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -47,6 +47,7 @@
         <h4 class="modal-title" id="modalLabel">Specify a version tag for "{{ selectedImage.name }}"</h4>
       </div>
       <div class="modal-body">
+
         <div class="checkbox">
           <label>
             <input type="checkbox" ng-model="allTags"> Include all tags
@@ -58,25 +59,10 @@
           <input type="text" class="form-control" ng-model="imageTag" id="imageTag" ng-show="!allTags">
         </div>
 
-        <div class="progress" ng-show="imagesAreLoading">
-          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="pullProgress">
-          </div>
-        </div>
-        <ul class="list-group">
-          <li class="list-group-item" ng-model="loadingImage" ng-repeat="(id, loadingImage) in loadingImages">
-            {{ loadingImage.name }}
-            <i ng-show="!loadingImage.done" class="fa fa-spinner fa-spin"></i>
-            <i ng-show="loadingImage.done" class="fa fa-check text-success" ></i>
-          </li>
-        </ul>
-
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="imagesAreLoading">Close</button>
-        <button type="button" class="btn btn-primary" ng-click="pullImage(selectedImage)" ng-disabled="imagesAreLoading">
-        Pull
-        <i ng-show="imagesAreLoading" class="fa fa-spinner fa-spin"></i>
-        </button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="pullImage(selectedImage)" >Pull</button>
       </div>
     </div>
   </div>

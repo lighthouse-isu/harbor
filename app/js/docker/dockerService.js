@@ -20,6 +20,7 @@
  */
 
 var _ = require('lodash');
+var oboe = require('oboe');
 
 function dockerService($http, actions, flux, alertService, configService) {
     /*
@@ -82,6 +83,25 @@ function dockerService($http, actions, flux, alertService, configService) {
         );
     }
 
+
+    function dockerStream(method, url, action, host, cid, data, patterns) {
+        var oboeStream = oboe({
+            method: method,
+            url: prepareUrl(url, host, cid) + '?' + $.param(data)
+        });
+
+        _.reduce(patterns, function(stream, pattern) {
+            return stream.node(pattern, function(item) {
+                flux.dispatch(action, {
+                    'id': cid,
+                    'host': host,
+                    'response': item,
+                    'pattern': pattern
+                });
+            });
+        }, oboeStream);
+    }
+
     /*
      * d()
      * @param *: (see dockerService.docker)
@@ -90,6 +110,16 @@ function dockerService($http, actions, flux, alertService, configService) {
     function d(method, url, action, host, cid, data) {
         return _.partial(docker, method, url, action);
     }
+
+    /*
+     * stream()
+     * @param *: (see dockerService.docker)
+     * Returns the partially applied docker oboe function.
+     */
+    function stream(method, url, action, host, cid, data, patterns) {
+        return _.partial(dockerStream, method, url, action);
+    }
+
 
     return {
         'containers': {
@@ -103,8 +133,9 @@ function dockerService($http, actions, flux, alertService, configService) {
             'unpause': d('POST', '/containers/{id}/unpause', actions.unpauseContainer)
         },
         'images': {
-            'search': d('GET', '/images/search', actions.searchImages),
-            'list': d('GET', '/images/json', actions.listImages)
+            'search':    d('GET', '/images/search', actions.searchImages),
+            'list':      d('GET', '/images/json', actions.listImages),
+            'pull': stream('POST', '/images/create', actions.pullImage)
         }
     };
 }

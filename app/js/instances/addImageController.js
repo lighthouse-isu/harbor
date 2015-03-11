@@ -19,10 +19,9 @@
  * Manages interactions for a single Docker container
  */
 
-var oboe = require('oboe');
 var _ = require('lodash');
 
-function addImageController($scope, $routeParams, dockerService, instanceModel, alertService) {
+function addImageController($scope, $routeParams, $location, dockerService, instanceModel) {
     'use strict';
     $scope.host = $routeParams.host;
 
@@ -31,11 +30,6 @@ function addImageController($scope, $routeParams, dockerService, instanceModel, 
     $scope.searchIsLoading = false;
 
     $scope.allTags = true;
-    $scope.imagesAreLoading = false;
-    $scope.loadingImages = {};
-    $scope.pullProgress = {
-      'width': '0%'
-    };
 
     $scope.$listenTo(instanceModel, function () {
       $scope.searchIsLoading = false;
@@ -63,37 +57,7 @@ function addImageController($scope, $routeParams, dockerService, instanceModel, 
     $scope.stageImage = function(image) {
       $scope.selectedImage = image;
       $scope.imageTag = 'latest';
-
-      $scope.imagesAreLoading = false;
-      $scope.loadingImages = {};
-      $scope.pullProgress = {
-        'width': '0%'
-      };
     };
-
-    var parseStatusObject = function(item) {
-      if (_.has(item.progressDetail, 'current') && _.has(item.progressDetail, 'total')) {
-        $scope.pullProgress.width = 100 * item.progressDetail.current / item.progressDetail.total + '%';
-      }
-
-      if (_.startsWith(item.status, 'Pulling image ')) {
-        $scope.loadingImages[item.id] = {
-          'done': false,
-          'name': item.status.split('(')[1].split(')')[0] // parse out tag name
-        };
-      } else if (_.startsWith(item.status, 'Download complete')) {
-        if (_.has($scope.loadingImages, item.id)) {
-          $scope.loadingImages[item.id].done = true;
-        }
-      }
-
-      if (_.every(_.values($scope.loadingImages), 'done')) {
-        $scope.imagesAreLoading = false;
-        this.forget();
-      }
-      $scope.$apply();
-    };
-
 
     $scope.pullImage = function(image) {
       var imageName = image.name;
@@ -101,27 +65,16 @@ function addImageController($scope, $routeParams, dockerService, instanceModel, 
         imageName = [image.name, $scope.imageTag].join(':');
       }
 
-      $scope.imagesAreLoading = true;
+      dockerService.images.pull($scope.host, null, {
+        fromImage: imageName
+      }, ['{status}', '{error}']);
 
-      var url = [
-        '/api/v0.2/d/', $scope.host, '/images/create?fromImage=', imageName
-      ].join('');
-
-      oboe({method: 'POST',url: url})
-      .node('{progressDetail}', parseStatusObject)
-      .node('{error}', function(item) {
-        $scope.imagesAreLoading = false;
-        this.forget();
-
-        alertService.create({
-            message: item.error,
-            type: 'danger'
-        });
-
+      $('#pullImageModal').on('hidden.bs.modal', function(e) {
+        $location.path('/instances/' + $scope.host);
         $scope.$apply();
-      });
+      }).modal('hide');
     };
 }
 
-addImageController.$inject = ['$scope', '$routeParams', 'dockerService', 'instanceModel', 'alertService'];
+addImageController.$inject = ['$scope', '$routeParams', '$location', 'dockerService', 'instanceModel'];
 module.exports = addImageController;

@@ -41,6 +41,7 @@ function instanceModel(dockerService) {
             details: {}
         },
         images: [],
+        loadingImages: {},
         foundImages: [],
 
         // Event handlers
@@ -52,7 +53,8 @@ function instanceModel(dockerService) {
             'unpauseContainer': 'containerUpdate',
             'listContainers': 'listContainers',
             'listImages': 'listImages',
-            'searchImages': 'searchImages'
+            'searchImages': 'searchImages',
+            'pullImage': 'pullImage'
         },
 
         // containerUpdate() - multi-action handler
@@ -81,7 +83,29 @@ function instanceModel(dockerService) {
             this.emitChange();
         },
 
+        pullImage: function(r) {
+            var statusUpdate = r.response;
+            if (r.pattern === '{error}') {
+                alertService.create({
+                    message: statusUpdate.error,
+                    type: 'danger'
+                });
+                return;
+            }
 
+            var imageIsPulling = _.startsWith(statusUpdate.status, 'Pulling image ');
+            var imageIdUnique = !_.has(this.loadingImages, statusUpdate.id);
+
+            if (imageIsPulling && imageIdUnique) {
+                var imageName = statusUpdate.status.split('from ')[1];
+                var imageTag = statusUpdate.status.split('(')[1].split(')')[0];
+
+                this.loadingImages[statusUpdate.id] = {
+                    'Id': statusUpdate.id,
+                    'RepoTags': [imageName + ':' + imageTag]
+                };
+            }
+        },
 
         // State access
         exports: {
@@ -91,6 +115,16 @@ function instanceModel(dockerService) {
 
             getContainer: function (id) {
                 return this.containers.details[id];
+            },
+
+            getLoadingImages: function() {
+                // filter out loading images if they've been loaded
+                var imageIds = _.map(this.images, function(image) {
+                    return image.Id.slice(0, 12);
+                });
+                this.loadingImages = _.omit(this.loadingImages, imageIds);
+
+                return _.values(this.loadingImages);
             },
 
             getImages: function () {

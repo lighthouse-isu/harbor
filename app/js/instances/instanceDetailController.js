@@ -21,12 +21,13 @@
 
 var _ = require('lodash');
 
-function instanceDetailController($scope, $routeParams, dockerService, instanceModel, instanceService) {
+function instanceDetailController($scope, $routeParams, $interval, dockerService, instanceModel, instanceService) {
     'use strict';
 
     // init
     $scope.containers = [];
     $scope.images = [];
+    $scope.loadingImages = [];
     $scope.instance = {name: $routeParams.host};
     $scope.allImages = false;
     $scope.allContainers = false;
@@ -38,6 +39,7 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
     $scope.$listenTo(instanceModel, function () {
         $scope.containers = instanceModel.getContainers();
         $scope.images = instanceModel.getImages();
+        $scope.loadingImages = instanceModel.getLoadingImages();
     });
 
     // View handlers
@@ -50,7 +52,17 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
         dockerService.containers.list(
             $scope.instance.name, null, {all: $scope.allContainers});
     };
+
+    var updateInterval = $interval(function() {
+        $scope.getImages();
+        $scope.getContainers();
+    }, 2000);
+
+    $scope.$on('$destroy',function(){
+        $interval.cancel(updateInterval);
+    });
+
 }
 
-instanceDetailController.$inject = ['$scope', '$routeParams', 'dockerService', 'instanceModel', 'instanceService'];
+instanceDetailController.$inject = ['$scope', '$routeParams', '$interval', 'dockerService', 'instanceModel', 'instanceService'];
 module.exports = instanceDetailController;
