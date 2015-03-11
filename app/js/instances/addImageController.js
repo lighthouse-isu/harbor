@@ -32,47 +32,50 @@ function addImageController($scope, $routeParams, $location, dockerService, inst
     $scope.allTags = true;
 
     $scope.$listenTo(instanceModel, function () {
-      $scope.searchIsLoading = false;
-      $scope.foundImages = instanceModel.getSearchedImages();
+        $scope.searchIsLoading = false;
+        $scope.foundImages = instanceModel.getSearchedImages();
     });
 
     $scope.inputHandler = function(event) {
-      if (event.type === 'keypress' && event.which === 13) {
-        $scope.searchImage();
-      }
+        if (event.type === 'keypress' && event.which === 13) {
+            $scope.searchImage();
+        }
     };
 
     $scope.searchImage = function() {
-      if ($scope.searchIsLoading) {
-        return;
-      }
+        if ($scope.searchIsLoading) {
+            return;
+        }
 
-      $scope.foundImages = [];
-      dockerService.images.search($scope.host, null, {
-        term: $scope.searchTerm.toLowerCase()
-      });
-      $scope.searchIsLoading = true;
+        $scope.foundImages = [];
+        dockerService.d('images.search', {
+            host: $scope.host,
+            query: {term: $scope.searchTerm.toLowerCase()}
+        });
+        $scope.searchIsLoading = true;
     };
 
     $scope.stageImage = function(image) {
-      $scope.selectedImage = image;
-      $scope.imageTag = 'latest';
+        $scope.selectedImage = image;
+        $scope.imageTag = 'latest';
     };
 
     $scope.pullImage = function(image) {
-      var imageName = image.name;
-      if (!$scope.allTags) {
-        imageName = [image.name, $scope.imageTag].join(':');
-      }
+        var imageName = image.name;
+        if (!$scope.allTags) {
+            imageName = [image.name, $scope.imageTag].join(':');
+        }
 
-      dockerService.images.pull($scope.host, null, {
-        fromImage: imageName
-      }, ['{status}', '{error}']);
+        dockerService.stream('images.pull', {
+            host: $scope.host,
+            data: {fromImage: imageName},
+            patterns: ['{status}', '{error}']
+        });
 
-      $('#pullImageModal').on('hidden.bs.modal', function(e) {
-        $location.path('/instances/' + $scope.host);
-        $scope.$apply();
-      }).modal('hide');
+        $('#pullImageModal').on('hidden.bs.modal', function(e) {
+            $location.path('/instances/' + $scope.host);
+            $scope.$apply();
+        }).modal('hide');
     };
 }
 

@@ -60,7 +60,10 @@ function instanceModel(dockerService) {
         // containerUpdate() - multi-action handler
         // forces container inspection
         containerUpdate: function (r) {
-            dockerService.containers.inspect(r.host, r.id);
+            dockerService.d('containers.inspect', {
+                host: r.host,
+                id: r.id
+            });
         },
 
         inspectContainer: function (r) {
