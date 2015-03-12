@@ -62,7 +62,7 @@ function httpInterceptor($q, actions, flux, alertService) {
                 // Clears session data and redirects to /login
                 flux.dispatch(actions.authLogout);
                 alertService.create({
-                    message: 'Your session has expired. Please log in.'
+                    message: 'Please provide a valid username and password.',
                     type: 'info'
                 });
             }

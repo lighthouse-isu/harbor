@@ -39,13 +39,6 @@ function instanceService($http, actions, flux, alertService, configService) {
             function (response) {
                 flux.dispatch(actions.listInstances,
                     {'id': beacon.id, 'response': response.data});
-            },
-            // error
-            function (response) {
-                alertService.create({
-                    message: 'Unable to retrieve beacon information.',
-                    type: 'danger'
-                });
             }
         );
     }
