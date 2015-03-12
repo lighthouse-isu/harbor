@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li><a href="/instances">Instances</a></li>
+        <li><a href="/instances/{{host}}">{{host}}</a></li>
+        <li>containers</li>
+        <li>create</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="row">
+    <form ng-submit="submit()">
+      <div class="form-group">
+        <label for="images">Image</label>
+        <select class="form-control" id="images" ng-model="selectedImage" ng-options="image as image.Tags for image in images">
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="cmdInput">CMD</label>
+        <input class="form-control" type="text" id="cmdInput" class="form-control" ng-model="cmdInput">
+      </div>
+
+
+      <div class="form-group">
+        <label for="envInput">Enviroment Variables</label>
+        <input class="form-control" type="text" id="envInput" class="form-control"  ng-model="enviromentInput" ng-keypress="addEnviromentVar($event)" ng-blur="addEnviromentVar($event)">
+      </div>
+
+      <ul class="list-group">
+        <li class="list-group-item" ng-model="enviromentVariables" ng-repeat="env in enviromentVariables">
+          {{ env }}
+          <button class="btn btn-default btn-xs btn-danger pull-right" ng-click="removeEnviromentVar(env)">X</button>
+        </li>
+      </ul>
+
+      <div class="form-group">
+        <label for="workingDir">Working Directory</label>
+        <input class="form-control" type="text" id="workingDir" class="form-control" ng-model="workingDir">
+      </div>
+
+      <button type="submit" class="btn btn-default pull-right">Create</button>
+    </form>
+  </div>
+</div>

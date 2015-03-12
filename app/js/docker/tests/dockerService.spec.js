@@ -33,68 +33,72 @@ describe('dockerService.containers', function () {
         http.expect('GET',
             configService.api.base + 'd/host%40com/containers/json').respond('');
 
-        dockerService.containers.list('host@com');
+        dockerService.d('containers.list', {
+            host: 'host@com'
+        });
+
         http.flush();
     });
 
-    it('should list containers', function () {
-        // testing route is created as expected
+    it('should handle endpoints with ids', function () {
+        http.expect('GET',
+            configService.api.base + 'd/host/containers/id/json').respond('');
+
+        dockerService.d('containers.inspect', {
+            host: 'host',
+            id: 'id'
+        });
+
+        http.flush();
+    });
+
+    it('should handle endpoints without query parameters', function () {
         http.expect('GET',
             configService.api.base + 'd/host/containers/json').respond('');
 
-        dockerService.containers.list('host');
+        dockerService.d('containers.list', {
+            host: 'host'
+        });
+
         http.flush();
     });
 
-    it('should list containers with query parameters', function() {
+    it('should handle endpoints with query parameters', function() {
         http.expect('GET',
             configService.api.base + 'd/host/containers/json?all=true&size=true').respond('');
 
-        dockerService.containers.list('host', null, {
-            all: true,
-            size: true
+        dockerService.d('containers.list', {
+            host: 'host',
+            query: {
+                all: true,
+                size: true
+            }
         });
+
         http.flush();
     });
 
-    it('should start a container', function () {
+    it('should handle endpoints with body data', function () {
         http.expect('POST',
-            configService.api.base + 'd/host/containers/id/start').respond('');
+            configService.api.base + 'd/host/containers/create', {'Payload': {'some': 'data'}}).respond('');
 
-        dockerService.containers.start('host', 'id');
+        dockerService.d('containers.create', {
+            host: 'host',
+            data: { 'some': 'data' }
+        });
+
         http.flush();
     });
 
-    it('should stop a container', function () {
+    it('should handle endpoints with both body data and query parameters', function () {
         http.expect('POST',
-            configService.api.base + 'd/host/containers/id/stop').respond('');
+            configService.api.base + 'd/host/containers/create?name=test', {'Payload': {'some': 'data'}}).respond('');
 
-        dockerService.containers.stop('host', 'id');
-        http.flush();
-    });
-
-    it('should restart a container', function () {
-        http.expect('POST',
-            configService.api.base + 'd/host/containers/id/restart').respond('');
-
-        dockerService.containers.restart('host', 'id');
-        http.flush();
-    });
-
-    it('should pause a container', function () {
-        http.expect('POST',
-            configService.api.base + 'd/host/containers/id/pause').respond('');
-
-        dockerService.containers.pause('host', 'id');
-        http.flush();
-    });
-
-    it('should unpause a container', function () {
-        http.expect('POST',
-            configService.api.base + 'd/host/containers/id/unpause').respond('');
-
-        dockerService.containers.unpause('host', 'id');
-        http.flush();
+        dockerService.d('containers.create', {
+            host: 'host',
+            query: { 'name': 'test' },
+            data: { 'some': 'data' }
+        });
     });
 
 });
