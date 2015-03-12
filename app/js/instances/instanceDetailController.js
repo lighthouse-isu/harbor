@@ -27,7 +27,7 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
     // init
     $scope.containers = [];
     $scope.images = [];
-    $scope.instance = {name: $routeParams.host};
+    $scope.instance = {alias: $routeParams.host};
     $scope.allImages = false;
     $scope.allContainers = false;
 
