@@ -53,31 +53,35 @@ var app = angular.module('lighthouse.app', [
     users.name
 ]);
 
-// Prepare app state
-var appModel = require('./appModel');
-app.store('appModel', appModel);
-
 // $http interceptor
 // Captures requests and responses before forwarding them to the calling service
-function httpInterceptor(actions, flux) {
+function httpInterceptor($q, actions, flux, alertService) {
     return {
-        'response': function (response) {
+        'responseError': function (response) {
             if (response.status === 401) {
                 // Clears session data and redirects to /login
                 flux.dispatch(actions.authLogout);
+                alertService.create({
+                    message: 'Your session has expired. Please log in.'
+                    type: 'info'
+                });
             }
             else {
-                return response;
+                alertService.create({
+                    message: response.data,
+                    type: 'danger'
+                });
             }
+
+            return $q.reject(response);
         }
     };
 }
 
 // Configuration
-function appConfig($locationProvider, $httpInterceptor, $provide) {
+function appConfig($locationProvider, $httpProvider) {
     $locationProvider.html5Mode(true);
-    $provide.factory('httpInterceptor', httpInterceptor);
-    $httpInterceptor.interceptors.push('httpInterceptor');
+    $httpProvider.interceptors.push('httpInterceptor');
 }
 
 // Initialization
@@ -85,8 +89,7 @@ function appInit($location, $rootScope, $window, actions, alertService, sessionS
     // Confirm auth status with the mothership
     if ($window.user && $window.user.email) {
         flux.dispatch(actions.authLogin, $window.user);
-
-        // Reload previous page
+        // Reload previous page, if any
         var route = sessionService.get('lighthouse.route');
         if (route) {
             flux.dispatch(actions.routeChange, route);
@@ -104,9 +107,14 @@ function appInit($location, $rootScope, $window, actions, alertService, sessionS
     });
 }
 
-httpInterceptor.$inject = ['actions', 'flux'];
-appConfig.$inject = ['$locationProvider', '$httpProvider', '$provide'];
+httpInterceptor.$inject = ['$q', 'actions', 'flux', 'alertService'];
+appConfig.$inject = ['$locationProvider', '$httpProvider'];
 appInit.$inject = ['$location', '$rootScope', '$window', 'actions', 'alertService', 'sessionService', 'appModel', 'flux'];
+
+// Prepare app state
+var appModel = require('./appModel');
+app.store('appModel', appModel);
+app.factory('httpInterceptor', httpInterceptor);
 
 app.config(appConfig);
 app.run(appInit);

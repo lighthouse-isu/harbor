@@ -18,7 +18,7 @@
  * instanceService
  * Requests and manages information related to instance discovery.
  */
-function instanceService($http, actions, flux, configService) {
+function instanceService($http, actions, flux, alertService, configService) {
     'use strict';
 
     /*
@@ -55,5 +55,5 @@ function instanceService($http, actions, flux, configService) {
     };
 }
 
-instanceService.$inject = ['$http', 'actions', 'flux', 'configService'];
+instanceService.$inject = ['$http', 'actions', 'flux', 'alertService', 'configService'];
 module.exports = instanceService;
