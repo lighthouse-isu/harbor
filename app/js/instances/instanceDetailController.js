@@ -21,7 +21,7 @@
 
 var _ = require('lodash');
 
-function instanceDetailController($scope, $routeParams, $interval, dockerService, instanceModel, instanceService) {
+function instanceDetailController($scope, $routeParams, flux, dockerService, instanceModel, instanceService) {
     'use strict';
 
     // init
@@ -29,15 +29,21 @@ function instanceDetailController($scope, $routeParams, $interval, dockerService
     $scope.images = [];
     $scope.loadingImages = [];
     $scope.instance = {name: $routeParams.host};
-    $scope.allImages = false;
+    $scope.allImages = instanceModel.getShowAllImages();
     $scope.allContainers = false;
 
     dockerService.d('containers.list', {
-        host: $scope.instance.name
+        host: $scope.instance.name,
+        query: {
+            all: $scope.allContainers
+        }
     });
 
     dockerService.d('images.list', {
-        host: $scope.instance.name
+        host: $scope.instance.name,
+        query: {
+            all: $scope.allImages
+        }
     });
 
     // State event listeners
@@ -49,6 +55,8 @@ function instanceDetailController($scope, $routeParams, $interval, dockerService
 
     // View handlers
     $scope.getImages = function() {
+        flux.dispatch('imageShowAll', $scope.allImages);
+
         dockerService.d('images.list', {
             host: $scope.instance.name,
             query: {
@@ -65,17 +73,7 @@ function instanceDetailController($scope, $routeParams, $interval, dockerService
             }
         });
     };
-
-    var updateInterval = $interval(function() {
-        $scope.getImages();
-        $scope.getContainers();
-    }, 2000);
-
-    $scope.$on('$destroy',function(){
-        $interval.cancel(updateInterval);
-    });
-
 }
 
-instanceDetailController.$inject = ['$scope', '$routeParams', '$interval', 'dockerService', 'instanceModel', 'instanceService'];
+instanceDetailController.$inject = ['$scope', '$routeParams', 'flux', 'dockerService', 'instanceModel', 'instanceService'];
 module.exports = instanceDetailController;

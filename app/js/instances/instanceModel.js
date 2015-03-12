@@ -31,6 +31,11 @@ function id(c) {
 function instanceModel(dockerService) {
     'use strict';
 
+    var debouncedService = _.debounce(dockerService.d, 1000, {
+        trailing: false,
+        leading: true
+    });
+
     return {
         // State
         hostName: '',
@@ -41,6 +46,7 @@ function instanceModel(dockerService) {
             details: {}
         },
         images: [],
+        showAllImages: false,
         loadingImages: {},
         foundImages: [],
 
@@ -53,6 +59,7 @@ function instanceModel(dockerService) {
             'unpauseContainer': 'containerUpdate',
             'listContainers': 'listContainers',
             'listImages': 'listImages',
+            'imageShowAll': 'imageShowAll',
             'searchImages': 'searchImages',
             'pullImage': 'pullImage'
         },
@@ -81,6 +88,10 @@ function instanceModel(dockerService) {
             this.emitChange();
         },
 
+        imageShowAll: function (r) {
+            this.showAllImages = r;
+        },
+
         searchImages: function(r) {
             this.foundImages = r.response;
             this.emitChange();
@@ -96,10 +107,10 @@ function instanceModel(dockerService) {
                 return;
             }
 
-            var imageIsPulling = _.startsWith(statusUpdate.status, 'Pulling image ');
-            var imageIdUnique = !_.has(this.loadingImages, statusUpdate.id);
+            var imageIsStartingToPull = _.startsWith(statusUpdate.status, 'Pulling image ');
+            var imagesIsAlreadyLoading = _.has(this.loadingImages, statusUpdate.id);
 
-            if (imageIsPulling && imageIdUnique) {
+            if (imageIsStartingToPull && !imagesIsAlreadyLoading) {
                 var imageName = statusUpdate.status.split('from ')[1];
                 var imageTag = statusUpdate.status.split('(')[1].split(')')[0];
 
@@ -107,6 +118,16 @@ function instanceModel(dockerService) {
                     'Id': statusUpdate.id,
                     'RepoTags': [imageName + ':' + imageTag]
                 };
+
+                this.emitChange();
+            } else if (_.startsWith(statusUpdate.status, 'Download complete')) {
+                this.loadingImages = _.omit(this.loadingImages, statusUpdate.id);
+
+                debouncedService('images.list', {
+                    host: r.host,
+                    query: {all: this.showAllImages}
+                });
+                this.emitChange();
             }
         },
 
@@ -116,17 +137,15 @@ function instanceModel(dockerService) {
                 return this.containers.summaries;
             },
 
+            getShowAllImages: function() {
+                return this.showAllImages;
+            },
+
             getContainer: function (id) {
                 return this.containers.details[id];
             },
 
             getLoadingImages: function() {
-                // filter out loading images if they've been loaded
-                var imageIds = _.map(this.images, function(image) {
-                    return image.Id.slice(0, 12);
-                });
-                this.loadingImages = _.omit(this.loadingImages, imageIds);
-
                 return _.values(this.loadingImages);
             },
 
