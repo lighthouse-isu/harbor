@@ -56,6 +56,14 @@ var app = angular.module('lighthouse.app', [
 // $http interceptor
 // Captures requests and responses before forwarding them to the calling service
 function httpInterceptor($q, actions, flux, alertService) {
+
+    function error(response) {
+        return {
+            Cause: response.data.Cause || 'unknown',
+            Message: resposne.data.Message || 'An unknown error occured. Please submit a bug report.'
+        };
+    }
+
     return {
         'responseError': function (response) {
             if (response.status === 401) {
@@ -68,7 +76,7 @@ function httpInterceptor($q, actions, flux, alertService) {
             }
             else {
                 alertService.create({
-                    message: response.data,
+                    message: error(response).Message,
                     type: 'danger'
                 });
             }
