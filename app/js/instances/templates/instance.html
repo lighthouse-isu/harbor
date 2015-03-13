@@ -20,7 +20,7 @@
         <label><input type="checkbox" ng-model="allContainers" ng-click="getContainers()"> Show all</label>
       </div>
 
-      <a class="btn btn-default btn-sm btn-success" href="/instances/{{instance.name}}/container/create">
+      <a class="btn btn-default btn-sm btn-success" href="/instances/{{instance.alias}}/container/create">
         Create
       </a>
     </div>
@@ -62,7 +62,7 @@
       <div class="checkbox">
         <label><input type="checkbox" ng-model="allImages" ng-click="getImages()"> Show all</label>
       </div>
-      <a class="btn btn-default btn-sm btn-success" href="/instances/{{instance.name}}/image/add">
+      <a class="btn btn-default btn-sm btn-success" href="/instances/{{instance.alias}}/image/add">
         Add
       </a>
     </div>
