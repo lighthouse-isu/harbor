@@ -25,6 +25,15 @@
         padding-right: 15px;
       }
     </style>
+
+    <!-- Current user's email from Lighthouse -->
+    <script>
+      {{ if .LoggedIn }}
+        window.user = {email: "{{.Email}}"};
+      {{ else }}
+        window.user = {};
+      {{ end }}
+    </script>
   </head>
 
   <body>
