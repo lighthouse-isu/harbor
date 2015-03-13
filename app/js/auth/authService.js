@@ -37,14 +37,6 @@ function authService($http, actions, flux, appModel, alertService, configService
                 // success
                 function (reponse) {
                     flux.dispatch(actions.authLogin, {email: auth.Email});
-                },
-                // error
-                function (response) {
-                    alertService.create({
-                        message: 'Invalid email address or password.',
-                        timeout: 2,
-                        type: 'danger'
-                    });
                 }
             );
         }
@@ -63,13 +55,6 @@ function authService($http, actions, flux, appModel, alertService, configService
                 // success
                 function (response) {
                     flux.dispatch(actions.authLogout);
-                },
-                // error
-                function (response) {
-                    alertService.create({
-                        message: 'Unable to logout - please check your connection.',
-                        type: 'warning'
-                    });
                 }
             );
         }

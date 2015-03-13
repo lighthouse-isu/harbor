@@ -105,13 +105,6 @@ function dockerService($http, actions, flux, alertService, configService) {
             function (response) {
                 flux.dispatch(endpoint.action,
                     {'id': request.id, 'host': request.host, 'response': response.data});
-            },
-            // error
-            function (response) {
-                alertService.create({
-                    message: response.data,
-                    type: 'danger'
-                });
             }
         );
     }

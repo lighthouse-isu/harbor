@@ -3,13 +3,13 @@
     <div class="col-md-12">
       <ol class="breadcrumb">
         <li><a href="/beacons">Beacons</a></li>
-        <li class="active">{{ instance.name }}</li>
+        <li class="active">{{ instance.alias }}</li>
       </ol>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h1>{{ instance.name }}</h1>
+      <h1>{{ instance.alias }}</h1>
     </div>
   </div>
   <!-- Containers -->
@@ -41,7 +41,7 @@
         <tbody>
           <tr ng-repeat="container in containers track by container.Id">
             <td>
-              <a href="/instances/{{instance.name}}/container/{{container.Id | shorten:10}}">
+              <a href="/instances/{{instance.alias}}/container/{{container.Id | shorten:10}}">
                 {{container.Id | shorten:10}}
               </a>
             </td>

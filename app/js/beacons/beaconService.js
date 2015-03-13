@@ -28,13 +28,6 @@ function beaconService($http, actions, flux, configService, alertService) {
             // success
             function (response) {
                 flux.dispatch(actions.listBeacons, {'response': response.data});
-            },
-            // error
-            function (response) {
-                alertService.create({
-                    message: response.data,
-                    type: 'danger'
-                });
             }
         );
     }
@@ -46,13 +39,6 @@ function beaconService($http, actions, flux, configService, alertService) {
             // success
             function (response) {
                 flux.dispatch(actions.listBeacons, {'response': response.data});
-            },
-            // error
-            function (response) {
-                alertService.create({
-                    message: response.data,
-                    type: 'danger'
-                });
             }
         );
     }
@@ -68,13 +54,6 @@ function beaconService($http, actions, flux, configService, alertService) {
                 alertService.create({
                     message: 'Successfully created beacon!',
                     type: 'success'
-                });
-            },
-            // error
-            function (response) {
-                alertService.create({
-                    message: response.data,
-                    type: 'danger'
                 });
             }
         );

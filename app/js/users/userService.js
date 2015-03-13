@@ -27,13 +27,6 @@ function userService($http, actions, flux, configService, alertService) {
             // success
             function (response) {
                 flux.dispatch(actions.listUsers, {'response': response.data});
-            },
-            // error
-            function (response) {
-                alertService.create({
-                    message: response.data,
-                    type: 'danger'
-                });
             }
         );
     }

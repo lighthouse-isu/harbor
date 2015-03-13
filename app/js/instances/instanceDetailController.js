@@ -27,20 +27,19 @@ function instanceDetailController($scope, $routeParams, flux, dockerService, ins
     // init
     $scope.containers = [];
     $scope.images = [];
-    $scope.loadingImages = [];
-    $scope.instance = {name: $routeParams.host};
+    $scope.instance = {alias: $routeParams.host};
     $scope.allImages = instanceModel.getShowAllImages();
     $scope.allContainers = false;
 
     dockerService.d('containers.list', {
-        host: $scope.instance.name,
+        host: $scope.instance.alias,
         query: {
             all: $scope.allContainers
         }
     });
 
     dockerService.d('images.list', {
-        host: $scope.instance.name,
+        host: $scope.instance.alias,
         query: {
             all: $scope.allImages
         }
@@ -58,7 +57,7 @@ function instanceDetailController($scope, $routeParams, flux, dockerService, ins
         flux.dispatch('imageShowAll', $scope.allImages);
 
         dockerService.d('images.list', {
-            host: $scope.instance.name,
+            host: $scope.instance.alias,
             query: {
                 all: $scope.allImages
             }
@@ -67,7 +66,7 @@ function instanceDetailController($scope, $routeParams, flux, dockerService, ins
 
     $scope.getContainers = function () {
         dockerService.d('containers.list', {
-            host: $scope.instance.name,
+            host: $scope.instance.alias,
             query: {
                 all: $scope.allContainers
             }
