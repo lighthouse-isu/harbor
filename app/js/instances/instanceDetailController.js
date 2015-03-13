@@ -32,11 +32,11 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
     $scope.allContainers = false;
 
     dockerService.d('containers.list', {
-        host: $scope.instance.name
+        host: $scope.instance.alias
     });
 
     dockerService.d('images.list', {
-        host: $scope.instance.name
+        host: $scope.instance.alias
     });
 
     // State event listeners
@@ -48,7 +48,7 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
     // View handlers
     $scope.getImages = function() {
         dockerService.d('images.list', {
-            host: $scope.instance.name,
+            host: $scope.instance.alias,
             query: {
                 all: $scope.allImages
             }
@@ -57,7 +57,7 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
 
     $scope.getContainers = function () {
         dockerService.d('containers.list', {
-            host: $scope.instance.name,
+            host: $scope.instance.alias,
             query: {
                 all: $scope.allContainers
             }
