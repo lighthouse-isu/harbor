@@ -53,46 +53,55 @@ var app = angular.module('lighthouse.app', [
     users.name
 ]);
 
-// Prepare app state
-var appModel = require('./appModel');
-app.store('appModel', appModel);
-
 // $http interceptor
 // Captures requests and responses before forwarding them to the calling service
-function httpInterceptor(actions, flux) {
+function httpInterceptor($q, actions, flux, alertService) {
+
+    function error(response) {
+        return {
+            Cause: response.data.Cause || 'unknown',
+            Message: resposne.data.Message || 'An unknown error occured. Please submit a bug report.'
+        };
+    }
+
     return {
-        // TODO - need to coordinate with backend
-        // 'response': function (response) {
-        //     if (response.status === 401) {
-        //         // Clears session data and redirects to /login
-        //         console.log('caught 401!');
-        //         flux.dispatch(actions.authLogout);
-        //     }
-        //     else {
-        //         console.log('authorized!');
-        //         return response;
-        //     }
-        // }
+        'responseError': function (response) {
+            if (response.status === 401) {
+                // Clears session data and redirects to /login
+                flux.dispatch(actions.authLogout);
+                alertService.create({
+                    message: 'Please provide a valid username and password.',
+                    type: 'info'
+                });
+            }
+            else {
+                alertService.create({
+                    message: error(response).Message,
+                    type: 'danger'
+                });
+            }
+
+            return $q.reject(response);
+        }
     };
 }
 
 // Configuration
-function appConfig($locationProvider, $httpInterceptor, $provide) {
+function appConfig($locationProvider, $httpProvider) {
     $locationProvider.html5Mode(true);
-    $provide.factory('httpInterceptor', httpInterceptor);
-    $httpInterceptor.interceptors.push('httpInterceptor');
+    $httpProvider.interceptors.push('httpInterceptor');
 }
 
 // Initialization
-function appInit($location, $rootScope, actions, alertService, sessionService, appModel, flux) {
-    // Redirect if logged in
-    var user = sessionService.get('lighthouse.user'),
-        route = sessionService.get('lighthouse.route'),
-        loggedIn = sessionService.get('lighthouse.loggedIn');
-
-    if (loggedIn === true && user && route) {
-        flux.dispatch(actions.authLogin, user);
-        flux.dispatch(actions.routeChange, route);
+function appInit($location, $rootScope, $window, actions, alertService, sessionService, appModel, flux) {
+    // Confirm auth status with the mothership
+    if ($window.user && $window.user.email) {
+        flux.dispatch(actions.authLogin, $window.user);
+        // Reload previous page, if any
+        var route = sessionService.get('lighthouse.route');
+        if (route) {
+            flux.dispatch(actions.routeChange, route);
+        }
     }
     else {
         flux.dispatch(actions.routeChange, '/login');
@@ -106,9 +115,14 @@ function appInit($location, $rootScope, actions, alertService, sessionService, a
     });
 }
 
-httpInterceptor.$inject = ['actions', 'flux'];
-appConfig.$inject = ['$locationProvider', '$httpProvider', '$provide'];
-appInit.$inject = ['$location', '$rootScope', 'actions', 'alertService', 'sessionService', 'appModel', 'flux'];
+httpInterceptor.$inject = ['$q', 'actions', 'flux', 'alertService'];
+appConfig.$inject = ['$locationProvider', '$httpProvider'];
+appInit.$inject = ['$location', '$rootScope', '$window', 'actions', 'alertService', 'sessionService', 'appModel', 'flux'];
+
+// Prepare app state
+var appModel = require('./appModel');
+app.store('appModel', appModel);
+app.factory('httpInterceptor', httpInterceptor);
 
 app.config(appConfig);
 app.run(appInit);

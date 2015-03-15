@@ -18,7 +18,7 @@
  * instanceService
  * Requests and manages information related to instance discovery.
  */
-function instanceService($http, actions, flux, configService) {
+function instanceService($http, actions, flux, alertService, configService) {
     'use strict';
 
     /*
@@ -39,13 +39,6 @@ function instanceService($http, actions, flux, configService) {
             function (response) {
                 flux.dispatch(actions.listInstances,
                     {'id': beacon.id, 'response': response.data});
-            },
-            // error
-            function (response) {
-                alertService.create({
-                    message: 'Unable to retrieve beacon information.',
-                    type: 'danger'
-                });
             }
         );
     }
@@ -55,5 +48,5 @@ function instanceService($http, actions, flux, configService) {
     };
 }
 
-instanceService.$inject = ['$http', 'actions', 'flux', 'configService'];
+instanceService.$inject = ['$http', 'actions', 'flux', 'alertService', 'configService'];
 module.exports = instanceService;
