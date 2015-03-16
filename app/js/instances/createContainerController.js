@@ -16,7 +16,7 @@
 
 var _ = require('lodash');
 
-function createContainerController($scope, $routeParams, $location, dockerService, instanceModel) {
+function createContainerController($scope, $routeParams, $location, alertService, dockerService, instanceModel) {
     'use strict';
     $scope.host = $routeParams.host;
 
@@ -44,6 +44,7 @@ function createContainerController($scope, $routeParams, $location, dockerServic
     $scope.enviromentVariables = [];
     $scope.enviromentInput = "";
     $scope.cmdInput = "";
+    $scope.nameInput = "";
 
     $scope.addEnviromentVar = function(event) {
       // ignore all other keyboard input other than the "Enter" key
@@ -64,21 +65,39 @@ function createContainerController($scope, $routeParams, $location, dockerServic
     };
 
     $scope.submit = function() {
-      var postData = {
-        'Env': $scope.enviromentVariables,
-        'Image': $scope.selectedImage.RepoTags[0],
-        'WorkingDir': $scope.workingDir,
-        'Cmd': $scope.cmdInput.split(' ')
-      };
+      if ($scope.containerForm.$valid) {
+        var postData = {
+          'Env': $scope.enviromentVariables,
+          'Image': $scope.selectedImage.RepoTags[0],
+          'WorkingDir': $scope.workingDir,
+          'Cmd': $scope.cmdInput.split(' ')
+        };
 
-      dockerService.d('containers.create', {
-        host: $scope.host,
-        data: postData
-      });
+        dockerService.d('containers.create', {
+          host: $scope.host,
+          data: postData,
+          query: {
+            'name': $scope.nameInput
+          }
+        });
+        $location.path('/instances/' + $scope.host);
+      }
+      else {
+        $scope.containerForm.submitted = true;
+        var message = 'There was an error with your submission.';
 
-      $location.path('/instances/' + $scope.host);
+        if ($scope.containerForm.name.$error.required) {
+          message = 'Please provide an application name for this container.';
+        }
+
+        alertService.create({
+          message: message,
+          type: 'danger',
+          timeout: 3
+        });
+      }
     };
 }
 
-createContainerController.$inject = ['$scope', '$routeParams', '$location', 'dockerService', 'instanceModel'];
+createContainerController.$inject = ['$scope', '$routeParams', '$location', 'alertService', 'dockerService', 'instanceModel'];
 module.exports = createContainerController;
