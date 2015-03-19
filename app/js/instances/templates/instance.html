@@ -56,7 +56,7 @@
     </div>
   </div>
   <!-- Images -->
-  <div class="row">
+  <div class="row" style="margin-bottom: 20px;">
     <div class="col-md-12">
       <h3>Images</h3>
       <div class="checkbox">
@@ -67,12 +67,21 @@
       </a>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-12" ng-repeat="(name, progress) in loadingImages">
+      <span>Pulling <strong>{{ name }}</strong></span>
+      <div class="progress">
+        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': progress}"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-md-12">
       <table class="table table-hover table-condensed">
         <thead>
           <tr>
-            <th></th>
             <th>ID</th>
             <th>Parent ID</th>
             <th>Repo tags</th>
@@ -82,17 +91,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="loadingImage in loadingImages track by loadingImage.Id">
-            <td><i class="fa fa-spinner fa-spin"></i></td>
-            <td>{{ loadingImage.Id | shorten:12 }}</td>
-            <td>-</td>
-            <td>{{ loadingImage.RepoTags.join(', ') }}</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-          </tr>
           <tr ng-repeat="image in images track by image.Id">
-            <td></td>
             <td>{{ image.Id | shorten:12 }}</td>
             <td>{{ image.ParentId | shorten:12 }}</td>
             <td>{{ image.RepoTags.join(', ') }}</td>

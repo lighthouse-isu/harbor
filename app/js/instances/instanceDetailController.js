@@ -21,12 +21,13 @@
 
 var _ = require('lodash');
 
-function instanceDetailController($scope, $routeParams, flux, dockerService, instanceModel, instanceService) {
+function instanceDetailController($scope, $routeParams, $timeout, flux, dockerService, instanceModel, instanceService) {
     'use strict';
 
     // init
     $scope.containers = [];
     $scope.images = [];
+    $scope.loadingImages = {};
     $scope.instance = {alias: $routeParams.host};
     $scope.allImages = instanceModel.getShowAllImages();
     $scope.allContainers = false;
@@ -49,7 +50,16 @@ function instanceDetailController($scope, $routeParams, flux, dockerService, ins
     $scope.$listenTo(instanceModel, function () {
         $scope.containers = instanceModel.getContainers();
         $scope.images = instanceModel.getImages();
-        $scope.loadingImages = instanceModel.getLoadingImages();
+
+        var loadingImages = instanceModel.getLoadingImages();
+        _.forEach(loadingImages, function(progress, name) {
+            $scope.loadingImages[name] = progress;
+        });
+        $scope.loadingImages = _.pick($scope.loadingImages, _.keys(loadingImages));
+
+        $timeout(function() {
+            $scope.$apply();
+        }, 0);
     });
 
     // View handlers
@@ -74,5 +84,5 @@ function instanceDetailController($scope, $routeParams, flux, dockerService, ins
     };
 }
 
-instanceDetailController.$inject = ['$scope', '$routeParams', 'flux', 'dockerService', 'instanceModel', 'instanceService'];
+instanceDetailController.$inject = ['$scope', '$routeParams', '$timeout', 'flux', 'dockerService', 'instanceModel', 'instanceService'];
 module.exports = instanceDetailController;

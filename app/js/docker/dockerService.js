@@ -125,7 +125,8 @@ function dockerService($http, actions, flux, alertService, configService) {
                     'id': request.id,
                     'host': request.host,
                     'response': item,
-                    'pattern': pattern
+                    'pattern': pattern,
+                    'meta': request
                 });
             });
         }, oboeStream);

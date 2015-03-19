@@ -31,11 +31,6 @@ function id(c) {
 function instanceModel(dockerService) {
     'use strict';
 
-    var debouncedService = _.debounce(dockerService.d, 1000, {
-        trailing: false,
-        leading: true
-    });
-
     return {
         // State
         hostName: '',
@@ -98,35 +93,38 @@ function instanceModel(dockerService) {
         },
 
         pullImage: function(r) {
-            var statusUpdate = r.response;
+            var imageTag = r.meta.query.fromImage;
+
             if (r.pattern === '{error}') {
                 alertService.create({
                     message: statusUpdate.error,
                     type: 'danger'
                 });
+                this.loadingImages = _.omit(this.loadingImages, imageTag);
                 return;
             }
 
-            var imageIsStartingToPull = _.startsWith(statusUpdate.status, 'Pulling image ');
-            var imagesIsAlreadyLoading = _.has(this.loadingImages, statusUpdate.id);
+            // right now we have to guess when the image pull has finished
+            // https://github.com/jimhigson/oboe.js/issues/44
+            if (_.startsWith(r.response.status, 'Status: Downloaded newer image') ||
+                _.startsWith(r.response.status, 'Status: Image is up to date')) {
 
-            if (imageIsStartingToPull && !imagesIsAlreadyLoading) {
-                var imageName = statusUpdate.status.split('from ')[1];
-                var imageTag = statusUpdate.status.split('(')[1].split(')')[0];
-
-                this.loadingImages[statusUpdate.id] = {
-                    'Id': statusUpdate.id,
-                    'RepoTags': [imageName + ':' + imageTag]
-                };
-
-                this.emitChange();
-            } else if (_.startsWith(statusUpdate.status, 'Download complete')) {
-                this.loadingImages = _.omit(this.loadingImages, statusUpdate.id);
-
-                debouncedService('images.list', {
+                this.loadingImages = _.omit(this.loadingImages, imageTag);
+                dockerService.d('images.list', {
                     host: r.host,
                     query: {all: this.showAllImages}
                 });
+                return;
+            }
+
+            if (!_.has(this.loadingImages, imageTag)) {
+                this.loadingImages[imageTag] = '0%';
+                this.emitChange();
+            }
+
+            if (_.has(r.response, 'progressDetail') && _.has(r.response.progressDetail, 'current')) {
+                var progress = r.response.progressDetail;
+                this.loadingImages[imageTag] = 100 * progress.current / progress.total + '%';
                 this.emitChange();
             }
         },
@@ -146,7 +144,7 @@ function instanceModel(dockerService) {
             },
 
             getLoadingImages: function() {
-                return _.values(this.loadingImages);
+                return this.loadingImages;
             },
 
             getImages: function () {
