@@ -56,11 +56,12 @@ var app = angular.module('lighthouse.app', [
 // $http interceptor
 // Captures requests and responses before forwarding them to the calling service
 function httpInterceptor($q, actions, flux, alertService) {
+    'use strict';
 
     function error(response) {
         return {
             Cause: response.data.Cause || 'unknown',
-            Message: resposne.data.Message || 'An unknown error occured. Please submit a bug report.'
+            Message: response.data.Message || 'An unknown error occured. Please submit a bug report.'
         };
     }
 
@@ -88,12 +89,16 @@ function httpInterceptor($q, actions, flux, alertService) {
 
 // Configuration
 function appConfig($locationProvider, $httpProvider) {
+    'use strict';
+
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('httpInterceptor');
 }
 
 // Initialization
 function appInit($location, $rootScope, $window, actions, alertService, sessionService, appModel, flux) {
+    'use strict';
+
     // Confirm auth status with the mothership
     if ($window.user && $window.user.email) {
         flux.dispatch(actions.authLogin, $window.user);
