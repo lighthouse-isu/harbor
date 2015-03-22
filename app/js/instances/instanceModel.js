@@ -101,6 +101,7 @@ function instanceModel(dockerService) {
                     type: 'danger'
                 });
                 this.loadingImages = _.omit(this.loadingImages, imageTag);
+                this.emitChange();
                 return;
             }
 
@@ -114,6 +115,8 @@ function instanceModel(dockerService) {
                     host: r.host,
                     query: {all: this.showAllImages}
                 });
+
+                this.emitChange();
                 return;
             }
 
