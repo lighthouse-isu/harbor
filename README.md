@@ -1,7 +1,7 @@
 harbor
 =================
 
-[![Build Status](https://img.shields.io/travis/lighthouse/lighthouse-client.svg?style=flat)](https://travis-ci.org/lighthouse/lighthouse-client)
+[![Build Status](https://img.shields.io/travis/lighthouse/harbor.svg?style=flat)](https://travis-ci.org/lighthouse/harbor)
 [![License](https://img.shields.io/badge/license-apache2-blue.svg?style=flat)](/LICENSE)
 
 UI assets and code for Lighthouse.
