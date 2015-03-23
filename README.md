@@ -1,4 +1,4 @@
-lighthouse-client
+harbor
 =================
 
 [![Build Status](https://img.shields.io/travis/lighthouse/lighthouse-client.svg?style=flat)](https://travis-ci.org/lighthouse/lighthouse-client)
@@ -33,10 +33,10 @@ Options:
 
 These two flags can be used in conjunction with each other and with any command above. Note that using `--gopath` overrides the default target directory. (i.e. source isn't moved to both locations)
 
-### Running unit tests (work in progress)
+### Running unit tests
 
 * `npm install -g karma-cli`
-* `npm test`
+* `npm test` or `karma start`
 
 Happy coding!
 
