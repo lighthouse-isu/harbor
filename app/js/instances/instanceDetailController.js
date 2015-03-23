@@ -57,6 +57,7 @@ function instanceDetailController($scope, $routeParams, $timeout, flux, dockerSe
         });
         $scope.loadingImages = _.pick($scope.loadingImages, _.keys(loadingImages));
 
+        // this needs some investigating, without this, loadingImages won't show
         $timeout(function() {
             $scope.$apply();
         }, 0);
