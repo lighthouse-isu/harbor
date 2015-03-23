@@ -41,6 +41,9 @@ function instanceModel(dockerService) {
             details: {}
         },
         images: [],
+        showAllImages: false,
+        loadingImages: {},
+        foundImages: [],
 
         // Event handlers
         handlers: {
@@ -50,7 +53,10 @@ function instanceModel(dockerService) {
             'pauseContainer': 'containerUpdate',
             'unpauseContainer': 'containerUpdate',
             'listContainers': 'listContainers',
-            'listImages': 'listImages'
+            'listImages': 'listImages',
+            'imageShowAll': 'imageShowAll',
+            'searchImages': 'searchImages',
+            'pullImage': 'pullImage'
         },
 
         // containerUpdate() - multi-action handler
@@ -77,18 +83,79 @@ function instanceModel(dockerService) {
             this.emitChange();
         },
 
+        imageShowAll: function (r) {
+            this.showAllImages = r;
+        },
+
+        searchImages: function(r) {
+            this.foundImages = r.response;
+            this.emitChange();
+        },
+
+        pullImage: function(r) {
+            var imageTag = r.meta.query.fromImage;
+
+            if (r.pattern === '{error}') {
+                alertService.create({
+                    message: statusUpdate.error,
+                    type: 'danger'
+                });
+                this.loadingImages = _.omit(this.loadingImages, imageTag);
+                this.emitChange();
+                return;
+            }
+
+            // right now we have to guess when the image pull has finished
+            // https://github.com/jimhigson/oboe.js/issues/44
+            if (_.startsWith(r.response.status, 'Status: Downloaded newer image') ||
+                _.startsWith(r.response.status, 'Status: Image is up to date')) {
+
+                this.loadingImages = _.omit(this.loadingImages, imageTag);
+                dockerService.d('images.list', {
+                    host: r.host,
+                    query: {all: this.showAllImages}
+                });
+
+                this.emitChange();
+                return;
+            }
+
+            if (!_.has(this.loadingImages, imageTag)) {
+                this.loadingImages[imageTag] = '0%';
+                this.emitChange();
+            }
+
+            if (_.has(r.response, 'progressDetail') && _.has(r.response.progressDetail, 'current')) {
+                var progress = r.response.progressDetail;
+                this.loadingImages[imageTag] = 100 * progress.current / progress.total + '%';
+                this.emitChange();
+            }
+        },
+
         // State access
         exports: {
             getContainers: function () {
                 return this.containers.summaries;
             },
 
+            getShowAllImages: function() {
+                return this.showAllImages;
+            },
+
             getContainer: function (id) {
                 return this.containers.details[id];
             },
 
+            getLoadingImages: function() {
+                return this.loadingImages;
+            },
+
             getImages: function () {
                 return this.images;
+            },
+
+            getSearchedImages: function() {
+                return this.foundImages;
             }
         }
     };

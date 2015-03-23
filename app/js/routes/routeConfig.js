@@ -38,6 +38,10 @@ function routeConfig($routeProvider) {
             template: require('../instances/templates/create_container.html'),
             controller: 'createContainerController'
         })
+        .when('/instances/:host/image/add', {
+            template: require('../instances/templates/add_image.html'),
+            controller: 'addImageController'
+        })
         .when('/instances/:host/container/:id', {
             template: require('../instances/templates/container.html'),
             controller: 'containerController'

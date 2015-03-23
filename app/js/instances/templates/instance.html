@@ -20,7 +20,7 @@
         <label><input type="checkbox" ng-model="allContainers" ng-click="getContainers()"> Show all</label>
       </div>
 
-      <a class="btn btn-default btn-sm btn-success" href="/instances/{{instance.name}}/container/create">
+      <a class="btn btn-default btn-sm btn-success" href="/instances/{{instance.alias}}/container/create">
         Create
       </a>
     </div>
@@ -56,14 +56,27 @@
     </div>
   </div>
   <!-- Images -->
-  <div class="row">
+  <div class="row" style="margin-bottom: 20px;">
     <div class="col-md-12">
       <h3>Images</h3>
       <div class="checkbox">
         <label><input type="checkbox" ng-model="allImages" ng-click="getImages()"> Show all</label>
       </div>
+      <a class="btn btn-default btn-sm btn-success" href="/instances/{{instance.alias}}/image/add">
+        Add
+      </a>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-12" ng-repeat="(name, progress) in loadingImages">
+      <span>Pulling <strong>{{ name }}</strong></span>
+      <div class="progress">
+        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': progress}"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-md-12">
       <table class="table table-hover table-condensed">
@@ -79,9 +92,9 @@
         </thead>
         <tbody>
           <tr ng-repeat="image in images track by image.Id">
-            <td>{{ image.Id | shorten:10 }}</td>
-            <td>{{ image.ParentId | shorten:10 }}</td>
-            <td>{{ image.RepoTags }}</td>
+            <td>{{ image.Id | shorten:12 }}</td>
+            <td>{{ image.ParentId | shorten:12 }}</td>
+            <td>{{ image.RepoTags.join(', ') }}</td>
             <td>{{ image.Size }}</td>
             <td>{{ image.VirtualSize }}</td>
             <td>{{ image.Created | fromEpoch:true }}</td>

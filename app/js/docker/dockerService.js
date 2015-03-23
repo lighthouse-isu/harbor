@@ -20,6 +20,7 @@
  */
 
 var _ = require('lodash');
+var oboe = require('oboe');
 
 function dockerService($http, actions, flux, alertService, configService) {
     'use strict';
@@ -46,7 +47,9 @@ function dockerService($http, actions, flux, alertService, configService) {
             'unpause': ep('POST', '/containers/{id}/unpause', actions.unpauseContainer)
         },
         'images': {
-            'list': ep('GET', '/images/json', actions.listImages)
+            'list':   ep('GET', '/images/json', actions.listImages),
+            'search': ep('GET', '/images/search', actions.searchImages),
+            'pull':   ep('POST', '/images/create', actions.pullImage)
         }
     };
 
@@ -106,8 +109,39 @@ function dockerService($http, actions, flux, alertService, configService) {
         );
     }
 
+    function stream(namespace, request) {
+        var ns = namespace.split('.');
+        var endpoint = endpoints[ns[0]][ns[1]];
+
+        var oboeStream = oboe({
+            method: endpoint.verb,
+            url: prepareUrl(endpoint.template, request.host, request.id) + '?' + $.param(request.query),
+            body: request.body
+        });
+
+        _.reduce(request.patterns, function(stream, pattern) {
+            return stream.node(pattern, function(item) {
+                flux.dispatch(endpoint.action, {
+                    'id': request.id,
+                    'host': request.host,
+                    'response': item,
+                    'pattern': pattern,
+                    'meta': request
+                });
+            });
+        }, oboeStream);
+
+        oboeStream.fail(function() {
+            alertService.create({
+                message: namespace + ' call failed...',
+                type: 'danger'
+            });
+        });
+    }
+
     return {
-        'd': d
+        'd': d,
+        'stream': stream
     };
 }
 

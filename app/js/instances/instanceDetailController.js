@@ -21,32 +21,52 @@
 
 var _ = require('lodash');
 
-function instanceDetailController($scope, $routeParams, dockerService, instanceModel, instanceService) {
+function instanceDetailController($scope, $routeParams, $timeout, flux, dockerService, instanceModel, instanceService) {
     'use strict';
 
     // init
     $scope.containers = [];
     $scope.images = [];
+    $scope.loadingImages = {};
     $scope.instance = {alias: $routeParams.host};
-    $scope.allImages = false;
+    $scope.allImages = instanceModel.getShowAllImages();
     $scope.allContainers = false;
 
     dockerService.d('containers.list', {
-        host: $scope.instance.alias
+        host: $scope.instance.alias,
+        query: {
+            all: $scope.allContainers
+        }
     });
 
     dockerService.d('images.list', {
-        host: $scope.instance.alias
+        host: $scope.instance.alias,
+        query: {
+            all: $scope.allImages
+        }
     });
 
     // State event listeners
     $scope.$listenTo(instanceModel, function () {
         $scope.containers = instanceModel.getContainers();
         $scope.images = instanceModel.getImages();
+
+        var loadingImages = instanceModel.getLoadingImages();
+        _.forEach(loadingImages, function(progress, name) {
+            $scope.loadingImages[name] = progress;
+        });
+        $scope.loadingImages = _.pick($scope.loadingImages, _.keys(loadingImages));
+
+        // this needs some investigating, without this, loadingImages won't show
+        $timeout(function() {
+            $scope.$apply();
+        }, 0);
     });
 
     // View handlers
     $scope.getImages = function() {
+        flux.dispatch('imageShowAll', $scope.allImages);
+
         dockerService.d('images.list', {
             host: $scope.instance.alias,
             query: {
@@ -65,5 +85,5 @@ function instanceDetailController($scope, $routeParams, dockerService, instanceM
     };
 }
 
-instanceDetailController.$inject = ['$scope', '$routeParams', 'dockerService', 'instanceModel', 'instanceService'];
+instanceDetailController.$inject = ['$scope', '$routeParams', '$timeout', 'flux', 'dockerService', 'instanceModel', 'instanceService'];
 module.exports = instanceDetailController;
