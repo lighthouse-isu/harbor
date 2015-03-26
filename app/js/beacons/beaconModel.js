@@ -56,7 +56,6 @@ function beaconModel() {
             });
 
             // build new map
-            this.beacons = {};
             this.beacons = _.indexBy(_beacons, 'id');
             this.nextId = id;
 

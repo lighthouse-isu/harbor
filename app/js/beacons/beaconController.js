@@ -14,23 +14,18 @@
  *  limitations under the License.
  */
 
-/*
- * beaconDirective
- * Defines a single beacon as a component,
- * which includes beacon-specific instance info.
- */
-function beaconDirective() {
+function beaconController($scope, beaconModel, beaconService) {
     'use strict';
 
-    return {
-        'controller': 'beaconController',
-        'restrict': 'A',
-        'scope': {
-            // beacon ID assigned at init
-            'bid': '='
-        },
-        'template': require('./templates/beacon.html')
-    };
+    $scope.beacon = beaconModel.getBeacon($scope.bid);
+    $scope.instances = [];
+
+    beaconService.getInstances($scope.beacon);
+
+    $scope.$listenTo(beaconModel, function () {
+        $scope.instances = beaconModel.getInstances($scope.beacon);
+    });
 }
 
-module.exports = beaconDirective;
+beaconController.$inject = ['$scope', 'beaconModel', 'beaconService'];
+module.exports = beaconController;
