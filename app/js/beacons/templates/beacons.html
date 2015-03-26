@@ -17,41 +17,40 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <div class="panel-group" id="beacons-list" role="tablist" aria-multiselectable="true">
-        <!-- beacon panel definition -->
-        <div class="panel panel-default" ng-repeat="beacon in beacons track by $index">
-          <div class="panel-heading" role="tab" ng-click="injectInstances(beacon)">
-            <a class="collapsed" data-toggle="collapse" data-parent="#beacons-list" href="#beacon-collapse-{{ $index }}" aria-expanded="true" aria-controls="beacon-collapse-{{ $index }}">
-              <h4 class="panel-title">
-                {{ beacon.Alias }} ({{ beacon.Address }})
-              </h4>
-            </a>
-          </div>
-          <div id="beacon-collapse-{{ $index }}" class="panel-collapse collapse" role="tabpanel">
-            <div class="panel-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Docker Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="instance in instances[$index] track by $index">
-                    <td>
-                      <a href="/instances/{{ instance.Alias }}">{{ instance.Alias }}</a>
-                    </td>
-                    <td>{{ instance.InstanceAddress }}</td>
-                    <td>{{ instance.CanAccessDocker }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+      <!-- beacon panel definition -->
+      <div class="panel panel-default" ng-repeat="beacon in beacons track by $index">
+        <div class="panel-heading" role="tab" ng-click="injectInstances(beacon)">
+          <h4 class="panel-title">
+            {{ beacon.Alias }} ({{ beacon.Address }})
+          </h4>
+        </div>
+        <div class="panel-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Docker Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="instance in instances[$index] track by $index">
+                <td>
+                  <a href="/instances/{{ instance.Alias }}">{{ instance.Alias }}</a>
+                </td>
+                <td>{{ instance.InstanceAddress }}</td>
+                <td>{{ instance.CanAccessDocker }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="row">
+    <div beacon bid="0"></div>
+    <div beacon bid="1"></div>
   </div>
 </div>
 

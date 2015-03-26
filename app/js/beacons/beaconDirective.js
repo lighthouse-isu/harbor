@@ -14,21 +14,21 @@
  *  limitations under the License.
  */
 
-// beacons/init.js
-// Handles management of Lighthouse beacons
+/*
+ * beaconDirective
+ * Defines a single beacon as a component,
+ * which includes beacon-specific instance info.
+ */
+function beaconDirective() {
+    'use strict';
 
-var beaconController = require('./beaconController'),
-    beaconDirective = require('./beaconDirective'),
-    beaconModel = require('./beaconModel'),
-    beaconService = require('./beaconService');
+    return {
+        'scope': {
+            'bid': '='
+        },
+        'restrict': 'A',
+        'template': require('./templates/beacon.html')
+    };
+}
 
-// init angular module
-var beacons = angular.module('lighthouse.beacons', []);
-
-// register module components
-beacons.controller('beaconController', beaconController);
-beacons.directive('beacon', beaconDirective);
-beacons.factory('beaconService', beaconService);
-beacons.store('beaconModel', beaconModel);
-
-module.exports = beacons;
+module.exports = beaconDirective;

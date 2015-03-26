@@ -46,6 +46,7 @@ function beaconController($scope, beaconModel, instanceModel, alertService, beac
         instanceService.getInstances(beacon);
     };
 
+    // Add beacon form control
     $scope.open = function () {
         $scope.submitting = true;
     };
