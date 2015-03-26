@@ -70,6 +70,10 @@ function beaconModel() {
 
         // State access
         exports: {
+            getBeacon: function (bid) {
+                return this.beacons[bid.toString()];
+            },
+
             getBeacons: function () {
                 return this.beacons;
             },

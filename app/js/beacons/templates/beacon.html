@@ -1,10 +1,27 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <h4 class="panel-title">
-      {{bid}}
+      {{beacon.Alias}} @ {{beacon.Address}}
     </h4>
   </div>
   <div class="panel-body">
-    <p>{{bid}}</p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Docker Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="instance in instances track by $index">
+          <td>
+            <a href="/instances/{{ instance.Alias }}">{{ instance.Alias }}</a>
+          </td>
+          <td>{{ instance.InstanceAddress }}</td>
+          <td>{{ instance.CanAccessDocker }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

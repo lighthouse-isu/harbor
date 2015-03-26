@@ -15,10 +15,10 @@
  */
 
 /*
- * beaconController
+ * beaconListController
  * Main beacon view control.
  */
-function beaconController($scope, beaconModel, instanceModel, alertService, beaconService, instanceService) {
+function beaconListController($scope, beaconModel, instanceModel, alertService, beaconService) {
     'use strict';
     // Init
     beaconService.getBeacons();
@@ -41,10 +41,6 @@ function beaconController($scope, beaconModel, instanceModel, alertService, beac
         $scope.beacons = beaconModel.getBeacons();
         $scope.instances = beaconModel.getInstances();
     });
-
-    $scope.injectInstances = function (beacon) {
-        instanceService.getInstances(beacon);
-    };
 
     // Add beacon form control
     $scope.open = function () {
@@ -92,5 +88,5 @@ function beaconController($scope, beaconModel, instanceModel, alertService, beac
     };
 }
 
-beaconController.$inject = ['$scope', 'beaconModel', 'instanceModel', 'alertService', 'beaconService', 'instanceService'];
-module.exports = beaconController;
+beaconListController.$inject = ['$scope', 'beaconModel', 'instanceModel', 'alertService', 'beaconService'];
+module.exports = beaconListController;

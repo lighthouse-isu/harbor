@@ -23,12 +23,25 @@ function beaconDirective() {
     'use strict';
 
     return {
+        'controller': beaconController,
+        'restrict': 'A',
         'scope': {
             'bid': '='
         },
-        'restrict': 'A',
         'template': require('./templates/beacon.html')
     };
 }
 
+function beaconController($scope, beaconModel, beaconService) {
+    $scope.beacon = beaconModel.getBeacon($scope.bid);
+    $scope.instances = [];
+
+    beaconService.getInstances($scope.beacon);
+
+    $scope.$listenTo(beaconModel, function () {
+        $scope.instances = beaconModel.getInstances($scope.beacon);
+    });
+}
+
+beaconController.$inject = ['$scope', 'beaconModel', 'beaconService'];
 module.exports = beaconDirective;
