@@ -23,11 +23,17 @@ function userModel() {
     return {
         // State
         Email: '',
-        users: [],
+        users: {},
 
         // Event handlers
         handlers: {
-          'listUsers': 'listUsers'
+            'addUser': 'addUser',
+            'listUsers': 'listUsers'
+        },
+
+        addUser: function (user) {
+            this.users.push(user.Email);
+            this.emitChange();
         },
 
         listUsers: function (r) {

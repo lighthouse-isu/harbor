@@ -57,6 +57,7 @@ var _actions = keymirror({
     listBeacons: null,
 
     // Users
+    addUser: null,
     listUsers: null
 });
 

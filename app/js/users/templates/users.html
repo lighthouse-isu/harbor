@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+        <li class="active">Users</li>
+      </ol>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group btn-group btn-group-sm">
+        <button type="button" class="btn btn-success" data-target="#user-modal" ng-click="open()">
+          <i class="fa fa-plus"></i> Add User
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="user in users">
+            <td>
+              <a href="/users/{{ user }}">{{ user }}</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal show" ng-show="submitting" id="user-modal" tab-index="-1"
+     role="dialog" aria-labelledby="user-modal-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="close()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="user-modal-label">Create User</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" name="userForm" ng-submit="create(new)" novalidate>
+          <div class="form-group" ng-class="{'has-error': form.submitted && userForm.email.$error.required}">
+            <label for="user-email" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-10">
+              <input required name="email" type="text" ng-model="new.email" class="form-control" id="user-email" placeholder="user@example.com">
+            </div>
+          </div>
+          <div class="form-group" ng-class="{'has-error': form.submitted && userForm.password.$error.required}">
+            <label for="user-password" class="col-sm-2 control-label">Password</label>
+            <div class="col-sm-10">
+              <input required name="password" type="password" ng-model="new.password" class="form-control" id="user-password">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-8 col-sm-4">
+              <button type="button" class="btn btn-default" ng-click="close()">Cancel</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
