@@ -85,7 +85,7 @@ function instanceDetailController($scope, $routeParams, $timeout, flux, dockerSe
     $scope.removeImage = function(image) {
         image.loading = true;
         dockerService.d('images.remove', {
-            host: $routeParams.host,
+            host: $scope.instance.alias,
             id: image.Id
         });
     };
