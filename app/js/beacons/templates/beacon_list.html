@@ -12,6 +12,9 @@
         <button type="button" class="btn btn-success" data-target="#beacon-modal" ng-click="open()">
           <i class="fa fa-plus"></i> Add Beacon
         </button>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#deployer-modal">
+          <i class="fa fa-play"></i> Deploy App
+        </button>
       </div>
     </div>
   </div>
@@ -23,6 +26,9 @@
     </div>
   </div>
 </div>
+
+<!-- modal -->
+<div deployer></div>
 
 <div class="modal show" ng-show="submitting"
      id="beacon-modal" tab-index="-1" role="dialog">

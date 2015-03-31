@@ -14,14 +14,29 @@
  *  limitations under the License.
  */
 
-// docker/init.js
-// Creates docker requests targetted at a specific host.
+function deployDirective() {
+    'use strict';
 
-var dockerTemplate = require('./dockerTemplate'),
-    dockerService = require('./dockerService');
+    function link(scope, element, attrs) {
+        var selector = $('[data-toggle="tooltip"]');
 
-var docker = angular.module('lighthouse.docker', []);
+        // Initialize tooltip functionality
+        $(function () {
+            selector.tooltip();
+        });
 
-docker.constant('dockerTemplate', dockerTemplate);
-docker.factory('dockerService', dockerService);
-module.exports = docker;
+        // Cleanup
+        element.on('$destroy', function () {
+            selector.tooltip('destroy');
+        });
+    }
+
+    return {
+        'controller': 'deployController',
+        'link': link,
+        'restrict': 'A',
+        'template': require('./templates/deployer.html')
+    };
+}
+
+module.exports = deployDirective;

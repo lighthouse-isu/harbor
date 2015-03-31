@@ -1,0 +1,38 @@
+<div class="modal fade"
+     id="deployer-modal"
+     tabindex="-1"
+     role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"
+                        class="close"
+                        data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+                <h4>Deploy an application</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <span class="input-group-addon"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Names help Lighthouse track applications across multiple instances.">Name</span>
+                    <input type="text" class="form-control" placeholder="application-name" ng-model="request.Name">
+                </div>
+
+                <h5>Docker container create request</h5>
+                <textarea class="form-control" rows="10">{{request.Command | stringify}}</textarea>
+
+                <h5>Select Instances</h5>
+                <div class="list-group">
+                    <a href="#" class="list-group-item"
+                       ng-repeat="instance in instances"
+                       ng-class="{'list-group-item-info': instance.selected}"
+                       ng-click="toggleInclude(instance)">
+                       <i class="fa fa-check" ng-show="instance.selected"></i>&nbsp;{{instance.Alias}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

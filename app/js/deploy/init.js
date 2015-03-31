@@ -14,14 +14,12 @@
  *  limitations under the License.
  */
 
-// docker/init.js
-// Creates docker requests targetted at a specific host.
+var deployController = require('./deployController'),
+    deployDirective = require('./deployDirective');
 
-var dockerTemplate = require('./dockerTemplate'),
-    dockerService = require('./dockerService');
+var deploy = angular.module('lighthouse.deploy', []);
 
-var docker = angular.module('lighthouse.docker', []);
+deploy.controller('deployController', deployController);
+deploy.directive('deployer', deployDirective);
 
-docker.constant('dockerTemplate', dockerTemplate);
-docker.factory('dockerService', dockerService);
-module.exports = docker;
+module.exports = deploy;
