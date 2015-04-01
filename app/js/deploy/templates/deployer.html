@@ -13,16 +13,17 @@
                 <h4>Deploy an application</h4>
             </div>
             <div class="modal-body">
-                <div class="input-group">
-                    <span class="input-group-addon"
-                          data-toggle="tooltip"
-                          data-placement="bottom"
-                          title="Names help Lighthouse track applications across multiple instances.">Name</span>
-                    <input type="text" class="form-control" placeholder="application-name" ng-model="request.Name">
-                </div>
-
-                <h5>Docker container create request</h5>
-                <textarea class="form-control" rows="10">{{request.Command | stringify}}</textarea>
+                <form>
+                    <div class="form-group">
+                        <label data-toggle="tooltip" data-placement="right"
+                               title="Names help Lighthouse track apps across multiple Docker instances.">Name</label>
+                        <input type="text" class="form-control" placeholder="application-name" ng-model="request.Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Image</label>
+                        <input type="text" class="form-control" placeholder="image:tag" ng-model="request.Command.Image">
+                    </div>
+                </form>
 
                 <h5>Select Instances</h5>
                 <div class="list-group">
@@ -32,6 +33,11 @@
                        ng-click="toggleInclude(instance)">
                        <i class="fa fa-check" ng-show="instance.selected"></i>&nbsp;{{instance.Alias}}</a>
                 </div>
+
+                <h5 data-toggle="collapse" data-target="#dockerRequest">
+                    <i class="fa fa-caret-down" ng-show="showRequest"></i>
+                    <i class="fa fa-caret-right" ng-show="!showRequest"></i>&nbsp;Docker container create request</h5>
+                <textarea id="dockerRequest" class="form-control collapse" rows="15">{{request.Command | stringify}}</textarea>
             </div>
         </div>
     </div>

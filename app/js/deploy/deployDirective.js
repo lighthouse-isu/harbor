@@ -25,6 +25,19 @@ function deployDirective() {
             selector.tooltip();
         });
 
+        // Collapse
+        scope.showRequest = false;
+
+        $('#dockerRequest').on('show.bs.collapse', function () {
+            scope.showRequest = true;
+            scope.$apply();
+        });
+
+        $('#dockerRequest').on('hide.bs.collapse', function () {
+            scope.showRequest = false;
+            scope.$apply();
+        });
+
         // Cleanup
         element.on('$destroy', function () {
             selector.tooltip('destroy');
@@ -35,6 +48,7 @@ function deployDirective() {
         'controller': 'deployController',
         'link': link,
         'restrict': 'A',
+        'scope': {},
         'template': require('./templates/deployer.html')
     };
 }
