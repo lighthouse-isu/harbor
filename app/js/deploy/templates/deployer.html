@@ -29,7 +29,7 @@
                 <div class="list-group">
                     <a href="#" class="list-group-item"
                        ng-repeat="instance in instances"
-                       ng-class="{'list-group-item-info': instance.selected}"
+                       ng-class="{'list-group-item-success': instance.selected}"
                        ng-click="toggleInclude(instance)">
                        <i class="fa fa-check" ng-show="instance.selected"></i>&nbsp;{{instance.Alias}}</a>
                 </div>
@@ -37,7 +37,8 @@
                 <h5 data-toggle="collapse" data-target="#dockerRequest">
                     <i class="fa fa-caret-down" ng-show="showRequest"></i>
                     <i class="fa fa-caret-right" ng-show="!showRequest"></i>&nbsp;Docker container create request</h5>
-                <textarea id="dockerRequest" class="form-control collapse" rows="15">{{request.Command | stringify}}</textarea>
+                <textarea id="dockerRequest" class="form-control collapse" rows="15"
+                          style="font-family: monospace; font-size: 14px;">{{request.Command | stringify}}</textarea>
             </div>
         </div>
     </div>
