@@ -31,6 +31,16 @@ function userService($http, actions, flux, configService, alertService) {
         );
     }
 
+    function getUser(email) {
+        var request = [configService.api.base, 'users/', email].join('');
+        $http.get(request).then(
+            // success
+            function (response) {
+                flux.dispatch(actions.getUser, {'response': response.data});
+            }
+        );
+      }
+
     function createUser(user) {
         var request = [configService.api.base, 'users/create'].join('');
 
@@ -49,6 +59,7 @@ function userService($http, actions, flux, configService, alertService) {
 
     return {
         'createUser': createUser,
+        'getUser': getUser,
         'getUsers': getUsers
     };
 }

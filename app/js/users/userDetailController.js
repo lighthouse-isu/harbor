@@ -14,21 +14,19 @@
  *  limitations under the License.
  */
 
-// users/init.js
-// Handles management of Lighthouse users
+function userDetailController($scope, $routeParams, flux, userModel, userService) {
+    'use strict';
 
-var userController = require('./userController'),
-    userDetailController = require('./userDetailController'),
-    userModel = require('./userModel'),
-    userService = require('./userService');
+    // init
+    $scope.user = {email: $routeParams.email};
 
-// init angular module
-var users = angular.module('lighthouse.users', []);
+    userService.getUser($scope.user.email);
 
-// register module components
-users.controller('userController', userController);
-users.controller('userDetailController, userDetailController');
-users.factory('userService', userService);
-users.store('userModel', userModel);
+    // State event listeners
+    $scope.$listenTo(userModel, function (){
+        $scope.user = userModel.getUser();
+    });
+}
 
-module.exports = users;
+userDetailController.$inject = ['$scope', '$routeParams', 'flux', 'userModel', 'userService'];
+module.exports = userDetailController;

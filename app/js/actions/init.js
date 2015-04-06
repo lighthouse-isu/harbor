@@ -58,6 +58,7 @@ var _actions = keymirror({
 
     // Users
     addUser: null,
+    getUser: null,
     listUsers: null
 });
 

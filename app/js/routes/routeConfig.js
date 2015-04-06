@@ -50,6 +50,10 @@ function routeConfig($routeProvider) {
             template: require('../users/templates/users.html'),
             controller: 'userController'
         })
+        .when('/users/:email', {
+            template: require('../users/templates/user.html'),
+            controller: 'userDetailController'
+        })
         .otherwise({ redirectTo: '/' });
 }
 
