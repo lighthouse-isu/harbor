@@ -65,8 +65,6 @@ function instanceDetailController($scope, $routeParams, $timeout, flux, dockerSe
 
     // View handlers
     $scope.getImages = function() {
-        flux.dispatch('imageShowAll', $scope.allImages);
-
         dockerService.d('images.list', {
             host: $scope.instance.alias,
             query: {
@@ -81,6 +79,14 @@ function instanceDetailController($scope, $routeParams, $timeout, flux, dockerSe
             query: {
                 all: $scope.allContainers
             }
+        });
+    };
+
+    $scope.removeImage = function(image) {
+        image.loading = true;
+        dockerService.d('images.remove', {
+            host: $scope.instance.alias,
+            id: image.Id
         });
     };
 }
