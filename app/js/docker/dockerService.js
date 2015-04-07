@@ -49,7 +49,8 @@ function dockerService($http, actions, flux, alertService, configService) {
         'images': {
             'list':   ep('GET', '/images/json', actions.listImages),
             'search': ep('GET', '/images/search', actions.searchImages),
-            'pull':   ep('POST', '/images/create', actions.pullImage)
+            'pull':   ep('POST', '/images/create', actions.pullImage),
+            'remove': ep('DELETE', '/images/{id}', actions.removeImage)
         }
     };
 

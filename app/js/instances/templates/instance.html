@@ -88,6 +88,7 @@
             <th>Size</th>
             <th>Virtual Size</th>
             <th>Created</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -98,6 +99,12 @@
             <td>{{ image.Size }}</td>
             <td>{{ image.VirtualSize }}</td>
             <td>{{ image.Created | fromEpoch:true }}</td>
+            <td>
+              <button class="btn btn-danger btn-xs" ng-disabled="image.loading" ng-click="removeImage(image)">
+                <i ng-show="!image.loading" class="fa fa-times"></i>
+                <i ng-show="image.loading" class="fa fa-spinner fa-spin"></i>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>

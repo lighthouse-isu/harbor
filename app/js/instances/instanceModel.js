@@ -56,7 +56,8 @@ function instanceModel(dockerService) {
             'listImages': 'listImages',
             'imageShowAll': 'imageShowAll',
             'searchImages': 'searchImages',
-            'pullImage': 'pullImage'
+            'pullImage': 'pullImage',
+            'removeImage': 'removeImage'
         },
 
         // containerUpdate() - multi-action handler
@@ -130,6 +131,14 @@ function instanceModel(dockerService) {
                 this.loadingImages[imageTag] = 100 * progress.current / progress.total + '%';
                 this.emitChange();
             }
+        },
+
+        removeImage: function(r) {
+            dockerService.d('images.list', {
+                host: r.host,
+                query: {all: this.showAllImages}
+            });
+            this.emitChange();
         },
 
         // State access
