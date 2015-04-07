@@ -100,7 +100,7 @@
             <td>{{ image.VirtualSize }}</td>
             <td>{{ image.Created | fromEpoch:true }}</td>
             <td>
-              <button class="btn btn-danger btn-xs" ng-click="removeImage(image)">
+              <button class="btn btn-danger btn-xs" ng-disabled="image.loading" ng-click="removeImage(image)">
                 <i ng-show="!image.loading" class="fa fa-times"></i>
                 <i ng-show="image.loading" class="fa fa-spinner fa-spin"></i>
               </button>
