@@ -103,12 +103,34 @@ function instanceModel(dockerService) {
                 });
                 this.loadingImages = _.omit(this.loadingImages, imageTag);
                 this.emitChange();
-                return;
-            }
+            } else if (_.has(r.response, 'progressDetail') &&
+                       _.has(r.response.progressDetail, 'current')) {
+
+                var imageLayers = [];
+
+                if (_.has(this.loadingImages, imageTag)) {
+                    imageLayers = this.loadingImages[imageTag];
+                }
+
+                var imageLayer = _.find(imageLayers, 'id', r.response.id);
+                if (_.isUndefined(imageLayer)) {
+                    imageLayer = {
+                        progress: '0%',
+                        id: r.response.id
+                    };
+                    imageLayers.push(imageLayer);
+                }
+
+                var progress = r.response.progressDetail;
+                imageLayer.progress = (100 * progress.current / progress.total).toFixed(2) + '%';
+                this.loadingImages[imageTag] = _.filter(imageLayers, function(imageLayer) {
+                    return parseInt(imageLayer.progress) < 100;
+                });
+                this.emitChange();
 
             // right now we have to guess when the image pull has finished
             // https://github.com/jimhigson/oboe.js/issues/44
-            if (_.startsWith(r.response.status, 'Status: Downloaded newer image') ||
+            } else if (_.startsWith(r.response.status, 'Status: Downloaded newer image') ||
                 _.startsWith(r.response.status, 'Status: Image is up to date')) {
 
                 this.loadingImages = _.omit(this.loadingImages, imageTag);
@@ -118,27 +140,7 @@ function instanceModel(dockerService) {
                 });
 
                 this.emitChange();
-                return;
             }
-
-            if (!_.has(this.loadingImages, imageTag)) {
-                this.loadingImages[imageTag] = '0%';
-                this.emitChange();
-            }
-
-            if (_.has(r.response, 'progressDetail') && _.has(r.response.progressDetail, 'current')) {
-                var progress = r.response.progressDetail;
-                this.loadingImages[imageTag] = 100 * progress.current / progress.total + '%';
-                this.emitChange();
-            }
-        },
-
-        removeImage: function(r) {
-            dockerService.d('images.list', {
-                host: r.host,
-                query: {all: this.showAllImages}
-            });
-            this.emitChange();
         },
 
         // State access
