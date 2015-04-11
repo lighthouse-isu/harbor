@@ -2,8 +2,8 @@
   <div class="row">
     <div class="col-md-12">
       <ol class="breadcrumb">
-        <li>Users</li>
-        <li class="active">{{ user.email }}</li>
+        <li><a href="/users">Users</a></li>
+        <li class="active">{{ user.Email }}</li>
       </ol>
     </div>
   </div>
@@ -11,7 +11,7 @@
     <div class="col-md-12">
       <div class="form-group btn-group btn-group-sm">
         <button type="button" class="btn btn-success">
-          <i class="fa fa-plus"></i> Something User
+          <i class="fa fa-pencil"></i> Edit User
         </button>
       </div>
     </div>
@@ -20,7 +20,23 @@
     <div class="col-md-12">
       <dl class="dl-horizontal">
         <dt>Email</dt>
-        <dd>{{ user.email }}</dd>
+        <dd>{{ user.Email }}</dd>
+        <dt>Role</dt>
+        <dd>{{ user.Role }}</dd>
+        <dt>Beacon Permissions</dt>
+        <dd>
+          <p ng-repeat="(beacon, level) in user.Permissions.Beacons">
+            {{ beacon }} -> <span ng-if="level==0">
+                              <i class="fa fa-eye"></i> Access
+                            </span>
+                            <span ng-if="level==1">
+                              <i class="fa fa-pencil"></i> Modify
+                            </span>
+                            <span ng-if="level==2">
+                              <i class="fa fa-cog"></i> Owner
+                            </span>
+          </p>
+        </dd>
       </dl>
     </div>
   </div>

@@ -14,19 +14,26 @@
  *  limitations under the License.
  */
 
-function userDetailController($scope, $routeParams, flux, userModel, userService) {
+var _ = require('lodash');
+
+function userDetailController($scope, $routeParams, configService, flux, userModel, userService) {
     'use strict';
 
     // init
-    $scope.user = {email: $routeParams.email};
+    $scope.user = { Email: $routeParams.email };
 
-    userService.getUser($scope.user.email);
+    userService.getUser($scope.user.Email);
 
     // State event listeners
     $scope.$listenTo(userModel, function (){
         $scope.user = userModel.getUser();
+        _.forEach(configService.roles, function (role) {
+            if ($scope.user.AuthLevel == role.AuthLevel) {
+                $scope.user.Role = role.DisplayName;
+            }
+        });
     });
 }
 
-userDetailController.$inject = ['$scope', '$routeParams', 'flux', 'userModel', 'userService'];
+userDetailController.$inject = ['$scope', '$routeParams', 'configService', 'flux', 'userModel', 'userService'];
 module.exports = userDetailController;

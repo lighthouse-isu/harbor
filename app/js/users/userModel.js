@@ -29,6 +29,7 @@ function userModel() {
         // Event handlers
         handlers: {
             'addUser': 'addUser',
+            'getUser': 'getUser',
             'listUsers': 'listUsers'
         },
 

@@ -27,7 +27,7 @@ var users = angular.module('lighthouse.users', []);
 
 // register module components
 users.controller('userController', userController);
-users.controller('userDetailController, userDetailController');
+users.controller('userDetailController', userDetailController);
 users.factory('userService', userService);
 users.store('userModel', userModel);
 

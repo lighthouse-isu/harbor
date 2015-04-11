@@ -42,4 +42,4 @@ roles.constant('release', release);
 roles.constant('admin', admin);
 roles.constant('roles', _roles);
 
-module.exports = actions;
+module.exports = roles;
