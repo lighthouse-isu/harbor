@@ -33,6 +33,7 @@ var actions = require('./actions/init'),
     docker = require('./docker/init'),
     instances = require('./instances/init'),
     nav = require('./nav/init'),
+    roles = require('./roles/init');
     routes = require('./routes/init'),
     transform = require('./transform/init'),
     users = require('./users/init');
@@ -48,6 +49,7 @@ var app = angular.module('lighthouse.app', [
     docker.name,
     instances.name,
     nav.name,
+    roles.name,
     routes.name,
     transform.name,
     users.name
