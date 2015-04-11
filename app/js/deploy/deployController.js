@@ -16,7 +16,7 @@
 
 var _ = require('lodash');
 
-function deployController($scope, beaconModel, dockerTemplate) {
+function deployController($scope, beaconModel, deployService, dockerTemplate) {
     'use strict';
 
     // Generated list of available instances for deployment
@@ -26,6 +26,11 @@ function deployController($scope, beaconModel, dockerTemplate) {
         'Name': '',
         'Command': dockerTemplate.containerCreate,
         'Instances': []
+    };
+    // Query params
+    $scope.query = {
+        'forcePull': false,
+        'start': false
     };
 
     $scope.$listenTo(beaconModel, function () {
@@ -47,11 +52,17 @@ function deployController($scope, beaconModel, dockerTemplate) {
     // Finalize the application deploy request object
     // and attempt the deployment.
     $scope.deploy = function () {
-        // var targets = _.filter($scope.instances, function (instance) {
-        //     return instance.selected;
-        // });
+        var targets = _.map($scope.instances, function (instance) {
+            if (instance.selected)
+                return instance.InstanceAddress;
+        });
+
+        deployService.create({
+            data: _.assign($scope.request, {'Instances': targets}),
+            query: $scope.query
+        });
     };
 }
 
-deployController.$inject = ['$scope', 'beaconModel', 'dockerTemplate'];
+deployController.$inject = ['$scope', 'beaconModel', 'deployService', 'dockerTemplate'];
 module.exports = deployController;

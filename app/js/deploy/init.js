@@ -15,11 +15,15 @@
  */
 
 var deployController = require('./deployController'),
-    deployDirective = require('./deployDirective');
+    deployDirective = require('./deployDirective'),
+    deployModel = require('./deployModel'),
+    deployService = require('./deployService');
 
 var deploy = angular.module('lighthouse.deploy', []);
 
 deploy.controller('deployController', deployController);
 deploy.directive('deployer', deployDirective);
+deploy.factory('deployService', deployService);
+deploy.store('deployModel', deployModel);
 
 module.exports = deploy;

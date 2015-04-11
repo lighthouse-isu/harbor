@@ -20,6 +20,12 @@
   </div>
   <div class="row">
     <div class="col-md-12">
+      <textarea ng-show="deployLog.length" class="form-control" rows="10"
+                style="font-family: monospace; font-size: 10px;">{{deployLog}}</textarea>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
       <div ng-repeat="b in beacons track by $index">
         <div beacon bid="b.id"></div>
       </div>

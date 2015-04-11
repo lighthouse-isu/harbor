@@ -14,14 +14,27 @@
  *  limitations under the License.
  */
 
+var _ = require('lodash');
+
 /*
  * beaconListController
  * Main beacon view control.
  */
-function beaconListController($scope, beaconModel, instanceModel, alertService, beaconService) {
+function beaconListController($scope, beaconModel, deployModel, alertService, beaconService) {
     'use strict';
     // Init
     beaconService.getBeacons();
+
+    // Deploy updates
+    $scope.deployLog = [];
+    $scope.$listenTo(deployModel, function () {
+        var _deployLog = _.map(deployModel.log(), function (entry) {
+            return JSON.stringify(entry);
+        });
+
+        $scope.deployLog = _deployLog.join('\n');
+        $scope.$apply();
+    });
 
     // New beacon parameters
     $scope.new = {
@@ -88,5 +101,5 @@ function beaconListController($scope, beaconModel, instanceModel, alertService, 
     };
 }
 
-beaconListController.$inject = ['$scope', 'beaconModel', 'instanceModel', 'alertService', 'beaconService'];
+beaconListController.$inject = ['$scope', 'beaconModel', 'deployModel', 'alertService', 'beaconService'];
 module.exports = beaconListController;
