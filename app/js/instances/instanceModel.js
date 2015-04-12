@@ -143,6 +143,14 @@ function instanceModel(dockerService) {
             }
         },
 
+        removeImage: function(r) {
+            dockerService.d('images.list', {
+                host: r.host,
+                query: {all: this.showAllImages}
+            });
+            this.emitChange();
+        },
+
         // State access
         exports: {
             getContainers: function () {
