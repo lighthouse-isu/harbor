@@ -74,7 +74,9 @@
       <div ng-repeat="layer in layers track by layer.id">
         <div class="progress">
           <div class=" progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': layer.progress}">
-            {{ layer.id }} ({{ layer.progress }})
+            <span class="pull-left" style="margin-left: 20px;">
+              {{ layer.id }} ({{ layer.progress }})
+            </span>
           </div>
         </div>
     </div>
