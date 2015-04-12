@@ -24,12 +24,19 @@ function deployModel() {
     'use strict';
 
     return {
-        good: true,
+        action: '',
+        instances: [],
         streamLog: [],
 
         handlers: {
+            'deployStream.start': 'start',
             'deployStream.update': 'update',
             'deployStream.fail': 'fail'
+        },
+
+        start: function (instances) {
+            this.instances = instances;
+            this.emitChange();
         },
 
         update: function (status) {
@@ -43,12 +50,16 @@ function deployModel() {
         },
 
         exports: {
-            log: function () {
-                return this.streamLog;
+            action: function () {
+                return this.action;
             },
 
-            isGood: function () {
-                return this.good;
+            instances: function () {
+                return this.instances;
+            },
+
+            log: function () {
+                return this.streamLog;
             }
         }
     };

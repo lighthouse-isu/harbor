@@ -47,10 +47,17 @@ function deployService($http, actions, flux, configService) {
         var stream = oboe({
             method: 'POST',
             url: _url(request),
-            body: request.data || {}
+            body: request.data || {},
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        stream.start(function () {
+            console.log('stream started....');
+            flux.dispatch('deployStream.start', request.Instances);
         });
 
         stream.node('{Status}', function (status) {
+            console.log(status);
             flux.dispatch('deployStream.update', status);
         });
 
