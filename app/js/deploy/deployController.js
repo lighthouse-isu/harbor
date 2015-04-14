@@ -58,7 +58,7 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
         });
 
         deployService.create({
-            data: _.assign($scope.request, {'Instances': targets}),
+            body: _.assign($scope.request, {'Instances': targets}),
             query: $scope.query
         });
     };

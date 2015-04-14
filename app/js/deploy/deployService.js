@@ -20,8 +20,6 @@
   * Sends application mgmt requests and aggregates / dispatches streaming updates.
   */
 
-var oboe = require('oboe');
-
 function deployService($http, actions, flux, configService) {
     'use strict';
 
@@ -40,29 +38,30 @@ function deployService($http, actions, flux, configService) {
      *
      * @param {object, required} request
      * Allowed keys:
-     *      {object, required} data: body data for POST to endpoin
+     *      {object, required} body: body data for POST to endpoint
      *      {object} query: map of query params to endpoint
      */
     function create(request) {
-        var stream = oboe({
+        oboe({
             method: 'POST',
             url: _url(request),
-            body: request.data || {},
-            headers: {'Content-Type': 'application/json'}
-        });
-
-        stream.start(function () {
+            body: request.body || {}
+        })
+        .start(function () {
             console.log('stream started....');
-            flux.dispatch('deployStream.start', request.Instances);
-        });
-
-        stream.node('{Status}', function (status) {
+            flux.dispatch(actions.deployStreamStart, request.Instances);
+        })
+        .node('{Status}', function (status) {
             console.log(status);
-            flux.dispatch('deployStream.update', status);
-        });
-
-        stream.fail(function (error) {
-            flux.dispatch('deployStream.fail', error);
+            flux.dispatch(actions.deployStreamUpdate, status);
+        })
+        .done(function (parsed) {
+            flux.dispatch(actions.deployStreamDone);
+        })
+        .fail(function (error) {
+            console.log('oboe: failure');
+            console.log(error);
+            flux.dispatch(actions.deployStreamFail, error);
         });
     }
 
