@@ -90,7 +90,7 @@ function deployModel() {
 
         fail: function (error) {
             this.good = false;
-            this.errorMessage = 'Streaming has failed.'
+            this.errorMessage = 'Streaming has failed.';
             this.emitChange();
         },
 
