@@ -21,6 +21,18 @@ function userDetailController($scope, $routeParams, configService, flux, userMod
 
     // init
     $scope.user = { Email: $routeParams.email };
+    $scope.new = {
+        Email: $routeParams.email,
+        AuthLevel: '',
+        Password: '',
+        Beacons: {}
+    };
+
+    $scope.roles = configService.roles;
+
+    // Form control / validation
+    $scope.submitting = false;
+    $scope.form = { submitted: false };
 
     userService.getUser($scope.user.Email);
 
@@ -32,7 +44,38 @@ function userDetailController($scope, $routeParams, configService, flux, userMod
                 $scope.user.Role = role.DisplayName;
             }
         });
+        console.log($scope.user);
     });
+
+    $scope.open = function () {
+        $scope.submitting = true;
+    };
+
+    $scope.close = function () {
+        $scope.submitting = false;
+        $scope.form.submitted = false;
+        $scope.new.AuthLevel = '';
+        $scope.new.Password = '';
+        $scope.new.Beacons = {};
+    };
+
+    $scope.edit = function () {
+        if ($scope.userForm.$valid) {
+            var newUser = { Email: $scope.user.Email };
+            if ($scope.new.AuthLevel) {
+                newUser.AuthLevel = parseInt($scope.new.AuthLevel);
+            }
+            if ($scope.new.Password) {
+                newUser.Password = $scope.new.Password;
+            }
+            if ($scope.new.Beacons) {
+                newUser.Beacons = $scope.new.Beacons;
+            }
+            userService.editUser($scope.user.Email, newUser);
+
+            $scope.close();
+        }
+    };
 }
 
 userDetailController.$inject = ['$scope', '$routeParams', 'configService', 'flux', 'userModel', 'userService'];

@@ -39,7 +39,7 @@ function userService($http, actions, flux, configService, alertService) {
                 flux.dispatch(actions.getUser, {'response': response.data});
             }
         );
-      }
+    }
 
     function createUser(user) {
         var request = [configService.api.base, 'users/create'].join('');
@@ -57,10 +57,27 @@ function userService($http, actions, flux, configService, alertService) {
         );
     }
 
+    function editUser(email, user) {
+        var request = [configService.api.base, 'users/', email].join('');
+
+        $http.put(request, user).then(
+            // success
+            function (response) {
+                getUser(email);
+
+                alertService.create({
+                    message: 'Successfully updated user!',
+                    type: 'success'
+                });
+            }
+        );
+    }
+
     return {
         'createUser': createUser,
         'getUser': getUser,
-        'getUsers': getUsers
+        'getUsers': getUsers,
+        'editUser': editUser
     };
 }
 
