@@ -49,16 +49,12 @@ function deployService($http, actions, flux, configService) {
             body: request.body || {}
         })
         .start(function () {
-            console.log('stream started....');
             flux.dispatch(actions.deployStreamStart, request.body);
         })
         .node('{Status}', function (status) {
-            console.log(status);
             flux.dispatch(actions.deployStreamUpdate, status);
         })
         .fail(function (error) {
-            console.log('oboe: failure');
-            console.log(error);
             flux.dispatch(actions.deployStreamFail, error);
         });
     }
