@@ -46,8 +46,52 @@ describe('deployModel', function () {
     it('should save instances upon stream start', function () {
         var instances = ['inst0', 'inst1', 'inst2'];
 
-        flux.dispatch(actions.deployStreamStart, instances);
+        flux.dispatch(actions.deployStreamStart, {'Instances': instances});
         expect(deployModel.instances()).toEqual(instances);
+    });
+
+    it('should change state upon stream start', function () {
+        expect(deployModel.state().started).toBe(false);
+        flux.dispatch(actions.deployStreamStart, {});
+        expect(deployModel.state().started).toBe(true);
+    });
+
+    it('should reset', function () {
+        var start = progress('Starting', 'method', 'some/action0', 'message', 0, '', 0, 1);
+        var ok = progress('OK', 'method', 'some/action0', 'message', 200, 'inst0', 0, 1);
+        var complete = progress('Complete', 'method', 'some/action0', 'message', 0, '', 1, 1);
+        var finalized = progress('Finalized');
+
+        flux.dispatch(actions.deployStreamStart, {});
+        flux.dispatch(actions.deployStreamUpdate, start);
+        flux.dispatch(actions.deployStreamUpdate, ok);
+        flux.dispatch(actions.deployStreamUpdate, complete);
+        flux.dispatch(actions.deployStreamUpdate, finalized);
+
+        flux.dispatch(actions.deployStreamReset);
+        expect(deployModel.state()).toEqual({
+            'started': false,
+            'finished': false,
+            'good': false,
+            'errorMessage': ''
+        });
+    });
+
+    it('should change state upon stream completion', function () {
+        var start = progress('Starting', 'method', 'some/action0', 'message', 0, '', 0, 1);
+        var ok = progress('OK', 'method', 'some/action0', 'message', 200, 'inst0', 0, 1);
+        var complete = progress('Complete', 'method', 'some/action0', 'message', 0, '', 1, 1);
+
+        expect(deployModel.state().finished).toBe(false);
+        flux.dispatch(actions.deployStreamStart, {});
+
+        flux.dispatch(actions.deployStreamUpdate, start);
+        flux.dispatch(actions.deployStreamUpdate, ok);
+        flux.dispatch(actions.deployStreamUpdate, complete);
+        expect(deployModel.state().finished).toBe(false);
+
+        flux.dispatch(actions.deployStreamUpdate, progress('Finalized'));
+        expect(deployModel.state().finished).toBe(true);
     });
 
     it('should save in progress actions', function () {
@@ -65,7 +109,7 @@ describe('deployModel', function () {
         var ok = progress('OK', 'method', 'some/action0', 'message', 200, 'inst0', 0, 1);
         var complete = progress('Complete', 'method', 'some/action0', 'message', 0, '', 1, 1);
 
-        flux.dispatch(actions.deployStreamStart, ['inst0']);
+        flux.dispatch(actions.deployStreamStart, {'Instances': ['inst0']});
 
         flux.dispatch(actions.deployStreamUpdate, start);
         expect(deployModel.inProgress()).toEqual([start]);
@@ -96,7 +140,7 @@ describe('deployModel', function () {
         var b = progress('OK', 'method', 'some/action0', 'message', 0, 'inst0', 0, 2);
         var c = progress('Complete', 'method', 'some/action0', 'message', 0, '', 2, 2);
 
-        flux.dispatch(actions.deployStreamStart, ['inst0', 'inst1']);
+        flux.dispatch(actions.deployStreamStart, {'Instances': ['inst0', 'inst1']});
         flux.dispatch(actions.deployStreamUpdate, a);
         flux.dispatch(actions.deployStreamUpdate, b);
         flux.dispatch(actions.deployStreamUpdate, c);

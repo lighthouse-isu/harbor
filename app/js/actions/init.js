@@ -60,10 +60,10 @@ var _actions = keymirror({
     listUsers: null,
 
     // Deploy stream
+    deployStreamFail: null,
+    deployStreamReset: null,
     deployStreamStart: null,
-    deployStreamUpdate: null,
-    deployStreamDone: null,
-    deployStreamFail: null
+    deployStreamUpdate: null
 });
 
 var actions = angular.module('lighthouse.actions', []);

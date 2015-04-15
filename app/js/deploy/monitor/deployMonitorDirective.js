@@ -21,8 +21,36 @@
 function deployMonitorDirective() {
     'use strict';
 
+    function link(scope, element, attrs) {
+        var selector = $('[data-toggle="tooltip"]');
+
+        // Initialize tooltip functionality for stream logs
+        $(function () {
+            selector.tooltip();
+        });
+
+        // Collapse
+        scope.showLog = false;
+
+        $('#streamLog').on('show.bs.collapse', function () {
+            scope.showLog = true;
+            scope.$apply();
+        });
+
+        $('#streamLog').on('hide.bs.collapse', function () {
+            scope.showLog = false;
+            scope.$apply();
+        });
+
+        // Cleanup
+        element.on('$destroy', function () {
+            selector.tooltip('destroy');
+        });
+    }
+
     return {
         'controller': 'deployMonitorController',
+        'link': link,
         'restrict': 'A',
         'scope': {},
         'template': require('../templates/deploy_monitor.html')

@@ -33,7 +33,8 @@ function deployService($http, actions, flux, configService) {
         return base;
     }
 
-    /* create()
+    /* 
+     * create()
      * Endpoint: /applications/create
      *
      * @param {object, required} request
@@ -49,14 +50,11 @@ function deployService($http, actions, flux, configService) {
         })
         .start(function () {
             console.log('stream started....');
-            flux.dispatch(actions.deployStreamStart, request.Instances);
+            flux.dispatch(actions.deployStreamStart, request.body);
         })
         .node('{Status}', function (status) {
             console.log(status);
             flux.dispatch(actions.deployStreamUpdate, status);
-        })
-        .done(function (parsed) {
-            flux.dispatch(actions.deployStreamDone);
         })
         .fail(function (error) {
             console.log('oboe: failure');
