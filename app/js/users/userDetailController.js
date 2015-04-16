@@ -16,7 +16,7 @@
 
 var _ = require('lodash');
 
-function userDetailController($timeout, $scope, $routeParams, configService, flux, userModel, userService, beaconModel, beaconService) {
+function userDetailController($scope, $routeParams, configService, flux, userModel, userService, beaconModel, beaconService) {
     'use strict';
 
     // init
@@ -90,5 +90,5 @@ function userDetailController($timeout, $scope, $routeParams, configService, flu
     };
 }
 
-userDetailController.$inject = ['$timeout', '$scope', '$routeParams', 'configService', 'flux', 'userModel', 'userService', 'beaconModel', 'beaconService'];
+userDetailController.$inject = ['$scope', '$routeParams', 'configService', 'flux', 'userModel', 'userService', 'beaconModel', 'beaconService'];
 module.exports = userDetailController;
