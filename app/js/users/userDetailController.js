@@ -16,7 +16,7 @@
 
 var _ = require('lodash');
 
-function userDetailController($scope, $routeParams, configService, flux, userModel, userService) {
+function userDetailController($scope, $routeParams, configService, flux, userModel, userService, beaconModel, beaconService) {
     'use strict';
 
     // init
@@ -29,15 +29,17 @@ function userDetailController($scope, $routeParams, configService, flux, userMod
     };
 
     $scope.roles = configService.roles;
+    $scope.beacons = {};
 
     // Form control / validation
     $scope.submitting = false;
     $scope.form = { submitted: false };
 
     userService.getUser($scope.user.Email);
+    beaconService.getBeacons();
 
     // State event listeners
-    $scope.$listenTo(userModel, function (){
+    $scope.$listenTo(userModel, function () {
         $scope.user = userModel.getUser();
         _.forEach(configService.roles, function (role) {
             if ($scope.user.AuthLevel == role.AuthLevel) {
@@ -45,6 +47,10 @@ function userDetailController($scope, $routeParams, configService, flux, userMod
             }
         });
         console.log($scope.user);
+    });
+
+    $scope.$listenTo(beaconModel, function () {
+        $scope.beacons = beaconModel.getBeacons();
     });
 
     $scope.open = function () {
@@ -71,12 +77,13 @@ function userDetailController($scope, $routeParams, configService, flux, userMod
             if ($scope.new.Beacons) {
                 newUser.Beacons = $scope.new.Beacons;
             }
-            userService.editUser($scope.user.Email, newUser);
+            //userService.editUser($scope.user.Email, newUser);
+            console.log($scope.new);
 
             $scope.close();
         }
     };
 }
 
-userDetailController.$inject = ['$scope', '$routeParams', 'configService', 'flux', 'userModel', 'userService'];
+userDetailController.$inject = ['$scope', '$routeParams', 'configService', 'flux', 'userModel', 'userService', 'beaconModel', 'beaconService'];
 module.exports = userDetailController;
