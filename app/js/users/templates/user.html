@@ -22,7 +22,7 @@
         <dt>Email</dt>
         <dd>{{ user.Email }}</dd>
         <dt>Role</dt>
-        <dd>{{ user.Role }}</dd>
+        <dd>{{ user.Role.DisplayName }}</dd>
         <dt>Beacon Permissions</dt>
         <dd>
           <p ng-repeat="(beacon, level) in user.Permissions.Beacons">
@@ -53,14 +53,14 @@
       <div class="modal-body">
         <form name="userForm" id="userForm" ng-submit="edit()" novalidate>
           <label>Role</label>
-          <div ng-repeat="role in roles" class="radio">
+          <div ng-repeat="(role, info) in roles">
             <label>
               <input type="radio"
-                     ng-checked="user.AuthLevel==role.AuthLevel"
+                     ng-checked="user.AuthLevel==info.AuthLevel"
                      ng-model="new.AuthLevel"
                      name="user-authlevel"
-                     id="user-authlevel-{{ role.AuthLevel }}"
-                     value="{{ role.AuthLevel }}"> {{ role.DisplayName }}
+                     id="user-authlevel-{{ info.AuthLevel }}"
+                     value="{{ info.AuthLevel }}"> {{ info.DisplayName }}
             </label>
           </div>
           <div class="form-group">
@@ -69,7 +69,7 @@
           </div>
           <hr/>
           <h4>Beacons</h4>
-          <div ng-repeat="beacon in beacons track by $index">
+          <div ng-repeat="beacon in beacons">
             <label>{{ beacon.Alias }}:</label>
             <label class="radio-inline">
               <input type="radio"

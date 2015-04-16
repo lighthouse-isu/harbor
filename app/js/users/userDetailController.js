@@ -16,7 +16,7 @@
 
 var _ = require('lodash');
 
-function userDetailController($scope, $routeParams, configService, flux, userModel, userService, beaconModel, beaconService) {
+function userDetailController($timeout, $scope, $routeParams, configService, flux, userModel, userService, beaconModel, beaconService) {
     'use strict';
 
     // init
@@ -42,15 +42,20 @@ function userDetailController($scope, $routeParams, configService, flux, userMod
     $scope.$listenTo(userModel, function () {
         $scope.user = userModel.getUser();
         _.forEach(configService.roles, function (role) {
-            if ($scope.user.AuthLevel == role.AuthLevel) {
-                $scope.user.Role = role.DisplayName;
+            if ($scope.user.AuthLevel >= role.AuthLevel) {
+                $scope.user.Role = role;
             }
         });
+
+        // Normalize user AuthLevel down to highest role applicable
+        $scope.user.AuthLevel = $scope.user.Role.AuthLevel;
         console.log($scope.user);
     });
 
     $scope.$listenTo(beaconModel, function () {
         $scope.beacons = beaconModel.getBeacons();
+        console.log('beacons');
+        console.log($scope.beacons);
     });
 
     $scope.open = function () {
@@ -85,5 +90,5 @@ function userDetailController($scope, $routeParams, configService, flux, userMod
     };
 }
 
-userDetailController.$inject = ['$scope', '$routeParams', 'configService', 'flux', 'userModel', 'userService', 'beaconModel', 'beaconService'];
+userDetailController.$inject = ['$timeout', '$scope', '$routeParams', 'configService', 'flux', 'userModel', 'userService', 'beaconModel', 'beaconService'];
 module.exports = userDetailController;
