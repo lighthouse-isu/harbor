@@ -16,7 +16,7 @@
 
 var _ = require('lodash');
 
-function deployMonitorController($scope, actions, flux, deployModel) {
+function deployMonitorController($scope, $timeout, actions, flux, deployError, deployModel) {
     'use strict';
 
     // init
@@ -24,6 +24,7 @@ function deployMonitorController($scope, actions, flux, deployModel) {
     $scope.inProgress = deployModel.inProgress();
     $scope.completed = deployModel.completed();
     $scope.request = deployModel.request();
+    $scope.errors = [];
 
     // state updates
     $scope.$listenTo(deployModel, function () {
@@ -32,17 +33,26 @@ function deployMonitorController($scope, actions, flux, deployModel) {
         $scope.completed = deployModel.completed();
         $scope.request = deployModel.request();
 
-        $scope.$apply();
+        if ($scope.state.started && !$scope.state.good) {
+            $scope.errors.push(deployError.display($scope.state.errorMessage));
+        }
+
+        $timeout(function () { 
+            $scope.$apply();
+        }, 0);
     });
 
     $scope.streamLog = function () {
-        return _.map(deployModel.log(), function (log) { return JSON.stringify(log); }).join('\r\n');
+        return _.map(deployModel.log(), function (log) {
+            return JSON.stringify(log);
+        }).join('\r\n');
     };
 
     $scope.reset = function () {
         flux.dispatch(actions.deployStreamReset);
+        $scope.errors = [];
     };
 }
 
-deployMonitorController.$inject = ['$scope', 'actions', 'flux', 'deployModel'];
+deployMonitorController.$inject = ['$scope', '$timeout', 'actions', 'flux', 'deployError', 'deployModel'];
 module.exports = deployMonitorController;

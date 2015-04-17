@@ -1,6 +1,12 @@
 <div class="well" ng-show="state.started">
     <h4 ng-show="!state.finished"><i class="fa fa-refresh fa-spin"></i> Deploying {{request.Name}} ...</h4>
-    <h4 ng-show="state.finished"><i class="fa fa-check"></i> Deployed {{request.Name}}!</h4>
+    <h4 ng-show="state.finished && state.good"><i class="fa fa-check"></i> Deployed {{request.Name}}!</h4>
+    <h4 ng-show="state.finished && !state.good"><i class="fa fa-exclamation-circle"></i> Deploy for {{request.Name}} failed.</h4>
+
+    <div ng-repeat="error in errors" class="alert alert-danger">
+        {{ error }}
+    </div>
+
     <ul class="list-group">
         <li class="list-group-item list-group-item-success" ng-repeat="status in completed"
             style="color: #5a5a5a; padding: 8px 15px;">{{status.Message}}&nbsp;

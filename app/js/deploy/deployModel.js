@@ -100,7 +100,16 @@ function deployModel() {
 
         fail: function (error) {
             this.streamGood = false;
-            this.errorMessage = 'Streaming has failed.';
+            this.streamFinished = true;
+            this.streamLog.push(error);
+
+            if (error.jsonBody) {
+                this.errorMessage = error.jsonBody.Message;
+            }
+            else {
+                this.errorMessage = 'Deploy request failed. (' + error.statusCode + ')';
+            }
+
             this.emitChange();
         },
 

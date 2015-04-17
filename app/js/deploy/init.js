@@ -16,6 +16,7 @@
 
 var deployController = require('./deployController'),
     deployDirective = require('./deployDirective'),
+    deployError = require('./deployError'),
     deployMonitorController = require('./monitor/deployMonitorController'),
     deployMonitorDirective = require('./monitor/deployMonitorDirective'),
     deployModel = require('./deployModel'),
@@ -29,6 +30,7 @@ deploy.controller('deployMonitorController', deployMonitorController);
 deploy.directive('deployer', deployDirective);
 deploy.directive('deployMonitor', deployMonitorDirective);
 
+deploy.factory('deployError', deployError);
 deploy.factory('deployService', deployService);
 deploy.store('deployModel', deployModel);
 
