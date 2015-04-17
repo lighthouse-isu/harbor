@@ -57,6 +57,10 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
                 return instance.InstanceAddress;
         });
 
+        // Format container command for Docker consumption
+        // (as an array of strings)
+        $scope.request.Command.Cmd = _.without($scope.request.Command.Cmd.split(' '), '');
+
         deployService.create({
             body: _.assign($scope.request, {'Instances': targets}),
             query: $scope.query
