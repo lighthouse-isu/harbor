@@ -48,14 +48,11 @@ function userDetailController($scope, $routeParams, configService, flux, userMod
         });
 
         // Normalize user AuthLevel down to highest role applicable
-        $scope.user.AuthLevel = $scope.user.Role.AuthLevel;
-        console.log($scope.user);
+        //$scope.user.AuthLevel = $scope.user.Role.AuthLevel;
     });
 
     $scope.$listenTo(beaconModel, function () {
         $scope.beacons = beaconModel.getBeacons();
-        console.log('beacons');
-        console.log($scope.beacons);
     });
 
     $scope.open = function () {
@@ -70,6 +67,10 @@ function userDetailController($scope, $routeParams, configService, flux, userMod
         $scope.new.Beacons = {};
     };
 
+    $scope.modifyBeacon = function (beacon, authLevel) {
+        $scope.new.Beacons[beacon.Address] = parseInt(authLevel);
+    };
+
     $scope.edit = function () {
         if ($scope.userForm.$valid) {
             var newUser = { Email: $scope.user.Email };
@@ -82,8 +83,8 @@ function userDetailController($scope, $routeParams, configService, flux, userMod
             if ($scope.new.Beacons) {
                 newUser.Beacons = $scope.new.Beacons;
             }
-            //userService.editUser($scope.user.Email, newUser);
-            console.log($scope.new);
+
+            userService.editUser($scope.user.Email, newUser);
 
             $scope.close();
         }

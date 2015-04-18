@@ -74,34 +74,18 @@
             <label class="radio-inline">
               <input type="radio"
                      ng-checked="user.Permissions.Beacons[beacon.Address]==undefined"
-                     ng-model="new.Beacons[beacon.Address]"
+                     ng-click="modifyBeacon(beacon, '-1')"
                      name="user-beacons"
                      id="user-beacons-{{ beacon.Alias }}"
                      value="-1"> None
             </label>
-            <label class="radio-inline">
+            <label ng-repeat="(level, name) in {0: 'Access', 1: 'Modify', 2: 'Owner'}" class="radio-inline">
               <input type="radio"
-                     ng-checked="user.Permissions.Beacons[beacon.Address]==0"
-                     ng-model="new.Beacons[beacon.Address]"
+                     ng-checked="user.Permissions.Beacons[beacon.Address]==level"
+                     ng-click="modifyBeacon(beacon, level)"
                      name="user-beacons"
                      id="user-beacons-{{ beacon.Alias }}"
-                     value="0"> Access
-            </label>
-            <label class="radio-inline">
-              <input type="radio"
-                     ng-checked="user.Permissions.Beacons[beacon.Address]==1"
-                     ng-model="new.Beacons[beacon.Address]"
-                     name="user-beacons"
-                     id="user-beacons-{{ beacon.Alias }}"
-                     value="1"> Modify
-            </label>
-            <label class="radio-inline">
-              <input type="radio"
-                     ng-checked="user.Permissions.Beacons[beacon.Address]==2"
-                     ng-model="new.Beacons[beacon.Address]"
-                     name="user-beacons"
-                     id="user-beacons-{{ beacon.Alias }}"
-                     value="2"> Owner
+                     value="{{ level }}"> {{ name }}
             </label>
           </div>
         </form>
