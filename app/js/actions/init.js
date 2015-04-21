@@ -25,6 +25,7 @@ var _actions = keymirror({
     // Authentication
     authLogin: null,
     authLogout: null,
+    getCurrentUser: null,
 
     // Navigation
     routeChange: null,

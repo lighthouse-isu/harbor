@@ -33,6 +33,7 @@ function appModel($location, sessionService) {
         handlers: {
             'authLogin': 'authLogin',
             'authLogout': 'authLogout',
+            'getCurrentUser': 'getCurrentUser',
             'routeChange': 'routeChange'
         },
 
@@ -57,12 +58,18 @@ function appModel($location, sessionService) {
             this.emitChange();
         },
 
+        getCurrentUser: function (r) {
+            this.user = r.response;
+            this.user.email = this.user.Email;
+            this.emitChange();
+        },
+
         routeChange: function (route) {
             this.route = route;
 
             $location.path(this.route);
             sessionService.set('lighthouse.route', this.route);
-            
+
             this.emitChange();
         },
 

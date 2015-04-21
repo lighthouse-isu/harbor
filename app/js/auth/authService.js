@@ -35,8 +35,16 @@ function authService($http, actions, flux, appModel, alertService, configService
         if (!appModel.isLoggedIn()) {
             $http.post(request, auth).then(
                 // success
-                function (reponse) {
+                function (response) {
                     flux.dispatch(actions.authLogin, {email: auth.Email});
+
+                    request = [configService.api.base, 'users/', auth.Email].join('');
+                    $http.get(request).then(
+                        // success
+                        function (response) {
+                            flux.dispatch(actions.getCurrentUser, {'response': response.data});
+                        }
+                    );
                 }
             );
         }

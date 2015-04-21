@@ -11,7 +11,7 @@
         <li>
           <a href="/beacons">Beacons</a>
         </li>
-        <li>
+        <li ng-if="user.AuthLevel>=1">
           <a href="/users">Users</a>
         </li>
       </ul>
