@@ -37,6 +37,17 @@ describe('beaconService', function () {
         http.flush();
     });
 
+    it('should list instances', function () {
+        http.expect('GET',
+            configService.api.base + 'beacons/list/beacon').respond('');
+
+        var beacon = {
+            Address: 'beacon'
+        };
+        beaconService.getInstances(beacon);
+        http.flush();
+    });
+
     it('should create beacon', function () {
         http.expect('POST',
             configService.api.base + 'beacons/create').respond('');

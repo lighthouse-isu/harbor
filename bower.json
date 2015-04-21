@@ -19,8 +19,9 @@
     "tests"
   ],
   "dependencies": {
-    "bootswatch-dist": "3.3.0-flatly",
+    "bootswatch-dist": "3.3.0-paper",
     "fontawesome": "~4.1.0",
-    "jquery": "~2.1.1"
+    "jquery": "~2.1.1",
+    "bootstrap": "~3.3.4"
   }
 }

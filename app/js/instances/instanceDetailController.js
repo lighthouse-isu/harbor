@@ -21,7 +21,7 @@
 
 var _ = require('lodash');
 
-function instanceDetailController($scope, $routeParams, $timeout, flux, dockerService, instanceModel, instanceService) {
+function instanceDetailController($scope, $routeParams, $timeout, flux, dockerService, instanceModel) {
     'use strict';
 
     // init
@@ -91,5 +91,5 @@ function instanceDetailController($scope, $routeParams, $timeout, flux, dockerSe
     };
 }
 
-instanceDetailController.$inject = ['$scope', '$routeParams', '$timeout', 'flux', 'dockerService', 'instanceModel', 'instanceService'];
+instanceDetailController.$inject = ['$scope', '$routeParams', '$timeout', 'flux', 'dockerService', 'instanceModel'];
 module.exports = instanceDetailController;

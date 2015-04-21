@@ -58,7 +58,13 @@ var _actions = keymirror({
     listBeacons: null,
 
     // Users
-    listUsers: null
+    listUsers: null,
+
+    // Deploy stream
+    deployStreamFail: null,
+    deployStreamReset: null,
+    deployStreamStart: null,
+    deployStreamUpdate: null
 });
 
 var actions = angular.module('lighthouse.actions', []);

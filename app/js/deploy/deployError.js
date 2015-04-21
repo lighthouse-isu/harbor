@@ -14,14 +14,24 @@
  *  limitations under the License.
  */
 
-// docker/init.js
-// Creates docker requests targetted at a specific host.
+/*
+ * Deployment errors and their UI-friendly message.
+ */
+var lookup = {
+    'databases: key already exists': 'An application with that name already exists.'
+};
 
-var dockerTemplate = require('./dockerTemplate'),
-    dockerService = require('./dockerService');
+function deployError() {
+    'use strict';
 
-var docker = angular.module('lighthouse.docker', []);
+    function display(message) {
+        var ui = lookup[message];
+        return ui ? ui : message;
+    }
 
-docker.constant('dockerTemplate', dockerTemplate);
-docker.factory('dockerService', dockerService);
-module.exports = docker;
+    return {
+        'display': display
+    };
+}
+
+module.exports = deployError;

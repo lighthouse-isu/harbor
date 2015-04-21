@@ -56,7 +56,6 @@ function beaconModel() {
             });
 
             // build new map
-            this.beacons = {};
             this.beacons = _.indexBy(_beacons, 'id');
             this.nextId = id;
 
@@ -70,6 +69,10 @@ function beaconModel() {
 
         // State access
         exports: {
+            getBeacon: function (bid) {
+                return this.beacons[bid.toString()];
+            },
+
             getBeacons: function () {
                 return this.beacons;
             },
