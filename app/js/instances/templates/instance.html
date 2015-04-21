@@ -9,18 +9,18 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <h1>{{ instance.alias }}</h1>
+      <h3>{{ instance.alias }}</h3>
     </div>
   </div>
   <!-- Containers -->
   <div class="row">
     <div class="col-md-12">
-      <h3>Containers</h3>
+      <h4>Containers</h4>
       <div class="checkbox">
         <label><input type="checkbox" ng-model="allContainers" ng-click="getContainers()"> Show all</label>
       </div>
 
-      <a class="btn btn-default btn-sm btn-success" href="/instances/{{instance.alias}}/container/create">
+      <a class="btn btn-sm btn-primary" href="/instances/{{instance.alias}}/container/create">
         Create
       </a>
     </div>
@@ -58,11 +58,11 @@
   <!-- Images -->
   <div class="row" style="margin-bottom: 20px;">
     <div class="col-md-12">
-      <h3>Images</h3>
+      <h4>Images</h4>
       <div class="checkbox">
         <label><input type="checkbox" ng-model="allImages" ng-click="getImages()"> Show all</label>
       </div>
-      <a class="btn btn-default btn-sm btn-success" href="/instances/{{instance.alias}}/image/add">
+      <a class="btn btn-sm btn-primary" href="/instances/{{instance.alias}}/image/add">
         Add
       </a>
     </div>

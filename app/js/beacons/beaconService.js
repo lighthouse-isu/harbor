@@ -32,6 +32,28 @@ function beaconService($http, actions, flux, configService, alertService) {
         );
     }
 
+    /*
+     * getInstances()
+     * Fetch instances under control of the given beacon.
+     * Successful responses dispatch `actions.listInstances` along with
+     * the given beacon's generated ID.
+     *
+     * @param {object} beacon - desired beacon to fetch instances from. Must
+     *                          contain a valid `Address` key.
+     */
+    function getInstances(beacon) {
+        var request = [
+            configService.api.base, 'beacons/list/', beacon.Address].join('');
+
+        $http.get(request).then(
+            // success
+            function (response) {
+                flux.dispatch(actions.listInstances,
+                    {'id': beacon.id, 'response': response.data});
+            }
+        );
+    }
+
     function refreshBeacon(beacon) {
         var request = [configService.api.base, 'beacons/refresh/', beacon.Address].join('');
 
@@ -62,6 +84,7 @@ function beaconService($http, actions, flux, configService, alertService) {
     return {
         'createBeacon': createBeacon,
         'getBeacons': getBeacons,
+        'getInstances': getInstances,
         'refreshBeacon': refreshBeacon
     };
 }

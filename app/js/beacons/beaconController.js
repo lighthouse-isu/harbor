@@ -14,82 +14,18 @@
  *  limitations under the License.
  */
 
-/*
- * beaconController
- * Main beacon view control.
- */
-function beaconController($scope, beaconModel, instanceModel, alertService, beaconService, instanceService) {
+function beaconController($scope, beaconModel, beaconService) {
     'use strict';
-    // Init
-    beaconService.getBeacons();
 
-    // New beacon parameters
-    $scope.new = {
-        alias: '',
-        address: '',
-        token: ''
-    };
-
+    $scope.beacon = beaconModel.getBeacon($scope.bid);
     $scope.instances = [];
-    $scope.beacons = [];
 
-    // Form control / validation
-    $scope.submitting = false;
-    $scope.form = { submitted: false };
+    beaconService.getInstances($scope.beacon);
 
-    $scope.$listenTo(beaconModel, function() {
-        $scope.beacons = beaconModel.getBeacons();
-        $scope.instances = beaconModel.getInstances();
+    $scope.$listenTo(beaconModel, function () {
+        $scope.instances = beaconModel.getInstances($scope.beacon);
     });
-
-    $scope.injectInstances = function (beacon) {
-        instanceService.getInstances(beacon);
-    };
-
-    $scope.open = function () {
-        $scope.submitting = true;
-    };
-
-    $scope.close = function () {
-        $scope.submitting = false;
-        $scope.form.submitted = false;
-        $scope.new.alias = '';
-        $scope.new.address = '';
-        $scope.new.token = '';
-    };
-
-    $scope.create = function () {
-        if ($scope.beaconForm.$valid) {
-            beaconService.createBeacon({
-                Alias: $scope.new.alias,
-                Address: $scope.new.address,
-                Token: $scope.new.token
-            });
-
-            $scope.close();
-        }
-        else {
-            var message = '';
-            if ($scope.beaconForm.alias.$error.required) {
-                message = 'Please provide a beacon alias.';
-            }
-            else if ($scope.beaconForm.address.$error.required) {
-                message = 'Please provide a beacon address.';
-            }
-            else if ($scope.beaconForm.token.$error.required) {
-                message = 'Please provide a beacon token.';
-            }
-
-            alertService.create({
-                message: message,
-                type: 'danger',
-                timeout: 2
-            });
-
-            $scope.form.submitted = true;
-        }
-    };
 }
 
-beaconController.$inject = ['$scope', 'beaconModel', 'instanceModel', 'alertService', 'beaconService', 'instanceService'];
+beaconController.$inject = ['$scope', 'beaconModel', 'beaconService'];
 module.exports = beaconController;

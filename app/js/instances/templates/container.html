@@ -16,19 +16,19 @@
            style="padding-right: 10px;">
         <button ng-if="state.stopped" type="button" class="btn btn-default"
                 ng-click="start(id)">
-          <span class="glyphicon glyphicon-play"></span> Start</button>
+          <i class="fa fa-play"></i> Start</button>
 
         <button ng-if="state.paused" type="button" class="btn btn-default"
                 ng-click="unpause(id)">
-          <span class="glyphicon glyphicon-play"></span> Unpause</button>
+          <i class="fa fa-play"></i> Unpause</button>
 
         <button ng-if="state.running" type="button" class="btn btn-default"
                 ng-click="pause(id)">
-          <span class="glyphicon glyphicon-pause"></span> Pause</button>
+          <i class="fa fa-pause"></i> Pause</button>
 
         <button ng-if="state.running || state.paused" type="button" class="btn btn-default"
                 ng-click="stop(id)">
-          <span class="glyphicon glyphicon-stop"></span> Stop</button>
+          <i class="fa fa-stop"></i> Stop</button>
       </div>
 
       <h4>Container <code>{{id}}</code> on {{host}} is

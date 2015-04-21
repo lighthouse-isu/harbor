@@ -18,6 +18,8 @@
 // Handles management of Lighthouse beacons
 
 var beaconController = require('./beaconController'),
+    beaconListController = require('./beaconListController'),
+    beaconDirective = require('./beaconDirective'),
     beaconModel = require('./beaconModel'),
     beaconService = require('./beaconService');
 
@@ -26,6 +28,8 @@ var beacons = angular.module('lighthouse.beacons', []);
 
 // register module components
 beacons.controller('beaconController', beaconController);
+beacons.controller('beaconListController', beaconListController);
+beacons.directive('beacon', beaconDirective);
 beacons.factory('beaconService', beaconService);
 beacons.store('beaconModel', beaconModel);
 

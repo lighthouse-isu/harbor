@@ -21,8 +21,7 @@ var containerController = require('./containerController'),
     createContainerController = require('./createContainerController'),
     addImageController = require('./addImageController'),
     instanceDetailController = require('./instanceDetailController'),
-    instanceModel = require('./instanceModel'),
-    instanceService = require('./instanceService');
+    instanceModel = require('./instanceModel');
 
 // init angular module
 var instances = angular.module('lighthouse.instances', []);
@@ -32,8 +31,6 @@ instances.controller('containerController', containerController);
 instances.controller('createContainerController', createContainerController);
 instances.controller('addImageController', addImageController);
 instances.controller('instanceDetailController', instanceDetailController);
-
-instances.factory('instanceService', instanceService);
 instances.store('instanceModel', instanceModel);
 
 module.exports = instances;

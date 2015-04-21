@@ -14,14 +14,23 @@
  *  limitations under the License.
  */
 
-// docker/init.js
-// Creates docker requests targetted at a specific host.
+/*
+ * beaconDirective
+ * Defines a single beacon as a component,
+ * which includes beacon-specific instance info.
+ */
+function beaconDirective() {
+    'use strict';
 
-var dockerTemplate = require('./dockerTemplate'),
-    dockerService = require('./dockerService');
+    return {
+        'controller': 'beaconController',
+        'restrict': 'A',
+        'scope': {
+            // beacon ID assigned at init
+            'bid': '='
+        },
+        'template': require('./templates/beacon.html')
+    };
+}
 
-var docker = angular.module('lighthouse.docker', []);
-
-docker.constant('dockerTemplate', dockerTemplate);
-docker.factory('dockerService', dockerService);
-module.exports = docker;
+module.exports = beaconDirective;

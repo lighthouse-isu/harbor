@@ -27,8 +27,8 @@ function routeConfig($routeProvider) {
         })
         // Functionality
         .when('/beacons', {
-            template: require('../beacons/templates/beacons.html'),
-            controller: 'beaconController'
+            template: require('../beacons/templates/beacon_list.html'),
+            controller: 'beaconListController'
         })
         .when('/instances/:host', {
             template: require('../instances/templates/instance.html'),
