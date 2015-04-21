@@ -100,12 +100,15 @@ function appConfig($locationProvider, $httpProvider) {
 }
 
 // Initialization
-function appInit($location, $rootScope, $window, actions, alertService, sessionService, appModel, flux) {
+function appInit($location, $rootScope, $window, actions, alertService, authService, sessionService, appModel, flux) {
     'use strict';
 
     // Confirm auth status with the mothership
     if ($window.user && $window.user.email) {
         flux.dispatch(actions.authLogin, $window.user);
+
+        authService.currentUser($window.user.email);
+
         // Reload previous page, if any
         var route = sessionService.get('lighthouse.route');
         if (route) {
@@ -126,7 +129,7 @@ function appInit($location, $rootScope, $window, actions, alertService, sessionS
 
 httpInterceptor.$inject = ['$q', 'actions', 'flux', 'alertService'];
 appConfig.$inject = ['$locationProvider', '$httpProvider'];
-appInit.$inject = ['$location', '$rootScope', '$window', 'actions', 'alertService', 'sessionService', 'appModel', 'flux'];
+appInit.$inject = ['$location', '$rootScope', '$window', 'actions', 'alertService', 'authService', 'sessionService', 'appModel', 'flux'];
 
 // Prepare app state
 var appModel = require('./appModel');

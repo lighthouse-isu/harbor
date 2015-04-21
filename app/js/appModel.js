@@ -33,7 +33,7 @@ function appModel($location, sessionService) {
         handlers: {
             'authLogin': 'authLogin',
             'authLogout': 'authLogout',
-            'getCurrentUser': 'getCurrentUser',
+            'currentUser': 'currentUser',
             'routeChange': 'routeChange'
         },
 
@@ -58,7 +58,7 @@ function appModel($location, sessionService) {
             this.emitChange();
         },
 
-        getCurrentUser: function (r) {
+        currentUser: function (r) {
             this.user = r.response;
             this.user.email = this.user.Email;
             this.emitChange();

@@ -25,7 +25,7 @@ var _actions = keymirror({
     // Authentication
     authLogin: null,
     authLogout: null,
-    getCurrentUser: null,
+    currentUser: null,
 
     // Navigation
     routeChange: null,
@@ -61,7 +61,6 @@ var _actions = keymirror({
     // Users
     addUser: null,
     getUser: null,
-    listUsers: null
     listUsers: null,
 
     // Deploy stream
