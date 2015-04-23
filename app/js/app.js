@@ -34,6 +34,7 @@ var actions = require('./actions/init'),
     docker = require('./docker/init'),
     instances = require('./instances/init'),
     nav = require('./nav/init'),
+    roles = require('./roles/init'),
     routes = require('./routes/init'),
     transform = require('./transform/init'),
     users = require('./users/init');
@@ -50,6 +51,7 @@ var app = angular.module('lighthouse.app', [
     docker.name,
     instances.name,
     nav.name,
+    roles.name,
     routes.name,
     transform.name,
     users.name
@@ -98,12 +100,15 @@ function appConfig($locationProvider, $httpProvider) {
 }
 
 // Initialization
-function appInit($location, $rootScope, $window, actions, alertService, sessionService, appModel, flux) {
+function appInit($location, $rootScope, $window, actions, alertService, authService, sessionService, appModel, flux) {
     'use strict';
 
     // Confirm auth status with the mothership
     if ($window.user && $window.user.email) {
         flux.dispatch(actions.authLogin, $window.user);
+
+        authService.currentUser($window.user.email);
+
         // Reload previous page, if any
         var route = sessionService.get('lighthouse.route');
         if (route) {
@@ -124,7 +129,7 @@ function appInit($location, $rootScope, $window, actions, alertService, sessionS
 
 httpInterceptor.$inject = ['$q', 'actions', 'flux', 'alertService'];
 appConfig.$inject = ['$locationProvider', '$httpProvider'];
-appInit.$inject = ['$location', '$rootScope', '$window', 'actions', 'alertService', 'sessionService', 'appModel', 'flux'];
+appInit.$inject = ['$location', '$rootScope', '$window', 'actions', 'alertService', 'authService', 'sessionService', 'appModel', 'flux'];
 
 // Prepare app state
 var appModel = require('./appModel');

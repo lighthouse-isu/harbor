@@ -23,6 +23,23 @@ function authService($http, actions, flux, appModel, alertService, configService
     'use strict';
 
     /*
+     * currentUser()
+     * Request the current user. Success dispatches the currentUser action
+     *
+     * @param email {String}
+     */
+    function currentUser(email) {
+        var request = [configService.api.base, 'users/', email].join('');
+
+        $http.get(request).then(
+            // success
+            function (response) {
+                flux.dispatch(actions.currentUser, {'response': response.data});
+            }
+        );
+    }
+
+    /*
      * login()
      * Request a session. Success dispatches authLogin action.
      *
@@ -35,8 +52,10 @@ function authService($http, actions, flux, appModel, alertService, configService
         if (!appModel.isLoggedIn()) {
             $http.post(request, auth).then(
                 // success
-                function (reponse) {
+                function (response) {
                     flux.dispatch(actions.authLogin, {email: auth.Email});
+
+                    currentUser(auth.Email);
                 }
             );
         }
@@ -61,6 +80,7 @@ function authService($http, actions, flux, appModel, alertService, configService
     }
 
     return {
+        'currentUser': currentUser,
         'login': login,
         'logout': logout
     };

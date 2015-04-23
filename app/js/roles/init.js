@@ -14,21 +14,32 @@
  *  limitations under the License.
  */
 
-// users/init.js
-// Handles management of Lighthouse users
+// roles/init.js
+// Handles Lighthouse role defintions
 
-var userController = require('./userController'),
-    userDetailController = require('./userDetailController'),
-    userModel = require('./userModel'),
-    userService = require('./userService');
+var user = {
+    Name: 'User',
+    DisplayName: 'User',
+    AuthLevel: 0
+},
+release = {
+    Name: 'Release',
+    DisplayName: 'Release Engineer',
+    AuthLevel: 1
+},
+admin = {
+    Name: 'Admin',
+    DisplayName: 'Administrator',
+    AuthLevel: 2
+};
 
-// init angular module
-var users = angular.module('lighthouse.users', []);
+var _roles = [user, release, admin];
 
-// register module components
-users.controller('userController', userController);
-users.controller('userDetailController', userDetailController);
-users.factory('userService', userService);
-users.store('userModel', userModel);
+var roles = angular.module('lighthouse.roles', []);
 
-module.exports = users;
+roles.constant('user', user);
+roles.constant('release', release);
+roles.constant('admin', admin);
+roles.constant('roles', _roles);
+
+module.exports = roles;

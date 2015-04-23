@@ -23,11 +23,24 @@ function userModel() {
     return {
         // State
         Email: '',
-        users: [],
+        users: {},
+        user: {},
 
         // Event handlers
         handlers: {
-          'listUsers': 'listUsers'
+            'addUser': 'addUser',
+            'getUser': 'getUser',
+            'listUsers': 'listUsers'
+        },
+
+        addUser: function (user) {
+            this.users.push(user.Email);
+            this.emitChange();
+        },
+
+        getUser: function (r) {
+            this.user = r.response;
+            this.emitChange();
         },
 
         listUsers: function (r) {
@@ -39,6 +52,9 @@ function userModel() {
         exports: {
             getUsers: function () {
                 return this.users;
+            },
+            getUser: function () {
+                return this.user;
             }
         }
     };

@@ -24,7 +24,24 @@ function configService() {
             version: 0.2,
             // Base URL for every outgoing API request
             base: '/api/v0.2/'
-        }
+        },
+        roles: [
+            {
+                Name: 'User',
+                DisplayName: 'User',
+                AuthLevel: 0
+            },
+            {
+                Name: 'Release',
+                DisplayName: 'Release Engineer',
+                AuthLevel: 1
+            },
+            {
+                Name: 'Admin',
+                DisplayName: 'Administrator',
+                AuthLevel: 2
+            }
+        ]
     };
 }
 

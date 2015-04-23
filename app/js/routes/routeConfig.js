@@ -46,6 +46,14 @@ function routeConfig($routeProvider) {
             template: require('../instances/templates/container.html'),
             controller: 'containerController'
         })
+        .when('/users', {
+            template: require('../users/templates/users.html'),
+            controller: 'userController'
+        })
+        .when('/users/:email', {
+            template: require('../users/templates/user.html'),
+            controller: 'userDetailController'
+        })
         .otherwise({ redirectTo: '/' });
 }
 

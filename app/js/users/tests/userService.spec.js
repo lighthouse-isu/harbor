@@ -36,4 +36,17 @@ describe('userService', function () {
         userService.getUsers();
         http.flush();
     });
+
+    it('should create user', function () {
+        http.expect('POST',
+            configService.api.base + 'users/create').respond('');
+
+        var user = {
+            Email: 'user@example.com',
+            Password: 'test'
+        };
+
+        userService.createUser(user);
+        http.flush();
+    });
 });

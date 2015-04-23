@@ -22,7 +22,7 @@ function userService($http, actions, flux, configService, alertService) {
     'use strict';
 
     function getUsers() {
-        var request = [configService.api.base, 'users/', 'list'].join('');
+        var request = [configService.api.base, 'users/list'].join('');
         $http.get(request).then(
             // success
             function (response) {
@@ -31,8 +31,53 @@ function userService($http, actions, flux, configService, alertService) {
         );
     }
 
+    function getUser(email) {
+        var request = [configService.api.base, 'users/', email].join('');
+        $http.get(request).then(
+            // success
+            function (response) {
+                flux.dispatch(actions.getUser, {'response': response.data});
+            }
+        );
+    }
+
+    function createUser(user) {
+        var request = [configService.api.base, 'users/create'].join('');
+
+        $http.post(request, user).then(
+            // success
+            function (response) {
+                flux.dispatch(actions.addUser, user);
+
+                alertService.create({
+                    message: 'Successfully created user!',
+                    type: 'success'
+                });
+            }
+        );
+    }
+
+    function editUser(email, user) {
+        var request = [configService.api.base, 'users/', email].join('');
+
+        $http.put(request, user).then(
+            // success
+            function (response) {
+                getUser(email);
+
+                alertService.create({
+                    message: 'Successfully updated user!',
+                    type: 'success'
+                });
+            }
+        );
+    }
+
     return {
-        'getUsers': getUsers
+        'createUser': createUser,
+        'getUser': getUser,
+        'getUsers': getUsers,
+        'editUser': editUser
     };
 }
 
