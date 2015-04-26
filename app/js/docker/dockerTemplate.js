@@ -23,6 +23,8 @@ module.exports = {
         'Cmd': [],
         'Entrypoint': '',
         'Image': '',
-        'ExposedPorts': {}
+        'ExposedPorts': {},
+        'OpenStdin': false,
+        'Tty': false
     }
 };

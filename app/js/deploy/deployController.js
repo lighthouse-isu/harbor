@@ -19,21 +19,7 @@ var _ = require('lodash');
 function deployController($scope, beaconModel, deployService, dockerTemplate) {
     'use strict';
 
-    // Generated list of available instances for deployment
-    $scope.instances = [];
-    // Request object
-    $scope.request = {
-        'Name': '',
-        'Command': dockerTemplate.containerCreate,
-        'Instances': []
-    };
-    // Query params
-    $scope.query = {
-        'forcePull': false,
-        'start': false
-    };
-
-    $scope.$listenTo(beaconModel, function () {
+    function _buildInstanceList() {
         var _instances = [];
         _.forEach(beaconModel.getBeacons(), function (beacon) {
             _.forEach(beaconModel.getInstances(beacon), function (instance) {
@@ -42,11 +28,38 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
         });
 
         $scope.instances = _instances;
+    }
+
+    // Generated list of available instances for deployment
+    $scope.instances = [];
+    // Request object
+    $scope.request = {
+        'Name': '',
+        'Command': dockerTemplate.containerCreate,
+        'Instances': []
+    };
+    // four spaces
+    $scope.rawCommand = JSON.stringify($scope.request.Command, null, '    ');
+    // Query params
+    $scope.query = {
+        'forcePull': false,
+        'start': false
+    };
+    // Init
+    _buildInstanceList();
+
+    $scope.$listenTo(beaconModel, function () {
+        _buildInstanceList();
     });
 
     // Triggered on click to toggle instance's include state
     $scope.toggleInclude = function (instance) {
         instance.selected = !instance.selected;
+    };
+
+    // Trigged on change event in command text area
+    $scope.updateCommand = function () {
+        $scope.rawCommand = JSON.stringify($scope.request.Command, null, '    ');
     };
 
     // Finalize the application deploy request object
@@ -59,6 +72,7 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
 
         // Format container command for Docker consumption
         // (as an array of strings)
+        $scope.request.Command = JSON.parse($scope.rawCommand);
         $scope.request.Command.Cmd = _.without($scope.request.Command.Cmd.split(' '), '');
 
         deployService.create({

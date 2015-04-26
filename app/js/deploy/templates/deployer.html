@@ -21,11 +21,13 @@
                     </div>
                     <div class="form-group">
                         <label>Image</label>
-                        <input type="text" class="form-control" placeholder="image:tag" ng-model="request.Command.Image">
+                        <input type="text" class="form-control" placeholder="image:tag"
+                               ng-model="request.Command.Image" ng-change="updateCommand()">
                     </div>
                     <div class="form-group">
                         <label>Command</label>
-                        <input type="text" class="form-control" placeholder="/bin/bash" ng-model="request.Command.Cmd">
+                        <input type="text" class="form-control" placeholder="/bin/bash"
+                               ng-model="request.Command.Cmd" ng-change="updateCommand()">
                     </div>
                     <div class="checkbox">
                         <label><input type="checkbox" ng-model="query.forcePull"> Force pull non-existent images</label>
@@ -45,8 +47,8 @@
                     <h5 data-toggle="collapse" data-target="#dockerRequest">
                         <i class="fa fa-caret-down" ng-show="showRequest"></i>
                         <i class="fa fa-caret-right" ng-show="!showRequest"></i>&nbsp;Docker container create request</h5>
-                    <textarea id="dockerRequest" class="form-control collapse" rows="15"
-                              style="font-family: monospace; font-size: 14px;">{{request.Command | stringify}}</textarea>
+                    <textarea id="dockerRequest" class="form-control collapse" rows="15" ng-model="rawCommand"
+                              style="font-family: monospace; font-size: 14px;"></textarea>
 
                     <button class="btn btn-success"
                             data-dismiss="modal"
