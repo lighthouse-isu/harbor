@@ -15,6 +15,7 @@
  */
 
 function appListController($scope, appListModel, deployService) {
+    'use strict';
 
     // Fetch application list
     deployService.apps();

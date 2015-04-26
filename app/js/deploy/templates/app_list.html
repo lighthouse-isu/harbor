@@ -1,7 +1,14 @@
 <div class="container">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12" ng-show="apps.length">
       <h4>Currently deployed applications</h4>
+    </div>
+    <!-- no app deployed -->
+    <div class="col-md-12" ng-show="!apps.length">
+      <h4>You have no currently deployed applications... </h4>
+      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#deployer-modal">
+        <i class="fa fa-play"></i> Deploy App
+      </button>
     </div>
   </div>
   <div class="row">
@@ -13,3 +20,5 @@
     </div>
   </div>
 </div>
+
+<div deployer></div>
