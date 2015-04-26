@@ -25,6 +25,14 @@ function appController($scope, appListModel, deployService) {
         $scope.detail = appListModel.detail($scope.info.Id);
         $scope.recent = _.first($scope.detail);
     });
+
+    $scope.start = function (id) {
+        deployService.start(id, $scope.info.Name);
+    };
+
+    $scope.stop = function (id) {
+        deployService.stop(id, $scope.info.Name);
+    };
 }
 
 appController.$inject = ['$scope', 'appListModel', 'deployService'];

@@ -3,11 +3,11 @@
     <div class="row">
       <div class="col-md-3">
         <h4>{{info.Name}} (ID: {{info.Id}})</h4>
-        <h6>Currently at revision {{info.CurrentDeployment}}</h6>
+        <h6>Deployment ID: {{info.CurrentDeployment}}</h6>
         <!-- control buttons -->
         <div class="btn-group" role="group" style="margin-right: 15px;">
-          <button type="button" class="btn btn-default btn-sm"><i class="fa fa-play"></i> Start</button>
-          <button type="button" class="btn btn-default btn-sm"><i class="fa fa-stop"></i> Stop</button>
+          <button ng-click="start(info.Id)" type="button" class="btn btn-default btn-sm"><i class="fa fa-play"></i> Start</button>
+          <button ng-click="stop(info.Id)" type="button" class="btn btn-default btn-sm"><i class="fa fa-stop"></i> Stop</button>
           <button type="button" class="btn btn-default btn-sm"><i class="fa fa-repeat"></i> Revert</button>
         </div>
       </div>

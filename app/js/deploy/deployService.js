@@ -14,14 +14,20 @@
  *  limitations under the License.
  */
 
+var _ = require('lodash');
+
  /*
   * deploy/deployService.js
   * Main entry point for the deploy / application API.
   * Sends application mgmt requests and aggregates / dispatches streaming updates.
+  *
+  * Streaming endpoints:
+  * Each dispatch to deployStreamStart must provide an object in the form:
+  * {
+  *    'appName': (string),
+  *    'action': ('create', 'start', 'stop', 'revert', 'update')
+  * }
   */
-
-var _ = require('lodash');
-
 function deployService($http, actions, flux, configService) {
     'use strict';
 
@@ -36,14 +42,24 @@ function deployService($http, actions, flux, configService) {
         };
     }
 
-    function _url(request) {
-        var base = [configService.api.base, 'applications/create'].join('');
-
-        if (request.query) {
-            return base + '?' + $.param(request.query);
-        }
-
-        return base;
+    function _stream(name, action, url, body) {
+        oboe({
+            'method': 'POST',
+            'url': url,
+            'body': body || {}
+        })
+        .start(function () {
+            flux.dispatch(actions.deployStreamStart, {
+                'appName': name,
+                'action': action
+            });
+        })
+        .node('{Status}', function (status) {
+            flux.dispatch(actions.deployStreamUpdate, status);
+        })
+        .fail(function (error) {
+            flux.dispatch(actions.deployStreamFail, error);
+        });
     }
 
     /* 
@@ -57,20 +73,38 @@ function deployService($http, actions, flux, configService) {
      *      {object} query: map of query params to endpoint
      */
     function create(request) {
-        oboe({
-            method: 'POST',
-            url: _url(request),
-            body: request.body || {}
-        })
-        .start(function () {
-            flux.dispatch(actions.deployStreamStart, request.body);
-        })
-        .node('{Status}', function (status) {
-            flux.dispatch(actions.deployStreamUpdate, status);
-        })
-        .fail(function (error) {
-            flux.dispatch(actions.deployStreamFail, error);
-        });
+        var url = [configService.api.base, 'applications/create'].join('');
+        if (request.query) {
+            url += ('?' + $.param(request.query));
+        }
+
+        _stream(request.body.Name, 'create', url, request.body);
+    }
+
+    /*
+     * start()
+     * Endpoint: /applications/start/{id}
+     * Dispatches: deployStream- prefixed actions
+     *
+     * @param {number, required} id - id of app to start
+     * @param {string, required} name - app name
+     */
+    function start(id, name) {
+        var url = [configService.api.base, 'applications/start/', id].join('');
+        _stream(name, 'start', url);
+    }
+
+    /*
+     * stop()
+     * Endpoint: /applications/stop/{id}
+     * Dispatches: deployStream- prefixed actions
+     *
+     * @param {number, required} id - id of app to stop
+     * @param {string, required} name - app name
+     */
+    function stop(id, name) {
+        var url = [configService.api.base, 'applications/stop/', id].join('');
+        _stream(name, 'stop', url);
     }
 
     /* 
@@ -118,7 +152,9 @@ function deployService($http, actions, flux, configService) {
     return {
         'apps': apps,
         'detail': detail,
-        'create': create
+        'create': create,
+        'start': start,
+        'stop': stop
     };
 }
 
