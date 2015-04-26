@@ -32,19 +32,19 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
 
     // Generated list of available instances for deployment
     $scope.instances = [];
-    // Request object
-    $scope.request = {
-        'Name': '',
-        'Command': dockerTemplate.containerCreate,
-        'Instances': []
-    };
+    // Request components
+    $scope.appName = '';
+    $scope.appImage = '';
+    $scope.appCmd = '';
     // four spaces
-    $scope.rawCommand = JSON.stringify($scope.request.Command, null, '    ');
+    $scope.rawCommand = JSON.stringify(dockerTemplate.containerCreate, null, '    ');
     // Query params
     $scope.query = {
         'forcePull': false,
         'start': false
     };
+    // Tracks parsing error
+    $scope.jsonError = false;
     // Init
     _buildInstanceList();
 
@@ -59,7 +59,21 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
 
     // Trigged on change event in command text area
     $scope.updateCommand = function () {
-        $scope.rawCommand = JSON.stringify($scope.request.Command, null, '    ');
+        // Update request command, using raw command to settle conflicts
+        var command = {};
+
+        try {
+            command = JSON.parse($scope.rawCommand);
+            $scope.jsonError = false;
+        } catch(e) {
+            $scope.jsonError = true;
+            return;
+        }
+
+        // Update with user input
+        command.Cmd = $scope.appCmd;
+        command.Image = $scope.appImage;
+        $scope.rawCommand = JSON.stringify(command, null, '    ');
     };
 
     // Finalize the application deploy request object
@@ -72,11 +86,22 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
 
         // Format container command for Docker consumption
         // (as an array of strings)
-        $scope.request.Command = JSON.parse($scope.rawCommand);
-        $scope.request.Command.Cmd = _.without($scope.request.Command.Cmd.split(' '), '');
+        var command = {};
+        try {
+            command = JSON.parse($scope.rawCommand);
+            command.Cmd = _.without(command.Cmd.split(' '), '');
+            $scope.jsonError = false;
+        } catch (e) {
+            $scope.jsonError = true;
+            return;
+        }
 
         deployService.create({
-            body: _.assign($scope.request, {'Instances': targets}),
+            body: {
+                'Name': $scope.appName,
+                'Command': command,
+                'Instances': targets
+            },
             query: $scope.query
         });
     };
