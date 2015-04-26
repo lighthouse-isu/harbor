@@ -19,6 +19,7 @@ var _ = require('lodash');
 function appController($scope, appListModel, deployService) {
     'use strict';
 
+    $scope.showHistory = false;
     deployService.detail($scope.info.Id);
 
     $scope.$listenTo(appListModel, function () {
