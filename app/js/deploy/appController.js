@@ -16,7 +16,7 @@
 
 var _ = require('lodash');
 
-function appController($scope, appListModel, deployService) {
+function appController($scope, $rootScope, appListModel, deployService) {
     'use strict';
 
     $scope.showHistory = false;
@@ -34,7 +34,16 @@ function appController($scope, appListModel, deployService) {
     $scope.stop = function (id) {
         deployService.stop(id, $scope.info.Name);
     };
+
+    $scope.revert = function (target) {
+        // Publish target ID for the revert controller
+        $rootScope.$broadcast('deploy.revert', {
+            'id': $scope.info.Id,
+            'target': target,
+            'name': $scope.info.Name
+        });
+    };
 }
 
-appController.$inject = ['$scope', 'appListModel', 'deployService'];
+appController.$inject = ['$scope', '$rootScope', 'appListModel', 'deployService'];
 module.exports = appController;

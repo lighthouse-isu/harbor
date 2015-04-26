@@ -42,9 +42,9 @@ function deployService($http, actions, flux, configService) {
         };
     }
 
-    function _stream(name, action, url, body) {
+    function _stream(method, name, action, url, body) {
         oboe({
-            'method': 'POST',
+            'method': method,
             'url': url,
             'body': body || {}
         })
@@ -78,7 +78,25 @@ function deployService($http, actions, flux, configService) {
             url += ('?' + $.param(request.query));
         }
 
-        _stream(request.body.Name, 'create', url, request.body);
+        _stream('POST', request.body.Name, 'create', url, request.body);
+    }
+
+    /*
+     * revert()
+     * Endpoint: /applications/revert/{id}
+     * Dispatches: deployStream- prefixed actions
+     *
+     * @param {number, required} id - target deployment id
+     * @param {string, required} name - app name
+     * @param {object, optional} query - query parameters object
+     */
+    function revert(id, name, query) {
+        var url = [configService.api.base, 'applications/revert/', id].join('');
+        if (query) {
+            url += ('?' + $.param(query));
+        }
+
+        _stream('PUT', name, 'revert', url);
     }
 
     /*
@@ -91,7 +109,7 @@ function deployService($http, actions, flux, configService) {
      */
     function start(id, name) {
         var url = [configService.api.base, 'applications/start/', id].join('');
-        _stream(name, 'start', url);
+        _stream('POST', name, 'start', url);
     }
 
     /*
@@ -104,7 +122,7 @@ function deployService($http, actions, flux, configService) {
      */
     function stop(id, name) {
         var url = [configService.api.base, 'applications/stop/', id].join('');
-        _stream(name, 'stop', url);
+        _stream('POST', name, 'stop', url);
     }
 
     /* 
@@ -153,6 +171,7 @@ function deployService($http, actions, flux, configService) {
         'apps': apps,
         'detail': detail,
         'create': create,
+        'revert': revert,
         'start': start,
         'stop': stop
     };

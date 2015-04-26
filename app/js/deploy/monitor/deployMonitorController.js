@@ -23,6 +23,11 @@ var actionMessages = {
         'finished': 'Deployed {}!',
         'failed': 'Deploy for {} failed.'
     },
+    'revert': {
+        'started': 'Reverting {} ...',
+        'finished': 'Reverted {}!',
+        'failed': 'Could not revert {}.'
+    },
     'start': {
         'started': 'Starting {} ...',
         'finished': 'Started {}!',

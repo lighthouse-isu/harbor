@@ -6,9 +6,14 @@
         <h6>Deployment ID: {{info.CurrentDeployment}}</h6>
         <!-- control buttons -->
         <div class="btn-group" role="group" style="margin-right: 15px;">
-          <button ng-click="start(info.Id)" type="button" class="btn btn-default btn-sm"><i class="fa fa-play"></i> Start</button>
-          <button ng-click="stop(info.Id)" type="button" class="btn btn-default btn-sm"><i class="fa fa-stop"></i> Stop</button>
-          <button type="button" class="btn btn-default btn-sm"><i class="fa fa-repeat"></i> Revert</button>
+          <button ng-click="start(info.Id)" type="button" class="btn btn-default btn-sm">
+            <i class="fa fa-play"></i> Start</button>
+          <button ng-click="stop(info.Id)" type="button" class="btn btn-default btn-sm">
+            <i class="fa fa-stop"></i> Stop</button>
+          <button ng-click="revert(-1)" type="button" class="btn btn-default btn-sm"
+                  data-toggle="modal" data-target="#deploy-revert-modal"
+                  title="Rollback one deployment.">
+            <i class="fa fa-repeat"></i> Revert</button>
         </div>
       </div>
       <div class="col-md-9">
@@ -24,6 +29,9 @@
 <div ng-show="showHistory">
   <ul class="list-group">
     <li class="list-group-item" ng-repeat="deploy in detail">
+      <button ng-click="revert(deploy.Id)" type="button" class="btn btn-default btn-sm"
+              data-toggle="modal" data-target="#deploy-revert-modal"
+              title="Rollback to this deployment."><i class="fa fa-repeat"></i></button>&nbsp;
       {{deploy.Creator}} deployed using <code>{{deploy.Image}}</code> {{deploy.Date | fromISO:true}} with ID {{deploy.Id}}
     </li>
   </ul>
