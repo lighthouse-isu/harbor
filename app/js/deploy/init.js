@@ -14,6 +14,13 @@
  *  limitations under the License.
  */
 
+// Application management
+var appController = require('./appController'),
+    appDirective = require('./appDirective'),
+    appListController = require('./appListController'),
+    appListModel = require('./appListModel');
+
+// Deployment control
 var deployController = require('./deployController'),
     deployDirective = require('./deployDirective'),
     deployError = require('./deployError'),
@@ -24,14 +31,19 @@ var deployController = require('./deployController'),
 
 var deploy = angular.module('lighthouse.deploy', []);
 
+deploy.controller('appController', appController);
+deploy.controller('appListController', appListController);
 deploy.controller('deployController', deployController);
 deploy.controller('deployMonitorController', deployMonitorController);
 
+deploy.directive('app', appDirective);
 deploy.directive('deployer', deployDirective);
 deploy.directive('deployMonitor', deployMonitorDirective);
 
 deploy.factory('deployError', deployError);
 deploy.factory('deployService', deployService);
+
+deploy.store('appListModel', appListModel);
 deploy.store('deployModel', deployModel);
 
 module.exports = deploy;

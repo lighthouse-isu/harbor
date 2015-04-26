@@ -44,9 +44,24 @@ transform.filter('fromEpoch', function() {
         if (toRelative) {
             return moment.unix(epoch).fromNow();
         }
+        
         return moment.unix(epoch);
     };
+});
 
+/*
+ * fromISO (filter)
+ * @param {string} timestamp - ISO 8601 formatted timestamp
+ * @param {boolean} toRelative - if true, uses moment's .fromNow() to obtain a relative date
+ */
+transform.filter('fromISO', function () {
+    return function(timestamp, toRelative) {
+        if (toRelative) {
+            return moment(timestamp).fromNow();
+        }
+
+        return moment(timestamp);
+    };
 });
 
 /*

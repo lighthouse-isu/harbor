@@ -20,8 +20,21 @@
   * Sends application mgmt requests and aggregates / dispatches streaming updates.
   */
 
+var _ = require('lodash');
+
 function deployService($http, actions, flux, configService) {
     'use strict';
+
+    // Default $http config
+    function _config() {
+        return {
+            method: 'GET',
+            responseType: 'json',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+    }
 
     function _url(request) {
         var base = [configService.api.base, 'applications/create'].join('');
@@ -36,6 +49,7 @@ function deployService($http, actions, flux, configService) {
     /* 
      * create()
      * Endpoint: /applications/create
+     * Dispatches: deployStream- prefixed actions
      *
      * @param {object, required} request
      * Allowed keys:
@@ -59,7 +73,51 @@ function deployService($http, actions, flux, configService) {
         });
     }
 
+    /* 
+     * apps()
+     * Endpoint: /applications/list
+     * Dispatches: actions.appList
+     */
+    function apps() {
+        var _url = [configService.api.base, 'applications/list'].join('');
+        var config = _.assign(_config(), {url: _url});
+
+        $http(config).then(
+            // success
+            function (response) {
+                flux.dispatch(actions.appList,
+                    {'response': response, 'data': response.data});
+            }
+        );
+    }
+
+    /*
+     * detail()
+     * Endpoint: /applications/list/{id}
+     * Dispatches: actions.appDetail
+     *
+     * @param {number, required} id
+     * @param {object, optional} query - query params
+     */
+    function detail(id, query) {
+        var _url = [configService.api.base, 'applications/list/', id].join('');
+        var config = _.assign(_config(), {
+            params: query || {},
+            url: _url
+        });
+
+        $http(config).then(
+            // success
+            function (response) {
+                flux.dispatch(actions.appDetail,
+                    {'id': id, 'data': response.data, 'response': response});
+            }
+        );
+    }
+
     return {
+        'apps': apps,
+        'detail': detail,
         'create': create
     };
 }

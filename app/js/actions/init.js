@@ -63,6 +63,10 @@ var _actions = keymirror({
     getUser: null,
     listUsers: null,
 
+    // Applications
+    appDetail: null,
+    appList: null,
+
     // Deploy stream
     deployStreamFail: null,
     deployStreamReset: null,
