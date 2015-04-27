@@ -131,6 +131,9 @@ function deployUpdateController($scope, beaconModel, beaconService, deployServic
                 deployService.apps();
                 deployService.detail($scope.id);
             });
+
+        toRemove = [];
+        toAdd = [];
     };
 }
 
