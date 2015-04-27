@@ -43,6 +43,19 @@ function appController($scope, $rootScope, appListModel, deployService) {
             'name': $scope.info.Name
         });
     };
+
+    $scope.update = function () {
+        // Publish recent deployment for the update controller
+        // patching in the Instances list of the top-level app info
+        var apps = appListModel.apps();
+        $scope.recent.Instances = _.findWhere(apps, {'Id': $scope.info.Id}).Instances;
+
+        $rootScope.$broadcast('deploy.update', {
+            'id': $scope.info.Id,
+            'name': $scope.info.Name,
+            'recent': $scope.recent
+        });
+    };
 }
 
 appController.$inject = ['$scope', '$rootScope', 'appListModel', 'deployService'];

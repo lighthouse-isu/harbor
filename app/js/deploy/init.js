@@ -32,6 +32,9 @@ var deployController = require('./deployController'),
     deployRevertController = require('./revert/deployRevertController'),
     deployRevertDirective = require('./revert/deployRevertDirective'),
 
+    deployUpdateController = require('./update/deployUpdateController'),
+    deployUpdateDirective = require('./update/deployUpdateDirective'),
+
     deployModel = require('./deployModel'),
     deployService = require('./deployService');
 
@@ -42,11 +45,13 @@ deploy.controller('appListController', appListController);
 deploy.controller('deployController', deployController);
 deploy.controller('deployMonitorController', deployMonitorController);
 deploy.controller('deployRevertController', deployRevertController);
+deploy.controller('deployUpdateController', deployUpdateController);
 
 deploy.directive('app', appDirective);
 deploy.directive('deployer', deployDirective);
 deploy.directive('deployMonitor', deployMonitorDirective);
 deploy.directive('deployRevert', deployRevertDirective);
+deploy.directive('deployUpdate', deployUpdateDirective);
 
 deploy.factory('deployError', deployError);
 deploy.factory('deployService', deployService);

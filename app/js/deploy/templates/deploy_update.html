@@ -1,0 +1,45 @@
+<div class="modal fade"
+     id="deploy-update-modal"
+     tabindex="-1"
+     role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"
+                        class="close"
+                        data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+                <h4>Update application</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="checkbox">
+                        <label><input type="checkbox" ng-model="query.restart">&nbsp;Restart containers</label>
+                    </div>
+
+                    <h5>Update Instances</h5>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item"
+                           ng-repeat="instance in instances"
+                           ng-class="{'list-group-item-success': instance.selected}"
+                           ng-click="updateInclude(instance)">
+                           <i class="fa fa-check" ng-show="instance.selected"></i>&nbsp;{{instance.Alias}}</a>
+                    </div>
+
+                    <h5>... with create command:</h5>
+                    <div ng-show="jsonError" class="alert alert-danger">
+                        Unable to parse given JSON object.
+                    </div>
+                    <textarea id="dockerRequest" class="form-control" rows="15" ng-model="createCommand"
+                              ng-blur="updateCommand()" style="font-family: monospace; font-size: 14px;"></textarea>
+
+                    <button class="btn btn-success"
+                            data-dismiss="modal"
+                            ng-click="updateApp()"
+                            type="submit">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

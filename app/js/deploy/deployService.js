@@ -125,6 +125,25 @@ function deployService($http, actions, flux, configService) {
         _stream('POST', name, 'stop', url);
     }
 
+    /*
+     * update()
+     * Endpoint: /applications/update/{id}
+     * Dispatches: deployStream- prefixed actions
+     *
+     * @param {number, required} id - id of app to update
+     * @param {string, required} name - app name
+     * @param {object, required} body - update info (see API)
+     * @param {object, optional} query - query parameters object
+     */
+    function update(id, name, body, query) {
+        var url = [configService.api.base, 'applications/update/', id].join('');
+        if (query) {
+            url += ('?' + $.param(query));
+        }
+
+        _stream('PUT', name, 'update', url, body);
+    }
+
     /* 
      * apps()
      * Endpoint: /applications/list
@@ -173,7 +192,8 @@ function deployService($http, actions, flux, configService) {
         'create': create,
         'revert': revert,
         'start': start,
-        'stop': stop
+        'stop': stop,
+        'update': update
     };
 }
 

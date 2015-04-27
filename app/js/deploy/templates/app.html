@@ -15,6 +15,11 @@
                   title="Rollback one deployment.">
             <i class="fa fa-repeat"></i> Revert</button>
         </div>
+        <div class="btn-group" role="group" style="margin-top: 10px;">
+          <button ng-click="update()" type="button" class="btn btn-default btn-sm"
+                  data-toggle="modal" data-target="#deploy-update-modal">
+            <i class="fa fa-edit"></i> Update</button>
+        </div>
       </div>
       <div class="col-md-9">
         <h5>{{recent.Creator}} deployed with ID {{recent.Id}}</h5>

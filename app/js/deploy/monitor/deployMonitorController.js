@@ -37,6 +37,11 @@ var actionMessages = {
         'started': 'Stopping {} ...',
         'finished': 'Stopped {}!',
         'failed': 'Could not stop {}.'
+    },
+    'update': {
+        'started': 'Updating {} ...',
+        'finished': 'Updated {}!',
+        'failed': 'Could not update {}.'
     }
 };
 
