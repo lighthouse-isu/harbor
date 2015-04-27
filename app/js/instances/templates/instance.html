@@ -69,11 +69,16 @@
   </div>
 
   <div class="row">
-    <div class="col-md-12" ng-repeat="(name, progress) in loadingImages">
-      <span>Pulling <strong>{{ name }}</strong></span>
-      <div class="progress">
-        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': progress}"></div>
-      </div>
+    <div class="col-md-12" ng-repeat="(name, layers) in loadingImages track by name">
+      <span>Pulling <strong>{{ name }}</strong> <i class="fa fa-spinner fa-spin"></i></span>
+      <div ng-repeat="layer in layers track by layer.id">
+        <div class="progress">
+          <div class=" progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': layer.progress}">
+            <span class="pull-left" style="margin-left: 20px;">
+              {{ layer.id }} ({{ layer.progress }})
+            </span>
+          </div>
+        </div>
     </div>
   </div>
 

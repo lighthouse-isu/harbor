@@ -50,12 +50,7 @@ function instanceDetailController($scope, $routeParams, $timeout, flux, dockerSe
     $scope.$listenTo(instanceModel, function () {
         $scope.containers = instanceModel.getContainers();
         $scope.images = instanceModel.getImages();
-
-        var loadingImages = instanceModel.getLoadingImages();
-        _.forEach(loadingImages, function(progress, name) {
-            $scope.loadingImages[name] = progress;
-        });
-        $scope.loadingImages = _.pick($scope.loadingImages, _.keys(loadingImages));
+        $scope.loadingImages = instanceModel.getLoadingImages();
 
         // this needs some investigating, without this, loadingImages won't show
         $timeout(function() {
