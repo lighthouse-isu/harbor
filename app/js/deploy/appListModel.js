@@ -34,8 +34,9 @@ function appListModel() {
             'appList': 'list'
         },
 
-        detail: function (r) {
-            this.state.detail[r.id.toString()] = _.sortBy(r.data, 'Id');
+        detail: function (r)    {
+            // Sort in descending by deploy id
+            this.state.detail[r.id.toString()] = _.sortByOrder(r.data, ['Id'], [false]);
             this.emitChange();
         },
 
