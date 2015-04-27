@@ -28,7 +28,7 @@ var _ = require('lodash');
   *    'action': ('create', 'start', 'stop', 'revert', 'update')
   * }
   */
-function deployService($http, actions, flux, configService) {
+function deployService($http, $q, actions, flux, configService) {
     'use strict';
 
     // Default $http config
@@ -43,6 +43,8 @@ function deployService($http, actions, flux, configService) {
     }
 
     function _stream(method, name, action, url, body) {
+        var d = $q.defer();
+
         oboe({
             'method': method,
             'url': url,
@@ -57,9 +59,15 @@ function deployService($http, actions, flux, configService) {
         .node('{Status}', function (status) {
             flux.dispatch(actions.deployStreamUpdate, status);
         })
+        .done(function (complete) {
+            d.resolve();
+        })
         .fail(function (error) {
             flux.dispatch(actions.deployStreamFail, error);
+            d.reject();
         });
+
+        return d.promise;
     }
 
     /* 
@@ -78,7 +86,7 @@ function deployService($http, actions, flux, configService) {
             url += ('?' + $.param(request.query));
         }
 
-        _stream('POST', request.body.Name, 'create', url, request.body);
+        return _stream('POST', request.body.Name, 'create', url, request.body);
     }
 
     /*
@@ -96,7 +104,7 @@ function deployService($http, actions, flux, configService) {
             url += ('?' + $.param(query));
         }
 
-        _stream('PUT', name, 'revert', url);
+        return _stream('PUT', name, 'revert', url);
     }
 
     /*
@@ -109,7 +117,7 @@ function deployService($http, actions, flux, configService) {
      */
     function start(id, name) {
         var url = [configService.api.base, 'applications/start/', id].join('');
-        _stream('POST', name, 'start', url);
+        return _stream('POST', name, 'start', url);
     }
 
     /*
@@ -122,7 +130,7 @@ function deployService($http, actions, flux, configService) {
      */
     function stop(id, name) {
         var url = [configService.api.base, 'applications/stop/', id].join('');
-        _stream('POST', name, 'stop', url);
+        return _stream('POST', name, 'stop', url);
     }
 
     /*
@@ -141,7 +149,7 @@ function deployService($http, actions, flux, configService) {
             url += ('?' + $.param(query));
         }
 
-        _stream('PUT', name, 'update', url, body);
+        return _stream('PUT', name, 'update', url, body);
     }
 
     /* 
@@ -197,5 +205,5 @@ function deployService($http, actions, flux, configService) {
     };
 }
 
-deployService.$inject = ['$http', 'actions', 'flux', 'configService'];
+deployService.$inject = ['$http', '$q', 'actions', 'flux', 'configService'];
 module.exports = deployService;

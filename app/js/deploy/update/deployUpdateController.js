@@ -70,13 +70,13 @@ function deployUpdateController($scope, beaconModel, beaconService, deployServic
     var toRemove = [];
 
     // Init
-    $scope.$on('deploy.update', function (event, info) {
-        $scope.id = info.id;
-        $scope.name = info.name;
-        $scope.recent = info.recent;
+    $scope.$on('deploy.update', function (event, app) {
+        $scope.id = app.id;
+        $scope.name = app.name;
+        $scope.recent = app.recent;
         // four spaces
         $scope.createCommand = JSON.stringify($scope.recent.Command, null, '    ');
-        _buildInstanceList(info.recent.Instances);
+        _buildInstanceList(app.recent.Instances);
     });
 
     $scope.updateCommand = function () {
@@ -125,7 +125,12 @@ function deployUpdateController($scope, beaconModel, beaconService, deployServic
             'Remove': _.map(toRemove, function (inst) { return inst.InstanceAddress; })
         };
 
-        deployService.update($scope.id, $scope.name, update, $scope.query);
+        deployService.update(
+            $scope.id, $scope.name, update, $scope.query)
+            .then(function () {
+                deployService.apps();
+                deployService.detail($scope.id);
+            });
     };
 }
 
