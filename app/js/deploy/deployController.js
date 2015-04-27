@@ -23,7 +23,9 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
         var _instances = [];
         _.forEach(beaconModel.getBeacons(), function (beacon) {
             _.forEach(beaconModel.getInstances(beacon), function (instance) {
-                _instances.push(_.assign(instance, {'selected': false}));
+                if (instance.CanAccessDocker) {
+                    _instances.push(_.assign(instance, {'selected': false}));
+                }
             });
         });
 

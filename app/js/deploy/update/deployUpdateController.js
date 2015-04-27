@@ -39,11 +39,13 @@ function deployUpdateController($scope, beaconModel, beaconService, deployServic
 
         _.forEach(beaconModel.getBeacons(), function (beacon) {
             _.forEach(beaconModel.getInstances(beacon), function (instance) {
-                if (_.includes(deployInstances, instance.InstanceAddress)) {
-                    _instances.push(_.assign(instance, {'selected': true}));
-                }
-                else {
-                    _instances.push(_.assign(instance, {'selected': false}));
+                if (instance.CanAccessDocker) {
+                    if (_.includes(deployInstances, instance.InstanceAddress)) {
+                        _instances.push(_.assign(instance, {'selected': true}));
+                    }
+                    else {
+                        _instances.push(_.assign(instance, {'selected': false}));
+                    }
                 }
             });
         });
