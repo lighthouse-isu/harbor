@@ -79,10 +79,8 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
     // Finalize the application deploy request object
     // and attempt the deployment.
     $scope.deploy = function () {
-        var targets = _.map($scope.instances, function (instance) {
-            if (instance.selected)
-                return instance.InstanceAddress;
-        });
+        var targets = _.map(_.where($scope.instances, {'selected': true}),
+            function (instance) { return instance.InstanceAddress; });
 
         // Format container command for Docker consumption
         // (as an array of strings)
