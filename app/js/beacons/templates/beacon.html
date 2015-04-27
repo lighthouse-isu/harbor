@@ -16,7 +16,12 @@
       <tbody>
         <tr ng-repeat="instance in instances track by $index">
           <td>
-            <a href="/instances/{{ instance.Alias }}">{{ instance.Alias }}</a>
+            <div ng-if="instance.CanAccessDocker">
+              <a href="/instances/{{ instance.Alias }}">{{ instance.Alias }}</a>
+            </div>
+            <div ng-if="!instance.CanAccessDocker">
+              {{ instance.Alias }}
+            </div>
           </td>
           <td>{{ instance.InstanceAddress }}</td>
           <td>{{ instance.CanAccessDocker }}</td>
