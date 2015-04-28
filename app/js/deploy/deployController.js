@@ -19,29 +19,39 @@ var _ = require('lodash');
 function deployController($scope, beaconModel, deployService, dockerTemplate) {
     'use strict';
 
+    function _buildInstanceList() {
+        var _instances = [];
+        _.forEach(beaconModel.getBeacons(), function (beacon) {
+            _.forEach(beaconModel.getInstances(beacon), function (instance) {
+                if (instance.CanAccessDocker) {
+                    _instances.push(_.assign(instance, {'selected': false}));
+                }
+            });
+        });
+
+        $scope.instances = _instances;
+    }
+
     // Generated list of available instances for deployment
     $scope.instances = [];
-    // Request object
-    $scope.request = {
-        'Name': '',
-        'Command': dockerTemplate.containerCreate,
-        'Instances': []
-    };
+    // Request components
+    $scope.appName = '';
+    $scope.appImage = '';
+    $scope.appCmd = '';
+    // four spaces
+    $scope.rawCommand = JSON.stringify(dockerTemplate.containerCreate, null, '    ');
     // Query params
     $scope.query = {
         'forcePull': false,
         'start': false
     };
+    // Tracks parsing error
+    $scope.jsonError = false;
+    // Init
+    _buildInstanceList();
 
     $scope.$listenTo(beaconModel, function () {
-        var _instances = [];
-        _.forEach(beaconModel.getBeacons(), function (beacon) {
-            _.forEach(beaconModel.getInstances(beacon), function (instance) {
-                _instances.push(_.assign(instance, {'selected': false}));
-            });
-        });
-
-        $scope.instances = _instances;
+        _buildInstanceList();
     });
 
     // Triggered on click to toggle instance's include state
@@ -49,20 +59,49 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
         instance.selected = !instance.selected;
     };
 
+    // Trigged on change event in command text area
+    $scope.updateCommand = function () {
+        // Update request command, using raw command to settle conflicts
+        var command = {};
+
+        try {
+            command = JSON.parse($scope.rawCommand);
+            $scope.jsonError = false;
+        } catch(e) {
+            $scope.jsonError = true;
+            return;
+        }
+
+        // Update with user input
+        command.Cmd = $scope.appCmd;
+        command.Image = $scope.appImage;
+        $scope.rawCommand = JSON.stringify(command, null, '    ');
+    };
+
     // Finalize the application deploy request object
     // and attempt the deployment.
     $scope.deploy = function () {
-        var targets = _.map($scope.instances, function (instance) {
-            if (instance.selected)
-                return instance.InstanceAddress;
-        });
+        var targets = _.map(_.where($scope.instances, {'selected': true}),
+            function (instance) { return instance.InstanceAddress; });
 
         // Format container command for Docker consumption
         // (as an array of strings)
-        $scope.request.Command.Cmd = _.without($scope.request.Command.Cmd.split(' '), '');
+        var command = {};
+        try {
+            command = JSON.parse($scope.rawCommand);
+            command.Cmd = _.without(command.Cmd.split(' '), '');
+            $scope.jsonError = false;
+        } catch (e) {
+            $scope.jsonError = true;
+            return;
+        }
 
         deployService.create({
-            body: _.assign($scope.request, {'Instances': targets}),
+            body: {
+                'Name': $scope.appName,
+                'Command': command,
+                'Instances': targets
+            },
             query: $scope.query
         });
     };

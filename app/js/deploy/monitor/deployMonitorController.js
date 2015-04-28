@@ -16,6 +16,41 @@
 
 var _ = require('lodash');
 
+// TODO refactor to constant in deploy module
+var actionMessages = {
+    'create': {
+        'started': 'Deploying {} ...',
+        'finished': 'Deployed {}!',
+        'failed': 'Deploy for {} failed.'
+    },
+    'revert': {
+        'started': 'Reverting {} ...',
+        'finished': 'Reverted {}!',
+        'failed': 'Could not revert {}.'
+    },
+    'start': {
+        'started': 'Starting {} ...',
+        'finished': 'Started {}!',
+        'failed': 'Could not start {}.'
+    },
+    'stop': {
+        'started': 'Stopping {} ...',
+        'finished': 'Stopped {}!',
+        'failed': 'Could not stop {}.'
+    },
+    'update': {
+        'started': 'Updating {} ...',
+        'finished': 'Updated {}!',
+        'failed': 'Could not update {}.'
+    }
+};
+
+function _format(message, name) {
+    if (message.indexOf('{}') > -1) {
+        return message.replace('{}', name);
+    }
+}
+
 function deployMonitorController($scope, $timeout, actions, flux, deployError, deployModel) {
     'use strict';
 
@@ -26,12 +61,25 @@ function deployMonitorController($scope, $timeout, actions, flux, deployError, d
     $scope.request = deployModel.request();
     $scope.errors = [];
 
+    // UI
+    $scope.action = {};
+
     // state updates
     $scope.$listenTo(deployModel, function () {
         $scope.state = deployModel.state();
         $scope.inProgress = deployModel.inProgress();
         $scope.completed = deployModel.completed();
         $scope.request = deployModel.request();
+
+        var template = actionMessages[$scope.request.action];
+
+        if (template) {
+            _.assign($scope.action, {
+                'started': _format(template.started, $scope.request.appName),
+                'finished': _format(template.finished, $scope.request.appName),
+                'failed': _format(template.failed, $scope.request.appName),
+            });
+        }
 
         if ($scope.state.started && !$scope.state.good) {
             $scope.errors.push(deployError.display($scope.state.errorMessage));

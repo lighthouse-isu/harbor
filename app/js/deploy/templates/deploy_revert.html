@@ -1,0 +1,28 @@
+<div class="modal fade"
+     id="deploy-revert-modal"
+     tabindex="-1"
+     role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"
+                        class="close"
+                        data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+                <h4>Are you sure you want to revert?</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        Target ID: {{query.target}}
+                        <div class="checkbox">
+                            <label><input type="checkbox" ng-model="query.forcePull"> Force pull non-existent images</label>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" data-dismiss="modal" ng-click="confirm()" type="submit">Do it!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

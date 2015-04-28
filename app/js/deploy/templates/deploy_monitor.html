@@ -1,7 +1,7 @@
 <div class="well" ng-show="state.started">
-    <h4 ng-show="!state.finished"><i class="fa fa-refresh fa-spin"></i> Deploying {{request.Name}} ...</h4>
-    <h4 ng-show="state.finished && state.good"><i class="fa fa-check"></i> Deployed {{request.Name}}!</h4>
-    <h4 ng-show="state.finished && !state.good"><i class="fa fa-exclamation-circle"></i> Deploy for {{request.Name}} failed.</h4>
+    <h4 ng-show="!state.finished"><i class="fa fa-refresh fa-spin"></i> {{action.started}}</h4>
+    <h4 ng-show="state.finished && state.good"><i class="fa fa-check"></i> {{action.finished}}</h4>
+    <h4 ng-show="state.finished && !state.good"><i class="fa fa-exclamation-circle"></i> {{action.failed}}</h4>
 
     <div ng-repeat="error in errors" class="alert alert-danger">
         {{ error }}

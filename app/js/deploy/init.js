@@ -14,24 +14,49 @@
  *  limitations under the License.
  */
 
+// Application management
+var appController = require('./appController'),
+    appDirective = require('./appDirective'),
+
+    appListController = require('./appListController'),
+    appListModel = require('./appListModel');
+
+// Deployment control
 var deployController = require('./deployController'),
     deployDirective = require('./deployDirective'),
     deployError = require('./deployError'),
+
     deployMonitorController = require('./monitor/deployMonitorController'),
     deployMonitorDirective = require('./monitor/deployMonitorDirective'),
+
+    deployRevertController = require('./revert/deployRevertController'),
+    deployRevertDirective = require('./revert/deployRevertDirective'),
+
+    deployUpdateController = require('./update/deployUpdateController'),
+    deployUpdateDirective = require('./update/deployUpdateDirective'),
+
     deployModel = require('./deployModel'),
     deployService = require('./deployService');
 
 var deploy = angular.module('lighthouse.deploy', []);
 
+deploy.controller('appController', appController);
+deploy.controller('appListController', appListController);
 deploy.controller('deployController', deployController);
 deploy.controller('deployMonitorController', deployMonitorController);
+deploy.controller('deployRevertController', deployRevertController);
+deploy.controller('deployUpdateController', deployUpdateController);
 
+deploy.directive('app', appDirective);
 deploy.directive('deployer', deployDirective);
 deploy.directive('deployMonitor', deployMonitorDirective);
+deploy.directive('deployRevert', deployRevertDirective);
+deploy.directive('deployUpdate', deployUpdateDirective);
 
 deploy.factory('deployError', deployError);
 deploy.factory('deployService', deployService);
+
+deploy.store('appListModel', appListModel);
 deploy.store('deployModel', deployModel);
 
 module.exports = deploy;

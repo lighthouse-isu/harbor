@@ -14,17 +14,19 @@
  *  limitations under the License.
  */
 
-module.exports = {
-    'containerCreate': {
-        'AttachStdin': false,
-        'AttachStdout': false,
-        'AttachStderr': false,
-        'Env': null,
-        'Cmd': [],
-        'Entrypoint': '',
-        'Image': '',
-        'ExposedPorts': {},
-        'OpenStdin': false,
-        'Tty': false
-    }
-};
+/*
+ * deployRevertDirective
+ * UI component to confirm a deployment revert.
+ */
+function deployRevertDirective() {
+    'use strict';
+
+    return {
+        'controller': 'deployRevertController',
+        'restrict': 'A',
+        'scope': {},
+        'template': require('../templates/deploy_revert.html')
+    };
+}
+
+module.exports = deployRevertDirective;

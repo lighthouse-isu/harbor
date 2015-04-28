@@ -26,6 +26,10 @@ function routeConfig($routeProvider) {
             controller: 'loginController'
         })
         // Functionality
+        .when('/apps', {
+            template: require('../deploy/templates/app_list.html'),
+            controller: 'appListController'
+        })
         .when('/beacons', {
             template: require('../beacons/templates/beacon_list.html'),
             controller: 'beaconListController'

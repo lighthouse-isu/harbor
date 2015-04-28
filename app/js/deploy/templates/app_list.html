@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div deploy-monitor></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" ng-show="apps.length">
+      <h4>Currently deployed applications</h4>
+    </div>
+    <!-- no app deployed -->
+    <div class="col-md-12" ng-show="!apps.length">
+      <h4>You have no currently deployed applications... </h4>
+      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#deployer-modal">
+        <i class="fa fa-play"></i> Deploy App
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <!-- application list -->
+      <div ng-repeat="app in apps track by $index">
+        <div app info="app"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div deployer></div>
+<div deploy-revert></div>
+<div deploy-update></div>

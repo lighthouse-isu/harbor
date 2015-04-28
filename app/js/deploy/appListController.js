@@ -14,17 +14,18 @@
  *  limitations under the License.
  */
 
-module.exports = {
-    'containerCreate': {
-        'AttachStdin': false,
-        'AttachStdout': false,
-        'AttachStderr': false,
-        'Env': null,
-        'Cmd': [],
-        'Entrypoint': '',
-        'Image': '',
-        'ExposedPorts': {},
-        'OpenStdin': false,
-        'Tty': false
-    }
-};
+function appListController($scope, appListModel, deployService) {
+    'use strict';
+
+    // Fetch application list
+    deployService.apps();
+
+    $scope.$listenTo(appListModel, function () {
+        $scope.apps = appListModel.apps();
+        $scope.detail = appListModel.detail();
+    });
+
+}
+
+appListController.$inject = ['$scope', 'appListModel', 'deployService'];
+module.exports = appListController;

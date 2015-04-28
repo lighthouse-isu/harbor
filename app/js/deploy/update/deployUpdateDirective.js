@@ -14,17 +14,19 @@
  *  limitations under the License.
  */
 
-module.exports = {
-    'containerCreate': {
-        'AttachStdin': false,
-        'AttachStdout': false,
-        'AttachStderr': false,
-        'Env': null,
-        'Cmd': [],
-        'Entrypoint': '',
-        'Image': '',
-        'ExposedPorts': {},
-        'OpenStdin': false,
-        'Tty': false
-    }
-};
+/*
+ * deployUpdateDirective
+ * UI component to update an application command and instances.
+ */
+function deployUpdateDirective() {
+    'use strict';
+
+    return {
+        'controller': 'deployUpdateController',
+        'restrict': 'A',
+        'scope': {},
+        'template': require('../templates/deploy_update.html')
+    };
+}
+
+module.exports = deployUpdateDirective;

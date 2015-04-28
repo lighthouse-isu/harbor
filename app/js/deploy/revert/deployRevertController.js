@@ -14,17 +14,24 @@
  *  limitations under the License.
  */
 
-module.exports = {
-    'containerCreate': {
-        'AttachStdin': false,
-        'AttachStdout': false,
-        'AttachStderr': false,
-        'Env': null,
-        'Cmd': [],
-        'Entrypoint': '',
-        'Image': '',
-        'ExposedPorts': {},
-        'OpenStdin': false,
-        'Tty': false
-    }
-};
+function deployRevertController($scope, deployService) {
+    'use strict';
+
+    $scope.query = {
+        'target': -1,
+        'forcePull': false
+    };
+
+    $scope.$on('deploy.revert', function (event, info) {
+        $scope.query.target = info.target;
+        $scope.id = info.id;
+        $scope.name = info.name;
+    });
+
+    $scope.confirm = function () {
+        deployService.revert($scope.id, $scope.name, $scope.query);
+    };
+}
+
+deployRevertController.$inject = ['$scope', 'deployService'];
+module.exports = deployRevertController;

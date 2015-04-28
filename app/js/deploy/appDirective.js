@@ -14,17 +14,23 @@
  *  limitations under the License.
  */
 
-module.exports = {
-    'containerCreate': {
-        'AttachStdin': false,
-        'AttachStdout': false,
-        'AttachStderr': false,
-        'Env': null,
-        'Cmd': [],
-        'Entrypoint': '',
-        'Image': '',
-        'ExposedPorts': {},
-        'OpenStdin': false,
-        'Tty': false
-    }
-};
+/*
+ * appDirective
+ * Defines a single application (in Lighthouse terms) as a component,
+ * which includes application specific information such as deploy history.
+ */
+function appDirective() {
+    'use strict';
+
+    return {
+        'controller': 'appController',
+        'restrict': 'A',
+        'scope': {
+            // application ID assigned at init
+            'info': '='
+        },
+        'template': require('./templates/app.html')
+    };
+}
+
+module.exports = appDirective;

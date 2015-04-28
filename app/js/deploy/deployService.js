@@ -14,28 +14,66 @@
  *  limitations under the License.
  */
 
+var _ = require('lodash');
+
  /*
   * deploy/deployService.js
   * Main entry point for the deploy / application API.
   * Sends application mgmt requests and aggregates / dispatches streaming updates.
+  *
+  * Streaming endpoints:
+  * Each dispatch to deployStreamStart must provide an object in the form:
+  * {
+  *    'appName': (string),
+  *    'action': ('create', 'start', 'stop', 'revert', 'update')
+  * }
   */
-
-function deployService($http, actions, flux, configService) {
+function deployService($http, $q, actions, flux, configService) {
     'use strict';
 
-    function _url(request) {
-        var base = [configService.api.base, 'applications/create'].join('');
+    // Default $http config
+    function _config() {
+        return {
+            method: 'GET',
+            responseType: 'json',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+    }
 
-        if (request.query) {
-            return base + '?' + $.param(request.query);
-        }
+    function _stream(method, name, action, url, body) {
+        var d = $q.defer();
 
-        return base;
+        oboe({
+            'method': method,
+            'url': url,
+            'body': body || {}
+        })
+        .start(function () {
+            flux.dispatch(actions.deployStreamStart, {
+                'appName': name,
+                'action': action
+            });
+        })
+        .node('{Status}', function (status) {
+            flux.dispatch(actions.deployStreamUpdate, status);
+        })
+        .done(function (complete) {
+            d.resolve();
+        })
+        .fail(function (error) {
+            flux.dispatch(actions.deployStreamFail, error);
+            d.reject();
+        });
+
+        return d.promise;
     }
 
     /* 
      * create()
      * Endpoint: /applications/create
+     * Dispatches: deployStream- prefixed actions
      *
      * @param {object, required} request
      * Allowed keys:
@@ -43,26 +81,129 @@ function deployService($http, actions, flux, configService) {
      *      {object} query: map of query params to endpoint
      */
     function create(request) {
-        oboe({
-            method: 'POST',
-            url: _url(request),
-            body: request.body || {}
-        })
-        .start(function () {
-            flux.dispatch(actions.deployStreamStart, request.body);
-        })
-        .node('{Status}', function (status) {
-            flux.dispatch(actions.deployStreamUpdate, status);
-        })
-        .fail(function (error) {
-            flux.dispatch(actions.deployStreamFail, error);
+        var url = [configService.api.base, 'applications/create'].join('');
+        if (request.query) {
+            url += ('?' + $.param(request.query));
+        }
+
+        return _stream('POST', request.body.Name, 'create', url, request.body);
+    }
+
+    /*
+     * revert()
+     * Endpoint: /applications/revert/{id}
+     * Dispatches: deployStream- prefixed actions
+     *
+     * @param {number, required} id - target deployment id
+     * @param {string, required} name - app name
+     * @param {object, optional} query - query parameters object
+     */
+    function revert(id, name, query) {
+        var url = [configService.api.base, 'applications/revert/', id].join('');
+        if (query) {
+            url += ('?' + $.param(query));
+        }
+
+        return _stream('PUT', name, 'revert', url);
+    }
+
+    /*
+     * start()
+     * Endpoint: /applications/start/{id}
+     * Dispatches: deployStream- prefixed actions
+     *
+     * @param {number, required} id - id of app to start
+     * @param {string, required} name - app name
+     */
+    function start(id, name) {
+        var url = [configService.api.base, 'applications/start/', id].join('');
+        return _stream('POST', name, 'start', url);
+    }
+
+    /*
+     * stop()
+     * Endpoint: /applications/stop/{id}
+     * Dispatches: deployStream- prefixed actions
+     *
+     * @param {number, required} id - id of app to stop
+     * @param {string, required} name - app name
+     */
+    function stop(id, name) {
+        var url = [configService.api.base, 'applications/stop/', id].join('');
+        return _stream('POST', name, 'stop', url);
+    }
+
+    /*
+     * update()
+     * Endpoint: /applications/update/{id}
+     * Dispatches: deployStream- prefixed actions
+     *
+     * @param {number, required} id - id of app to update
+     * @param {string, required} name - app name
+     * @param {object, required} body - update info (see API)
+     * @param {object, optional} query - query parameters object
+     */
+    function update(id, name, body, query) {
+        var url = [configService.api.base, 'applications/update/', id].join('');
+        if (query) {
+            url += ('?' + $.param(query));
+        }
+
+        return _stream('PUT', name, 'update', url, body);
+    }
+
+    /* 
+     * apps()
+     * Endpoint: /applications/list
+     * Dispatches: actions.appList
+     */
+    function apps() {
+        var _url = [configService.api.base, 'applications/list'].join('');
+        var config = _.assign(_config(), {url: _url});
+
+        $http(config).then(
+            // success
+            function (response) {
+                flux.dispatch(actions.appList,
+                    {'response': response, 'data': response.data});
+            }
+        );
+    }
+
+    /*
+     * detail()
+     * Endpoint: /applications/list/{id}
+     * Dispatches: actions.appDetail
+     *
+     * @param {number, required} id
+     * @param {object, optional} query - query params
+     */
+    function detail(id, query) {
+        var _url = [configService.api.base, 'applications/list/', id].join('');
+        var config = _.assign(_config(), {
+            params: query || {},
+            url: _url
         });
+
+        $http(config).then(
+            // success
+            function (response) {
+                flux.dispatch(actions.appDetail,
+                    {'id': id, 'data': response.data, 'response': response});
+            }
+        );
     }
 
     return {
-        'create': create
+        'apps': apps,
+        'detail': detail,
+        'create': create,
+        'revert': revert,
+        'start': start,
+        'stop': stop,
+        'update': update
     };
 }
 
-deployService.$inject = ['$http', 'actions', 'flux', 'configService'];
+deployService.$inject = ['$http', '$q', 'actions', 'flux', 'configService'];
 module.exports = deployService;
