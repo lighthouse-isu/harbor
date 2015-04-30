@@ -40,6 +40,7 @@ function dockerService($http, actions, flux, alertService, configService) {
             'inspect': ep('GET', '/containers/{id}/json', actions.inspectContainer),
             'create':  ep('POST', '/containers/create', actions.createContainer),
             'list':    ep('GET', '/containers/json', actions.listContainers),
+            'logs':    ep('GET', '/containers/{id}/logs', actions.inspectContainerLogs),
             'start':   ep('POST', '/containers/{id}/start', actions.startContainer),
             'stop':    ep('POST', '/containers/{id}/stop', actions.stopContainer),
             'restart': ep('POST', '/containers/{id}/restart', actions.restartContainer),
@@ -95,7 +96,7 @@ function dockerService($http, actions, flux, alertService, configService) {
             url: prepareUrl(endpoint.template, request.host, request.id),
             params: request.query,
             data: request.data ? {'Payload': request.data} : null,
-            responseType: 'json',
+            responseType: request.responseType || 'json',
             headers: {
                 'Content-Type': 'application/json'
             }

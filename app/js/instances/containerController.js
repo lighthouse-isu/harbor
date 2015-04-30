@@ -19,19 +19,46 @@
  * Manages interactions for a single Docker container
  */
 
-function containerController($scope, $routeParams, dockerService, instanceModel) {
+function containerController($scope, $routeParams, $sce, $timeout, $interval, dockerService, instanceModel) {
     'use strict';
 
     $scope.host = $routeParams.host;
     $scope.id = $routeParams.id;
+    $scope.logs = "";
 
     dockerService.d('containers.inspect', {
         host: $scope.host,
         id: $scope.id
     });
 
+    var loadLogs = function() {
+        dockerService.d('containers.logs', {
+            host: $scope.host,
+            id: $scope.id,
+            responseType: 'text',
+            query: {
+                stderr: '1',
+                stdout: '1',
+                timestamps: '0',
+                follow: '0'
+            }
+        });
+    };
+
+    loadLogs();
+
+    var logInterval, logsElement = $('.logs');
+
     $scope.$listenTo(instanceModel, function () {
         $scope.info = instanceModel.getContainer($scope.id);
+
+        $scope.logs = $sce.trustAsHtml(instanceModel.getContainerLogs($scope.id));
+        if ($scope.follow) {
+            $timeout(function () { 
+                logsElement.scrollTop(logsElement[0].scrollHeight);
+            }, 0);
+        }
+
 
         if ($scope.info) {
             var ds = $scope.info.State;
@@ -43,6 +70,16 @@ function containerController($scope, $routeParams, dockerService, instanceModel)
             };
         }
     });
+
+    $scope.followLogs = function (_id) {
+        if ($scope.follow) {
+            logInterval = $interval(loadLogs, 750);
+            logsElement.scrollTop(logsElement[0].scrollHeight);
+        } else {
+            $interval.cancel(logInterval);
+            logInterval = undefined;
+        }
+    };
 
     $scope.start = function (_id) {
         dockerService.d('containers.start', {
@@ -71,7 +108,14 @@ function containerController($scope, $routeParams, dockerService, instanceModel)
             id: _id
         });
     };
+
+    $scope.$on('$destroy', function() {
+        if (!_.isUndefined(logInterval)) {
+            $interval.cancel(logInterval);
+            logInterval = undefined;
+        }
+    });
 }
 
-containerController.$inject = ['$scope', '$routeParams', 'dockerService', 'instanceModel'];
+containerController.$inject = ['$scope', '$routeParams', '$sce', '$timeout', '$interval', 'dockerService', 'instanceModel'];
 module.exports = containerController;
