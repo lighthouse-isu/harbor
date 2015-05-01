@@ -20,6 +20,8 @@
  */
 
 var _ = require('lodash');
+var AnsiConvert = require('ansi-to-html');
+AnsiConvert = new AnsiConvert();
 
 /*
  * @return shortened container Id hash
@@ -41,6 +43,7 @@ function instanceModel(dockerService) {
             details: {}
         },
         images: [],
+        containerLogs: {},
         showAllImages: false,
         loadingImages: {},
         foundImages: [],
@@ -57,7 +60,8 @@ function instanceModel(dockerService) {
             'imageShowAll': 'imageShowAll',
             'searchImages': 'searchImages',
             'pullImage': 'pullImage',
-            'removeImage': 'removeImage'
+            'removeImage': 'removeImage',
+            'inspectContainerLogs': 'inspectContainerLogs'
         },
 
         // containerUpdate() - multi-action handler
@@ -76,6 +80,14 @@ function instanceModel(dockerService) {
 
         listContainers: function (r) {
             this.containers.summaries = r.response;
+            this.emitChange();
+        },
+
+        inspectContainerLogs: function(r) {
+            this.containerLogs[r.id] = AnsiConvert
+                .toHtml(_.escape(r.response))
+                .split('\n').join('<br>');
+
             this.emitChange();
         },
 
@@ -124,7 +136,7 @@ function instanceModel(dockerService) {
                 var progress = r.response.progressDetail;
                 imageLayer.progress = (100 * progress.current / progress.total).toFixed(2) + '%';
                 this.loadingImages[imageTag] = _.filter(imageLayers, function(imageLayer) {
-                    return parseInt(imageLayer.progress) < 100;
+                    return parseInt(imageLayer.progress) < 100 && parseInt(imageLayer.progress) >= 0;
                 });
                 this.emitChange();
 
@@ -175,6 +187,9 @@ function instanceModel(dockerService) {
 
             getSearchedImages: function() {
                 return this.foundImages;
+            },
+            getContainerLogs: function(id) {
+                return this.containerLogs[id];
             }
         }
     };

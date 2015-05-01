@@ -42,6 +42,7 @@ var _actions = keymirror({
     inspectContainer: null,
     createContainer: null,
     listContainers: null,
+    inspectContainerLogs: null,
     startContainer: null,
     stopContainer: null,
     restartContainer: null,
