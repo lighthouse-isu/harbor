@@ -16,7 +16,7 @@
 
 var _ = require('lodash');
 
-function createContainerController($scope, $routeParams, $location, alertService, dockerService, instanceModel) {
+function createContainerController($scope, $routeParams, $location, dockerService, instanceModel) {
     'use strict';
     $scope.host = $routeParams.host;
 
@@ -65,39 +65,23 @@ function createContainerController($scope, $routeParams, $location, alertService
     };
 
     $scope.submit = function() {
-      if ($scope.containerForm.$valid) {
-        var postData = {
-          'Env': $scope.enviromentVariables,
-          'Image': $scope.selectedImage.RepoTags[0],
-          'WorkingDir': $scope.workingDir,
-          'Cmd': $scope.cmdInput.split(' ')
-        };
+      var postData = {
+        'Env': $scope.enviromentVariables,
+        'Image': $scope.selectedImage.RepoTags[0],
+        'WorkingDir': $scope.workingDir,
+        'Cmd': $scope.cmdInput.split(' ')
+      };
 
-        dockerService.d('containers.create', {
-          host: $scope.host,
-          data: postData,
-          query: {
-            'name': $scope.nameInput
-          }
-        });
-        $location.path('/instances/' + $scope.host);
-      }
-      else {
-        $scope.containerForm.submitted = true;
-        var message = 'There was an error with your submission.';
-
-        if ($scope.containerForm.name.$error.required) {
-          message = 'Please provide an application name for this container.';
+      dockerService.d('containers.create', {
+        host: $scope.host,
+        data: postData,
+        query: {
+          'name': $scope.nameInput
         }
-
-        alertService.create({
-          message: message,
-          type: 'danger',
-          timeout: 3
-        });
-      }
+      });
+      $location.path('/instances/' + $scope.host);
     };
 }
 
-createContainerController.$inject = ['$scope', '$routeParams', '$location', 'alertService', 'dockerService', 'instanceModel'];
+createContainerController.$inject = ['$scope', '$routeParams', '$location', 'dockerService', 'instanceModel'];
 module.exports = createContainerController;

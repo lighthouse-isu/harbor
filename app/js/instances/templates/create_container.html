@@ -12,10 +12,9 @@
 
   <div class="row">
     <form name="containerForm" ng-submit="submit()" novalidate>
-      <div class="form-group" ng-class="{'has-error': containerForm.submitted && containerForm.name.$error.required}">
-        <label for="name">Name</label>
-        <p class="help-block">Names allow Lighthouse to track your application containers across multiple instances.</p>
-        <input required name="name" class="form-control" type="text" id="nameInput" ng-model="nameInput">
+      <div class="form-group">
+        <label for="name">Container Name</label>
+        <input name="name" class="form-control" type="text" id="nameInput" ng-model="nameInput">
       </div>
 
       <div class="form-group">
