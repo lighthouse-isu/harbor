@@ -47,12 +47,17 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
     };
     // Tracks parsing error
     $scope.jsonError = false;
+    $scope.errors = [];
     // Init
     _buildInstanceList();
 
     $scope.$listenTo(beaconModel, function () {
         _buildInstanceList();
     });
+
+    $scope.clearError = function (error) {
+        $scope.errors = _.without($scope.errors, error);
+    };
 
     // Triggered on click to toggle instance's include state
     $scope.toggleInclude = function (instance) {
@@ -83,6 +88,11 @@ function deployController($scope, beaconModel, deployService, dockerTemplate) {
     $scope.deploy = function () {
         var targets = _.map(_.where($scope.instances, {'selected': true}),
             function (instance) { return instance.InstanceAddress; });
+
+        if (_.isEmpty(targets)) {
+            $scope.errors.push('Please select at least one instance.');
+            return;
+        }
 
         // Format container command for Docker consumption
         // (as an array of strings)

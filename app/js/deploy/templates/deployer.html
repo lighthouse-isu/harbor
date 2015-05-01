@@ -44,6 +44,10 @@
                            <i class="fa fa-check" ng-show="instance.selected"></i>&nbsp;{{instance.Alias}}</a>
                     </div>
 
+                    <div ng-repeat="error in errors" class="alert alert-danger alert-dismissible">
+                        <button ng-click="clearError(error)" type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+                        {{error}}
+                    </div>
                     <div ng-show="jsonError" class="alert alert-danger">
                         Unable to parse given JSON object.
                     </div>
@@ -56,6 +60,7 @@
                     <button class="btn btn-success"
                             data-dismiss="modal"
                             ng-click="deploy()"
+                            ng-disabled="errors.length"
                             type="submit">Deploy</button>
                 </form>
             </div>
